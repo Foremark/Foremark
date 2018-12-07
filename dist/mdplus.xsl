@@ -5,6 +5,7 @@
     <xsl:template match="/mdp">
         <xsl:call-template name="html">
             <xsl:with-param name="baseURI" select="@base" />
+            <xsl:with-param name="lang" select="@lang" />
             <xsl:with-param name="content">
                 <xsl:value-of select="." />
             </xsl:with-param>
@@ -13,6 +14,7 @@
     <xsl:template match="/mdp-text">
         <xsl:call-template name="html">
             <xsl:with-param name="baseURI" select="@base" />
+            <xsl:with-param name="lang" select="@lang" />
             <xsl:with-param name="content">
                 <mdp-text><xsl:value-of select="." /></mdp-text>
             </xsl:with-param>
@@ -21,8 +23,9 @@
 
     <xsl:template name="html">
         <xsl:param name="baseURI" />
+        <xsl:param name="lang" />
         <xsl:param name="content" />
-        <html class="mdp">
+        <html class="mdp" lang="{$lang}">
             <head>
                 <title>Markdeep Plus Document</title>
                 <style type="text/css">
