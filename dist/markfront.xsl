@@ -7,7 +7,7 @@
             <xsl:with-param name="baseURI" select="@base" />
             <xsl:with-param name="lang" select="@lang" />
             <xsl:with-param name="content">
-                <xsl:value-of select="." />
+                <xsl:copy-of select="node()" />
             </xsl:with-param>
         </xsl:call-template>
     </xsl:template>
@@ -16,7 +16,9 @@
             <xsl:with-param name="baseURI" select="@base" />
             <xsl:with-param name="lang" select="@lang" />
             <xsl:with-param name="content">
-                <mdp-text><xsl:value-of select="." /></mdp-text>
+                <mdp-text>
+                    <xsl:copy-of select="node()" />
+                </mdp-text>
             </xsl:with-param>
         </xsl:call-template>
     </xsl:template>
