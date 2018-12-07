@@ -1,0 +1,6 @@
+# Node.js local modules and build artifacts
+/node_modules
+/dist/mdplus.js
+
+# macOS thing
+.DS_Store
