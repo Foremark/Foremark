@@ -7,5 +7,7 @@ module.exports = merge(common(true), {
   devServer: {
     contentBase: './examples',
     historyApiFallback: true,
+    inline: false,
+    openPage: 'basic.mdp.xml',
   }
 });
