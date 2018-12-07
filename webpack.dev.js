@@ -6,6 +6,7 @@ module.exports = merge(common(true), {
   mode: 'development',
   devServer: {
     contentBase: './examples',
+    publicPath: '/dist/',
     historyApiFallback: true,
     inline: false,
     openPage: 'basic.mf.xml',
