@@ -1,6 +1,6 @@
 # Node.js local modules and build artifacts
 /node_modules
-/dist/mdplus.js
+/dist/markfront.js
 
 # macOS thing
 .DS_Store

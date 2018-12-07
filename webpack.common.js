@@ -6,7 +6,7 @@ const gitRevision = new GitRevisionPlugin();
 
 module.exports = debug => ({
   entry: {
-    mdplus: './app/index.tsx',
+    markfront: './app/index.tsx',
   },
   module: {
     rules: [

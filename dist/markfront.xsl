@@ -27,7 +27,7 @@
         <xsl:param name="content" />
         <html class="mdp" lang="{$lang}">
             <head>
-                <title>Markdeep Plus Document</title>
+                <title>Markfront Document</title>
                 <style type="text/css">
                     <!-- Fallback -->
                     .mdp:not(.mdp-processed) mdp-text {
@@ -44,7 +44,7 @@
             </head>
             <body>
                 <xsl:copy-of select="$content" />
-                <script src="{$baseURI}mdplus.js" type="application/javascript"></script>
+                <script src="{$baseURI}markfront.js" type="application/javascript"></script>
             </body>
         </html>
     </xsl:template>

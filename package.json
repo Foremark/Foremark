@@ -1,7 +1,7 @@
 {
-  "name": "markdeep-plus",
+  "name": "markfront",
   "version": "1.0.0",
-  "description": "Markdeep Plus is a technology for writing semi-plain text documents that extends upon the concept of Markdeep.",
+  "description": "Markfront is a technology for writing semi-plain text documents that extends upon the concept of Markdeep.",
   "main": "index.js",
   "dependencies": {
     "react": "^16.6.3",

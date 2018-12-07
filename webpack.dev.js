@@ -8,6 +8,6 @@ module.exports = merge(common(true), {
     contentBase: './examples',
     historyApiFallback: true,
     inline: false,
-    openPage: 'basic.mdp.xml',
+    openPage: 'basic.mf.xml',
   }
 });
