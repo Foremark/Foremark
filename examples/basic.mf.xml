@@ -1,5 +1,5 @@
 <?xml-stylesheet type="text/xsl" href="dist/markfront.xsl" ?>
-<mdp-text base="dist/" lang="en">
+<mf-text base="dist/" lang="en">
 
                         **Markfront Example**
 
@@ -31,4 +31,4 @@ proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 Cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-</mdp-text>
+</mf-text>
