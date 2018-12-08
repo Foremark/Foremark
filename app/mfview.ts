@@ -1,4 +1,4 @@
-import {highlightAuto} from 'highlight.js';
+import {highlightAuto} from '../lib/highlight';
 
 /**
  * Transforms Markfront XML for viewing.
