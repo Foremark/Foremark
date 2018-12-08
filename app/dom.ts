@@ -31,9 +31,9 @@ export function transformHtmlWith(node: Node, tx: (s: string) => string) {
         case NodeType.CDATA_SECTION_NODE:
             node.textContent = decodeHTML(tx(
                 node.textContent!
-                    .replace('&', '&amp;')
-                    .replace('<', '&lt;')
-                    .replace('>', '&gt;')
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
             ));
             break;
         case NodeType.ELEMENT_NODE:
@@ -47,9 +47,9 @@ export function transformHtmlWith(node: Node, tx: (s: string) => string) {
             for (let n: Node | null = node.firstChild; n; n = n.nextSibling) {
                 if (n instanceof Text) {
                     html += n.textContent!
-                        .replace('&', '&amp;')
-                        .replace('<', '&lt;')
-                        .replace('>', '&gt;');
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;');
                 } else {
                     let placeholderId = String(nextPlaceholderId++);
                     placeholders.set(placeholderId, n);
