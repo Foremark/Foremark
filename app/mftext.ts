@@ -124,6 +124,11 @@ export function expandMfText(node: Element): void {
         return output.join('');
     });
 
+    // Inline code
+    transformHtmlWith(node, html => html.replace(
+        /`(.+?(?:\n.+?)?)`(?!\d)/g, '<code>$1</code>',
+    ));
+
     // Parse HTML comments
     transformHtmlWith(node, html => html.replace(
         /&lt;(!--\s[\s\S]*?--)&gt;/g,
