@@ -28,6 +28,8 @@ The following custom elements are defined:
 - `<mf-code>` — A code block with syntax highlighting. Not to be confused with `<code>`.
 - `<mf-eq>` - A LaTeX inline equation.
 - `<mf-eq-display>` - A LaTeX display equation.
+- `<mf-title>`
+- `<mf-lead>`
 
 ### Step 2 - Complex styling (`mfview.ts`)
 

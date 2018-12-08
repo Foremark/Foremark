@@ -308,4 +308,53 @@ export function expandMfText(node: Element): void {
     transformHtmlWith(node, html => html.replace(
         /_(.*?)_/g, '<i>$1</i>',
     ), isNonVerbatimElement);
+
+    // The first paragraph starting with `<b>...</b>` is treated as title
+    (() => {
+        const firstPara = node.getElementsByTagName('p')[0];
+        if (!firstPara) {
+            return;
+        }
+        let bold: Element | null = null;
+        for (let n: Node | null = firstPara.firstChild; n; n = n!.nextSibling) {
+            if ((n instanceof Text) && n.textContent!.match(/^\s*$/)) {
+                continue;
+            }
+            if (!(n instanceof Element) || (n.tagName !== 'B' && n.tagName !== 'b')) {
+                return;
+            }
+            bold = n;
+            break;
+        }
+        if (!bold) {
+            return;
+        }
+
+        // Replace `<p><b>...</b></p>` with `<mf-title>...</mf-title>`
+        const title = node.ownerDocument!.createElement('mf-title');
+        for (let n: Node | null = bold.firstChild; n; ) {
+            const next = n.nextSibling;
+            title.appendChild(n);
+            n = next;
+        }
+        firstPara.parentElement!.insertBefore(title, firstPara);
+        firstPara.parentElement!.removeChild(firstPara);
+
+        // If there are remaining contents, put them in `<mf-lead>...</mf-lead>`
+        const lead = node.ownerDocument!.createElement('mf-lead');
+        let isEmpty = true;
+        for (let n: Node | null = bold.nextSibling; n; ) {
+            if (!(n instanceof Text) || !n.textContent!.match(/^\s*$/)) {
+                isEmpty = false;
+            }
+
+            const next = n.nextSibling;
+            lead.appendChild(n);
+            n = next;
+        }
+        if (isEmpty) {
+            return;
+        }
+        title.parentElement!.insertBefore(lead, title.nextSibling);
+    })();
 }
