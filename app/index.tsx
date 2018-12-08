@@ -18,4 +18,8 @@ const inputNode = document.body;
 import {expandMfText} from './mftext';
 expandMfText(inputNode);
 
+// Apply view transformation
+import {prepareMarkfrontForViewing} from './mfview';
+prepareMarkfrontForViewing(inputNode);
+
 require('./view');

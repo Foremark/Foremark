@@ -35,6 +35,11 @@ mf-code {
     tab-size:4; -moz-tab-size:4; -o-tab-size:4;
 }
 
+:global { @import (less) "~highlight.js/styles/tomorrow.css"; }
+@media (prefers-color-scheme: dark) {
+    :global { @import (less) "~highlight.js/styles/tomorrow-night.css"; }
+}
+
 mf-error {
     display: inline-block;
     border: 2px solid red;

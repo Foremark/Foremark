@@ -13,7 +13,7 @@ Markfront is a technology for writing semi-plain text documents that extends upo
 
 ## How does it work?
 
-### Step 1 - Expand `<mf-text>`
+### Step 1 - Expand `<mf-text>` (`mftext.ts`)
 
 Annotations in the text contents of `mf-text` elements are parsed and converted into explicit markups. Non-textual parts are simply passed through, so you can write any part of a text using markups if you want to for some reasons.
 
@@ -29,7 +29,7 @@ The following custom elements are defined:
 - `<mf-eq>` - A LaTeX inline equation.
 - `<mf-eq-display>` - A LaTeX display equation.
 
-### Step 2 - Complex styling
+### Step 2 - Complex styling (`mfview.ts`)
 
 This step processes custom elements of Markfront XML. The result looks pretty when viewed via a web browser, but the raw code might not no longer retain human-readability.
 
@@ -39,7 +39,7 @@ This step may involve:
 - Markdeep diagrams to SVG conversion
 - Footnote/sidenote layouting
 
-### Step 3 - Add user interface
+### Step 3 - Add user interface (`view.tsx`)
 
 The final HTML is displayed by a web-based viewer application embedded in `markfront.js`, which provides rich functionalities such as table of contents.
 
