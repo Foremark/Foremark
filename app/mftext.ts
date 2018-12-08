@@ -187,6 +187,14 @@ export function expandMfText(node: Element): void {
         let inParagraph = false;
 
         for (let line of lines) {
+            if (line.length === 0) {
+                // Empty line - insert a paragraph break
+                if (inParagraph) {
+                    output.push('</p>');
+                    output.push('\n');
+                    inParagraph = false;
+                }
+            }
             while (line.length > 0) {
                 // Non-phrasing element terminates the current paragraph
                 let until = -1;
@@ -210,14 +218,7 @@ export function expandMfText(node: Element): void {
                 // A part of the current line to be included in the current paragraph
                 const cur = line.substr(0, until).trim();
 
-                if (cur === '') {
-                    // Empty line - insert a paragraph break
-                    if (inParagraph) {
-                        output.push('</p>');
-                        output.push('\n');
-                        inParagraph = false;
-                    }
-                } else {
+                if (cur !== '') {
                     if (!inParagraph) {
                         // Start a paragraph
                         output.push('<p>');
