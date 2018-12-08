@@ -1,4 +1,5 @@
 import {transformHtmlWith} from './dom';
+import {removePrefix} from './utils';
 
 const MFTEXT_TAG_NAME = 'mf-text';
 
@@ -18,6 +19,8 @@ const ARROWS_REGEX = new RegExp(
     'g',
 );
 
+const FENCE_REGEX = /([ \t]*)(~{3,}|`{3,})\s*([-_0-9a-zA-Z\s]*)$/;
+
 /**
  * Expands all `<mf-text>` in a given DOM node.
  */
@@ -35,7 +38,68 @@ export function expandMfText(node: Element): void {
 
     // TODO: Replace diagrams
 
-    // TODO: Replace code blocks
+    // Fenced code blocks
+    transformHtmlWith(node, html => {
+        const lines = html.split('\n');
+        const output: string[] = [];
+
+        let inCodeBlock = false;
+        let currentCodeBlockIndentation = '';
+        let currentCodeBlockFence = '';
+
+        for (const line of lines) {
+            const matches = line.match(FENCE_REGEX);
+
+            if (matches) {
+                matches[2] = matches[2].substr(0, 1);
+                matches[3] = matches[3].trim();
+            }
+
+            if (inCodeBlock) {
+                if (matches && matches[2] === currentCodeBlockFence) {
+                    if (output[output.length - 1] === '\n') {
+                        output.pop(); // Remove trailing newline
+                    }
+                    if (matches[3] === '') {
+                        // End of code blocks
+                        output.push('</mf-code></mf-codeblock>\n');
+                        inCodeBlock = false;
+                    } else {
+                        // Language switch
+                        output.pop(); // Remove trailing newline
+                        output.push(`</mf-code><mf-code type="${matches[3]}">`);
+                        output.push('\n');
+                        currentCodeBlockIndentation = matches[1];
+                    }
+                } else {
+                    output.push(removePrefix(line, currentCodeBlockIndentation));
+                    output.push('\n');
+                }
+            } else {
+                if (matches) {
+                    output.push(`<mf-code type="${matches[3]}">`);
+                    inCodeBlock = true;
+                    currentCodeBlockFence = matches[2];
+                    currentCodeBlockIndentation = matches[1];
+                } else {
+                    output.push(line);
+                    output.push('\n');
+                }
+            }
+        }
+
+        if (inCodeBlock) {
+            if (output[output.length - 1] === '\n') {
+                output.pop(); // Remove trailing newline
+            }
+            output.push('</mf-code></mf-codeblock>');
+            output.push('<mf-error>Unclosed fenced code block/mf-error>');
+        } else {
+            output.pop(); // Remove trailing newline
+        }
+
+        return output.join('');
+    });
 
     // TODO: Replace LaTeX blocks
 
