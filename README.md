@@ -26,6 +26,8 @@ The following custom elements are defined:
 - `<mf-error>` — indicates an error encountered while processing `<mf-text>`.
 - `<mf-codeblock>` — Wraps one or more `<mf-code>` code blocks (optional).
 - `<mf-code>` — A code block with syntax highlighting. Not to be confused with `<code>`.
+- `<mf-eq>` - A LaTeX inline equation.
+- `<mf-eq-display>` - A LaTeX display equation.
 
 ### Step 2 - Complex styling
 

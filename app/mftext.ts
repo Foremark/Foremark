@@ -23,6 +23,7 @@ const FENCE_REGEX = /([ \t]*)(~{3,}|`{3,})\s*([-_0-9a-zA-Z\s]*)$/;
 
 const PHRASING_ELEMENTS = [
     'mf-ph', // default placeholder for non-element nodes
+    'mf-eq',
     'addr', 'audio', 'b', 'bdo', 'br', 'button', 'canvas', 'cite', 'code',
     'command', 'data', 'datalist', 'dfn', 'em', 'embed', 'i', 'iframe', 'img',
     'input', 'kbd', 'keygen', 'label', 'mark', 'math', 'meter', 'noscript',
@@ -38,7 +39,7 @@ const PHRASING_ELEMENTS_MAP = new Map(PHRASING_ELEMENTS.map(
 ));
 
 const VERBATIM_ELEMENTS = [
-    'code', 'mf-code', 'svg',
+    'code', 'mf-code', 'svg', 'mf-eq', 'mf-eq-display'
 ];
 const VERBATIM_ELEMENTS_MAP = new Map(VERBATIM_ELEMENTS.map(
     (n): [string, boolean] => [n, true]
@@ -130,6 +131,26 @@ export function expandMfText(node: Element): void {
 
     // TODO: Replace well-formed HTML tags
 
+    // LaTeX display equations
+    transformHtmlWith(node, html => html.replace(
+        /\$\$(.*?)\$\$/g,
+        '<mf-eq-display>$1</mf-eq-display>',
+    ));
+    transformHtmlWith(node, html => html.replace(
+        /\\begin{(equation\*?|eqnarray)}.*?\\end{\1}/g,
+        '<mf-eq-display>$&</mf-eq-display>',
+    ));
+
+    // LaTeX inline equations
+    transformHtmlWith(node, html => html.replace(
+        /((?:[^\w\d]))\$(\S(?:[^\$]*?\S(?!US|Can))??)\$(?![\w\d])/g,
+        '$1<mf-eq>$2</mf-eq>',
+    ));
+    transformHtmlWith(node, html => html.replace(
+        /((?:[^\w\d]))\$([ \t][^\$]+?[ \t])\$(?![\w\d])/g,
+        '$1<mf-eq>$2</mf-eq>',
+    ));
+
     // Headings
     transformHtmlWith(node, html => html.replace(
         /(?:^|\s*\n)(.+?)\n[ \t]*={3,}[ \t]*\n/g,
@@ -167,13 +188,14 @@ export function expandMfText(node: Element): void {
                 while ((match = TAG.exec(line)) !== null) {
                     until = TAG.lastIndex - match[0].length;
                     restartFrom = TAG.lastIndex;
-                    if (!PHRASING_ELEMENTS_MAP.has(match[1])) {
+                    if (!PHRASING_ELEMENTS_MAP.has(match[1].toLowerCase())) {
                         // Non-phrasing element found - stop right here
                         break;
                     }
                 }
                 if (match === null) {
                     until = line.length;
+                    restartFrom = -1;
                 }
 
                 // A part of the current line to be included in the current paragraph
@@ -224,8 +246,6 @@ export function expandMfText(node: Element): void {
 
     const isNonVerbatimElement = (e: Element) =>
         !VERBATIM_ELEMENTS_MAP.has(e.tagName)
-
-    // TODO: Replace LaTeX blocks
 
     // TODO: Replace tables
 
