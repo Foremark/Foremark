@@ -4,14 +4,14 @@ import {removePrefix} from './utils';
 const MFTEXT_TAG_NAME = 'mf-text';
 
 const ARROWS: [string, string][] = [
-    ['<==', '\u21D0'],
-    ['->', '&rarr;'],
-    ['-->', '&xrarr;'],
-    ['==>', '\u21D2'],
-    ['<-', '&larr;'],
-    ['<--', '&xlarr;'],
-    ['<==>', '\u21D4'],
-    ['<->', '\u2194'],
+    ['&lt;==', '\u21D0'],
+    ['-&gt;', '&rarr;'],
+    ['--&gt;', '&xrarr;'],
+    ['==&gt;', '\u21D2'],
+    ['&lt;-', '&larr;'],
+    ['&lt;--', '&xlarr;'],
+    ['&lt;==&gt;', '\u21D4'],
+    ['&lt;-&gt;', '\u2194'],
 ];
 const ARROWS_MAP = new Map(ARROWS);
 const ARROWS_REGEX = new RegExp(
