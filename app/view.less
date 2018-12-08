@@ -1,0 +1,48 @@
+@import "~./constants.less";
+
+html, body {
+    background: white;
+    font-family: serif;
+    font-size: 17px;
+    color: #444;
+    line-height: 1.5;
+}
+
+@media (prefers-color-scheme: dark) {
+    html, body {
+        background: #222;
+        color: #eee;
+    }
+}
+
+mf-codeblock {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    display: block;
+    padding: 0.5em 0.25em;
+    margin: 0.25em;
+
+    @media (prefers-color-scheme: dark) {
+        border-color: #eee;
+    }
+}
+
+mf-code {
+    white-space: pre;
+    font-size: 90%;
+    font-family: Menlo, Consolas, monospace;
+    letter-spacing: -0.02em;
+    tab-size:4; -moz-tab-size:4; -o-tab-size:4;
+}
+
+mf-error {
+    display: inline-block;
+    border: 2px solid red;
+    margin: 0.5em; padding: 0.5em;
+    font-size: 80%;
+}
+
+code {
+    white-space: pre;
+    page-break-inside: avoid;
+}

@@ -18,6 +18,8 @@ module.exports = debug => ({
       {
         test: /\.less$/,
         use: [{
+          loader: 'style-loader',
+        }, {
           loader: 'css-loader',
           options: {
             modules: true,

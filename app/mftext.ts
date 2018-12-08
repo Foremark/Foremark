@@ -97,6 +97,7 @@ export function expandMfText(node: Element): void {
                 }
             } else {
                 if (matches) {
+                    output.push('<mf-codeblock>');
                     output.push(`<mf-code type="${matches[3]}">`);
                     inCodeBlock = true;
                     currentCodeBlockFence = matches[2];

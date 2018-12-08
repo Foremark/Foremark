@@ -17,3 +17,5 @@ const inputNode = document.body;
 // Expand `<mf-text>`
 import {expandMfText} from './mftext';
 expandMfText(inputNode);
+
+require('./view');
