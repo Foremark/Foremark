@@ -64,7 +64,6 @@ export function expandMfText(node: Element): void {
                         inCodeBlock = false;
                     } else {
                         // Language switch
-                        output.pop(); // Remove trailing newline
                         output.push(`</mf-code><mf-code type="${matches[3]}">`);
                         output.push('\n');
                         currentCodeBlockIndentation = matches[1];
