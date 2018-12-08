@@ -14,9 +14,10 @@ const enum NodeType {
 
 let nextPlaceholderId = 1;
 function placeholderHtmlWithId(name: string, i: any): string {
-    return `<${name} id="${i}" />`;
+    return `<${name} ph-id="${i}" />`;
 }
-const PLACEHOLDER_REGEX = /<[-_a-zA-Z0-9]+ id="([0-9]+)" \/>/;
+const PLACEHOLDER_REGEX = /<[-_a-zA-Z0-9]+ ph-id="([0-9]+)" \/>/g;
+const PLACEHOLDER_ATTR = 'ph-id';
 
 /**
  * Transforms the HTML markup of a given node's contents using a supplied
@@ -24,7 +25,7 @@ const PLACEHOLDER_REGEX = /<[-_a-zA-Z0-9]+ id="([0-9]+)" \/>/;
  *
  * Before passing a HTML markup to a given function, this function protects
  * child elements by replacing them with placeholders. A placeholder is a
- * self-closing tag that looks like `<tagname id="12345" />`. The tag name is
+ * self-closing tag that looks like `<tagname ph-id="12345" />`. The tag name is
  * identical to the original tag name (if the original node was an element), or
  * `mf-ph` (otherwise).
  *
@@ -69,17 +70,37 @@ export function transformHtmlWith(
     }
 
     // Replace the old contents
-    node.innerHTML = '';
+    html = html.replace(
+        PLACEHOLDER_REGEX,
+        `<mf-ph ${PLACEHOLDER_ATTR}="$1"></mf-ph>`
+    );
+    node.innerHTML = html;
 
-    const parts = html.split(PLACEHOLDER_REGEX);
-
-    if (parts[0] !== '') {
-        node.innerHTML = parts[0];
+    if (placeholders.size === 0) {
+        return;
     }
 
-    for (let i = 1; i < parts.length; i += 2) {
-        let placeholderId = parts[i];
-        node.appendChild(placeholders.get(placeholderId)!);
-        node.insertAdjacentHTML('beforeend', parts[i + 1]);
+    // Put the original elements back
+    function fillPlaceholders(e: Element): void {
+        if (e.tagName === 'mf-ph' || e.tagName === 'MF-PH') {
+            const id = e.getAttribute(PLACEHOLDER_ATTR);
+            const original = id && placeholders.get(id);
+            if (original) {
+                const parent = e.parentElement!;
+                parent.insertBefore(original, e);
+                parent.removeChild(e);
+                return;
+            }
+        }
+
+        for (let child: Node | null = e.firstChild; child; ) {
+            const next = child.nextSibling;
+            if (child instanceof Element) {
+                fillPlaceholders(child);
+            }
+            child = next;
+        }
     }
+
+    fillPlaceholders(node);
 }
