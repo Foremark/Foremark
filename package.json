@@ -4,11 +4,13 @@
   "description": "Markfront is a technology for writing semi-plain text documents that extends upon the concept of Markdeep.",
   "main": "index.js",
   "dependencies": {
+    "entities": "^1.1.2",
     "promise-polyfill": "^8.1.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3"
   },
   "devDependencies": {
+    "@types/entities": "^1.1.0",
     "@types/node": "^10.12.12",
     "@types/react": "^16.7.13",
     "@types/react-dom": "^16.0.11",

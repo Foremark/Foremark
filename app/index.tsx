@@ -5,4 +5,15 @@ if ('あ'.charCodeAt(0) !== 0x3042) {
 // Polyfill mainly for IE11
 require('./ie11');
 
-console.log("yeehaw");
+// Load the input from the current document
+import {Context} from './context';
+const context = {
+    document: window.document,
+    lang: document.getElementsByTagName('html')[0].getAttribute('lang') || '',
+};
+
+const inputNode = document.body;
+
+// Expand `<mf-text>`
+import {expandMfText} from './mftext';
+expandMfText(inputNode);
