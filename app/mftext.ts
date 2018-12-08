@@ -34,8 +34,6 @@ export function expandMfText(node: Element): void {
         return;
     }
 
-    // TODO: Replace obvious HTML tags (such as comments)
-
     // TODO: Replace diagrams
 
     // Fenced code blocks
@@ -100,6 +98,14 @@ export function expandMfText(node: Element): void {
 
         return output.join('');
     });
+
+    // Parse HTML comments
+    transformHtmlWith(node, html => html.replace(
+        /&lt;(!--\s[\s\S]*?--)&gt;/g,
+        (_, inner) => `<${inner}>`,
+    ));
+
+    // TODO: Replace well-formed HTML tags
 
     // TODO: Replace LaTeX blocks
 
