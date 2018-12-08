@@ -1,5 +1,6 @@
 import {transformHtmlWith} from './dom';
 import {removePrefix} from './utils';
+import {replaceTables} from './mftext-table';
 
 const MFTEXT_TAG_NAME = 'mf-text';
 
@@ -168,6 +169,9 @@ export function expandMfText(node: Element): void {
         ));
     }
 
+    // Tables
+    transformHtmlWith(node, replaceTables);
+
     // Paragraphs
     transformHtmlWith(node, html => {
         const TAG = /<([-_a-zA-Z0-9]+)\s+.*?>/g;
@@ -246,8 +250,6 @@ export function expandMfText(node: Element): void {
 
     const isNonVerbatimElement = (e: Element) =>
         !VERBATIM_ELEMENTS_MAP.has(e.tagName)
-
-    // TODO: Replace tables
 
     // TODO: Replace definition lists
 
