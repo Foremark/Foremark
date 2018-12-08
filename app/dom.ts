@@ -13,19 +13,30 @@ const enum NodeType {
 }
 
 let nextPlaceholderId = 1;
-function placeholderHtmlWithId(i: any): string {
-    return `<mf-ph id="${i}" />`;
+function placeholderHtmlWithId(name: string, i: any): string {
+    return `<${name} id="${i}" />`;
 }
-const PLACEHOLDER_REGEX = /<mf-ph id="([0-9]+)" \/>/;
+const PLACEHOLDER_REGEX = /<[-_a-zA-Z0-9]+ id="([0-9]+)" \/>/;
 
 /**
  * Transforms the HTML markup of a given node's contents using a supplied
  * function.
  *
  * Before passing a HTML markup to a given function, this function protects
- * child elements by replacing them with placeholders.
+ * child elements by replacing them with placeholders. A placeholder is a
+ * self-closing tag that looks like `<tagname id="12345" />`. The tag name is
+ * identical to the original tag name (if the original node was an element), or
+ * `mf-ph` (otherwise).
+ *
+ * If `recursionFilter` is specified, the contents of a child element is
+ * transformed as well if the element matches the predicate specified by
+ * `recursionFilter`.
  */
-export function transformHtmlWith(node: Node, tx: (s: string) => string) {
+export function transformHtmlWith(
+    node: Node,
+    tx: (s: string) => string,
+    recursionFilter?: (e: Element) => boolean,
+) {
     switch (node.nodeType) {
         case NodeType.TEXT_NODE:
         case NodeType.CDATA_SECTION_NODE:
@@ -50,10 +61,18 @@ export function transformHtmlWith(node: Node, tx: (s: string) => string) {
                         .replace(/&/g, '&amp;')
                         .replace(/</g, '&lt;')
                         .replace(/>/g, '&gt;');
+                } else if (n instanceof Element) {
+                    if (recursionFilter && recursionFilter(n)) {
+                        transformHtmlWith(n, tx, recursionFilter);
+                    }
+
+                    let placeholderId = String(nextPlaceholderId++);
+                    placeholders.set(placeholderId, n);
+                    html += placeholderHtmlWithId(n.tagName, placeholderId);
                 } else {
                     let placeholderId = String(nextPlaceholderId++);
                     placeholders.set(placeholderId, n);
-                    html += placeholderHtmlWithId(placeholderId);
+                    html += placeholderHtmlWithId('mf-ph', placeholderId);
                 }
             }
 

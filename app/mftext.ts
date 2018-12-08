@@ -21,6 +21,29 @@ const ARROWS_REGEX = new RegExp(
 
 const FENCE_REGEX = /([ \t]*)(~{3,}|`{3,})\s*([-_0-9a-zA-Z\s]*)$/;
 
+const PHRASING_ELEMENTS = [
+    'mf-ph', // default placeholder for non-element nodes
+    'addr', 'audio', 'b', 'bdo', 'br', 'button', 'canvas', 'cite', 'code',
+    'command', 'data', 'datalist', 'dfn', 'em', 'embed', 'i', 'iframe', 'img',
+    'input', 'kbd', 'keygen', 'label', 'mark', 'math', 'meter', 'noscript',
+    'object', 'output', 'progress', 'q', 'ruby', 'samp', 'script', 'select',
+    'small', 'span', 'strong', 'sub', 'sup', 'svg', 'textarea', 'time', 'var',
+    'video', 'wbr',
+    // The following elements are conditional, but we assume they belong to
+    // this category
+    'a', 'del', 'ins',
+];
+const PHRASING_ELEMENTS_MAP = new Map(PHRASING_ELEMENTS.map(
+    (n): [string, boolean] => [n, true]
+));
+
+const VERBATIM_ELEMENTS = [
+    'code', 'mf-code', 'svg',
+];
+const VERBATIM_ELEMENTS_MAP = new Map(VERBATIM_ELEMENTS.map(
+    (n): [string, boolean] => [n, true]
+));
+
 /**
  * Expands all `<mf-text>` in a given DOM node.
  */
@@ -106,6 +129,101 @@ export function expandMfText(node: Element): void {
 
     // TODO: Replace well-formed HTML tags
 
+    // Headings
+    transformHtmlWith(node, html => html.replace(
+        /(?:^|\s*\n)(.+?)\n[ \t]*={3,}[ \t]*\n/g,
+        (_, inner) => `<h1>${inner}</h1>`,
+    ));
+    transformHtmlWith(node, html => html.replace(
+        /(?:^|\s*\n)(.+?)\n[ \t]*-{3,}[ \t]*\n/g,
+        (_, inner) => `<h2>${inner}</h2>`,
+    ));
+    for (let i = 6; i >= 1; --i) {
+        // ATX-style header (`## h2`)
+        transformHtmlWith(node, html => html.replace(
+            new RegExp(`^\s*#{${i},${i}}(?:[ \t])([^\n#]+)#*[ \t]*\n`, 'gm'),
+            (_, inner) => `<h${i}>${inner}</h${i}>`,
+        ));
+    }
+
+    // Paragraphs
+    transformHtmlWith(node, html => {
+        const TAG = /<([-_a-zA-Z0-9]+)\s+.*?>/g;
+
+        const lines = html.split('\n');
+        const output: string[] = [];
+
+        let inParagraph = false;
+
+        for (let line of lines) {
+            while (line.length > 0) {
+                // Non-phrasing element terminates the current paragraph
+                let until = -1;
+                let restartFrom = -1;
+
+                TAG.lastIndex = 0;
+                let match: ArrayLike<string> | null;
+                while ((match = TAG.exec(line)) !== null) {
+                    until = TAG.lastIndex - match[0].length;
+                    restartFrom = TAG.lastIndex;
+                    if (!PHRASING_ELEMENTS_MAP.has(match[1])) {
+                        // Non-phrasing element found - stop right here
+                        break;
+                    }
+                }
+                if (match === null) {
+                    until = line.length;
+                }
+
+                // A part of the current line to be included in the current paragraph
+                const cur = line.substr(0, until).trim();
+
+                if (cur === '') {
+                    // Empty line - insert a paragraph break
+                    if (inParagraph) {
+                        output.push('</p>');
+                        output.push('\n');
+                        inParagraph = false;
+                    }
+                } else {
+                    if (!inParagraph) {
+                        // Start a paragraph
+                        output.push('<p>');
+                        output.push('\n');
+                        inParagraph = true;
+                    }
+                    output.push(cur);
+                    output.push('\n');
+                }
+
+                // Processs the rest of the line
+                if (restartFrom >= 0) {
+                    if (inParagraph) {
+                        output.push('</p>');
+                        output.push('\n');
+                        inParagraph = false;
+                    }
+
+                    output.push(line.substring(until, restartFrom));
+                    output.push('\n');
+
+                    line = line.substr(restartFrom);
+                } else {
+                    break;
+                }
+            }
+        }
+
+        if (output[output.length - 1] === '\n') {
+            output.pop(); // Remove trailing newline
+        }
+
+        return output.join('');
+    });
+
+    const isNonVerbatimElement = (e: Element) =>
+        !VERBATIM_ELEMENTS_MAP.has(e.tagName)
+
     // TODO: Replace LaTeX blocks
 
     // TODO: Replace tables
@@ -139,26 +257,26 @@ export function expandMfText(node: Element): void {
         html = html.replace(/\b(\d+\s?)x(\s?\d+)\b/g, '$1&imes;$2');
 
         return html;
-    });
+    }, isNonVerbatimElement);
 
     // Strikethrough
     transformHtmlWith(node, html => html.replace(
-        /~~(.*?)~~/, '<del>$1</del>',
-    ));
+        /~~(.*?)~~/g, '<del>$1</del>',
+    ), isNonVerbatimElement);
 
     // Boldfaces
     transformHtmlWith(node, html => html.replace(
-        /\*\*(.*?)\*\*/, '<b>$1</b>',
-    ));
+        /\*\*(.*?)\*\*/g, '<b>$1</b>',
+    ), isNonVerbatimElement);
     transformHtmlWith(node, html => html.replace(
-        /__(.*?)__/, '<b>$1</b>',
-    ));
+        /__(.*?)__/g, '<b>$1</b>',
+    ), isNonVerbatimElement);
 
     // Italics
     transformHtmlWith(node, html => html.replace(
-        /\*(.*?)\*/, '<i>$1</i>',
-    ));
+        /\*(.*?)\*/g, '<i>$1</i>',
+    ), isNonVerbatimElement);
     transformHtmlWith(node, html => html.replace(
-        /_(.*?)_/, '<i>$1</i>',
-    ));
+        /_(.*?)_/g, '<i>$1</i>',
+    ), isNonVerbatimElement);
 }
