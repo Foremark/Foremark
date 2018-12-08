@@ -255,7 +255,7 @@ export function expandMfText(node: Element): void {
     });
 
     const isNonVerbatimElement = (e: Element) =>
-        !VERBATIM_ELEMENTS_MAP.has(e.tagName)
+        !VERBATIM_ELEMENTS_MAP.has(e.tagName.toLowerCase())
 
     // TODO: Replace definition lists
 
