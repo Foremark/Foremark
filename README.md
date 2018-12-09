@@ -9,7 +9,7 @@ Markfront is a technology for writing semi-plain text documents that extends upo
 - Built based on modern web technologies. The source code is written in TypeScript and organized into modules.
 - Supports flexible input formats ranging from Markdeep-like annotated plain text to explicit markups to meet various needs. In other words, you can write as explicitly as you want to!
 - Less unreliable tricks mean less corner cases.
-- The recommended file format uses the `.xml` extension. Most softwares display XML files in the raw code. This is more preferrable to the situation with Markdeep's HTML, which is likely to be inadequately "parsed" and mangled by less-functional viewers such as GitHub's source code view.
+- The recommended file format uses the `.xhtml` extension. Most source tree browsing softwares display XHTML files in the raw code. This is more preferrable to the situation with Markdeep's HTML, which is likely to be inadequately "parsed" and mangled by less-functional viewers such as GitHub and GitLab.
 
 ## How does it work?
 
