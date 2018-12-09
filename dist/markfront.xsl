@@ -43,6 +43,9 @@
                         }
                     }
                 </style>
+                <link rel="preload" as="font" href="{$baseURI}assets/et-book-roman-line-figures.woff" crossorigin="crossorigin" />
+                <link rel="preload" as="font" href="{$baseURI}assets/et-book-bold-line-figures.woff" crossorigin="crossorigin" />
+                <link rel="preload" as="font" href="{$baseURI}assets/et-book-display-italic-old-style-figures.woff" crossorigin="crossorigin" />
                 <link href="{$baseURI}markfront.css" rel="stylesheet" type="text/css" />
             </head>
             <body>
