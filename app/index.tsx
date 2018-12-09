@@ -22,4 +22,23 @@ expandMfText(inputNode);
 import {prepareMarkfrontForViewing} from './mfview';
 prepareMarkfrontForViewing(inputNode);
 
-require('./view');
+// Move the contents into a detached DOM element
+const markfrontRoot = document.createElement('article');
+for (let e: Node | null = inputNode.firstChild; e; ) {
+    const next = e.nextSibling;
+    if (!(e instanceof Element) || (e.tagName !== 'SCRIPT' && e.tagName !== 'script')) {
+        markfrontRoot.appendChild(e);
+    }
+    e = next;
+}
+
+// Create a React root
+const reactRoot = document.createElement('mf-app');
+document.body.appendChild(reactRoot);
+
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import {App} from './view';
+
+ReactDOM.render(<App markfrontDocument={markfrontRoot} />, reactRoot);
+
