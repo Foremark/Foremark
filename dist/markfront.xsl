@@ -43,6 +43,7 @@
                         }
                     }
                 </style>
+                <link href="{$baseURI}markfront.css" rel="stylesheet" type="text/css" />
             </head>
             <body>
                 <xsl:copy-of select="$content" />

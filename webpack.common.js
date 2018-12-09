@@ -2,6 +2,7 @@ const path = require('path');
 
 const webpack = require('webpack');
 const GitRevisionPlugin = require('git-revision-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const gitRevision = new GitRevisionPlugin();
 
 module.exports = debug => ({
@@ -18,7 +19,7 @@ module.exports = debug => ({
       {
         test: /\.less$/,
         use: [{
-          loader: 'style-loader',
+          loader: MiniCssExtractPlugin.loader,
         }, {
           loader: 'css-loader',
           options: {
@@ -37,9 +38,9 @@ module.exports = debug => ({
         test: /\.(svg|eot|ttf|woff|woff2|png|jpg)$/,
         loader: 'url-loader',
         options: {
-          limit: 65000,
+          limit: 8000,
           name: 'assets/[name].[ext]',
-          publicPath: '/',
+          publicPath: '.',
         },
       }
     ]
@@ -63,5 +64,6 @@ module.exports = debug => ({
         'IS_BROWSER': JSON.stringify(true),
       },
     }),
+    new MiniCssExtractPlugin(),
   ],
 });
