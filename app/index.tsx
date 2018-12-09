@@ -20,6 +20,15 @@ if (!inputNode) {
     </mf-error>`;
 }
 
+// `<mf-text>` is a shorthand syntax for `<mf><mf-text>...</mf-text></mf>`
+if (inputNode.tagName.toLowerCase() === 'mf-text') {
+    const mf = document.createElement('mf');
+    mf.appendChild(inputNode);
+    inputNode = mf;
+} else {
+    inputNode.parentElement!.removeChild(inputNode);
+}
+
 // Expand `<mf-text>`
 import {expandMfText} from './mftext';
 expandMfText(inputNode);
@@ -27,16 +36,6 @@ expandMfText(inputNode);
 // Apply view transformation
 import {prepareMarkfrontForViewing} from './mfview';
 prepareMarkfrontForViewing(inputNode);
-
-// Move the contents into a detached DOM element
-const markfrontRoot = document.createElement('article');
-for (let e: Node | null = inputNode.firstChild; e; ) {
-    const next = e.nextSibling;
-    if (!(e instanceof Element) || (e.tagName !== 'SCRIPT' && e.tagName !== 'script')) {
-        markfrontRoot.appendChild(e);
-    }
-    e = next;
-}
 
 // Create `<body>` if it doesn't exist yet
 let body = document.getElementsByTagName('body')[0];
@@ -63,5 +62,5 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {App} from './view';
 
-ReactDOM.render(<App markfrontDocument={markfrontRoot} />, reactRoot);
+ReactDOM.render(<App markfrontDocument={inputNode as HTMLElement} />, reactRoot);
 

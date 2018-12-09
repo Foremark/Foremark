@@ -371,4 +371,14 @@ export function expandMfText(node: Element): void {
         }
         title.parentElement!.insertBefore(lead, title.nextSibling);
     })();
+
+    // Unwrap `<mf-text>`
+    const parent = node.parentElement;
+    if (!parent) {
+        throw new Error("mf-text must bave a parent element.");
+    }
+    while (node.firstChild) {
+        parent.insertBefore(node.firstChild, node);
+    }
+    parent.removeChild(node);
 }
