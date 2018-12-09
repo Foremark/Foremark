@@ -198,19 +198,31 @@ export function expandMfText(node: Element): void {
             while (line.length > 0) {
                 // Non-phrasing element terminates the current paragraph
                 let until = -1;
-                let restartFrom = -1;
+                let restartFrom = 0;
+                let foundVisualElement = false;
 
                 TAG.lastIndex = 0;
                 let match: ArrayLike<string> | null;
                 while ((match = TAG.exec(line)) !== null) {
                     until = TAG.lastIndex - match[0].length;
+                    if (until > restartFrom) {
+                        // A text node was found
+                        foundVisualElement = true;
+                    }
                     restartFrom = TAG.lastIndex;
                     if (!PHRASING_ELEMENTS_MAP.has(match[1].toLowerCase())) {
                         // Non-phrasing element found - stop right here
                         break;
                     }
+                    if (match[1] !== 'mf-ph' && match[1] !== 'MF-PH') {
+                        // Element possibly including a text node was found
+                        foundVisualElement = true;
+                    }
                 }
                 if (match === null) {
+                    if (line.length > restartFrom) {
+                        foundVisualElement = true;
+                    }
                     until = line.length;
                     restartFrom = -1;
                 }
@@ -219,7 +231,9 @@ export function expandMfText(node: Element): void {
                 const cur = line.substr(0, until).trim();
 
                 if (cur !== '') {
-                    if (!inParagraph) {
+                    // Do not start a paragraph if we only encountered non-visual
+                    // nodes such as comments
+                    if (foundVisualElement && !inParagraph) {
                         // Start a paragraph
                         output.push('<p>');
                         output.push('\n');
