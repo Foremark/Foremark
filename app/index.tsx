@@ -12,7 +12,13 @@ const context = {
     lang: document.getElementsByTagName('html')[0].getAttribute('lang') || '',
 };
 
-const inputNode = document.body;
+let inputNode = document.querySelector('mf, mf-text');
+if (!inputNode) {
+    inputNode = document.createElement('mf');
+    inputNode.innerHTML = `<mf-error>
+        Could not find <code>&lt;mf&gt;</code> nor <code>&lt;mf-text&gt;</code>.
+    </mf-error>`;
+}
 
 // Expand `<mf-text>`
 import {expandMfText} from './mftext';
@@ -32,9 +38,26 @@ for (let e: Node | null = inputNode.firstChild; e; ) {
     e = next;
 }
 
+// Create `<body>` if it doesn't exist yet
+let body = document.getElementsByTagName('body')[0];
+if (!body) {
+    document.getElementsByTagName('html')[0].appendChild(
+        body = document.createElement('body'));
+}
+
+// Inject stylesheet
+const script = document.querySelector('script[data-rel=markfront]');
+const basePathMatch = script && (script as HTMLScriptElement).src.match(/^(.*?)[^\/]+$/);
+if (basePathMatch) {
+    const style = document.createElement('link');
+    style.rel = 'stylesheet';
+    style.href = basePathMatch[1] + '/markfront.css';
+    body.appendChild(style);
+}
+
 // Create a React root
 const reactRoot = document.createElement('mf-app');
-document.body.appendChild(reactRoot);
+body.appendChild(reactRoot);
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';

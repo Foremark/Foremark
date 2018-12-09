@@ -9,6 +9,6 @@ module.exports = merge(common(true), {
     publicPath: '/dist/',
     historyApiFallback: true,
     inline: false,
-    openPage: 'basic.mf.xml',
+    openPage: 'basic.mf.xhtml',
   }
 });
