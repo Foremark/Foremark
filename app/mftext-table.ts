@@ -65,9 +65,9 @@ export function replaceTables(s: string): string {
             result += `<tr><${tag}${columnStyle[0]}>`;
             result += row.replace(/ *\| */g, () => {
                 ++i;
-                return ` </${tag}><${tag}${columnStyle[i]}> `;
+                return ` </${tag}><${tag}${columnStyle[i] || ''}> `;
             });
-            result += '</tr>\n';
+            result += `</${tag}></tr>\n`;
 
             // Skip the header-separator row
             if (r == startRow) {

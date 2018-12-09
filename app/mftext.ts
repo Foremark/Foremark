@@ -5,14 +5,14 @@ import {replaceTables} from './mftext-table';
 const MFTEXT_TAG_NAME = 'mf-text';
 
 const ARROWS: [string, string][] = [
-    ['&lt;==', '\u21D0'],
-    ['-&gt;', '&rarr;'],
-    ['--&gt;', '&xrarr;'],
-    ['==&gt;', '\u21D2'],
-    ['&lt;-', '&larr;'],
-    ['&lt;--', '&xlarr;'],
-    ['&lt;==&gt;', '\u21D4'],
-    ['&lt;-&gt;', '\u2194'],
+    ['&lt;==', '⇐'],
+    ['-&gt;', '→'],
+    ['--&gt;', '⟶'],
+    ['==&gt;', '⇒'],
+    ['&lt;-', '←'],
+    ['&lt;--', '⟵'],
+    ['&lt;==&gt;', '⇔'],
+    ['&lt;-&gt;', '↔'],
 ];
 const ARROWS_MAP = new Map(ARROWS);
 const ARROWS_REGEX = new RegExp(
@@ -283,7 +283,7 @@ export function expandMfText(node: Element): void {
         html = html.replace(/\b--\b/g, '–');
 
         // Number x number
-        html = html.replace(/\b(\d+\s?)x(\s?\d+)\b/g, '$1&imes;$2');
+        html = html.replace(/\b(\d+\s?)x(\s?\d+)\b/g, '$1×$2');
 
         return html;
     }, isNonVerbatimElement);
