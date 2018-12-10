@@ -30,11 +30,11 @@ if (inputNode.tagName.toLowerCase() === 'mf-text') {
 }
 
 // Expand `<mf-text>`
-import {expandMfText} from './mftext';
+import {expandMfText} from './converter/mftext';
 expandMfText(inputNode);
 
 // Apply view transformation
-import {prepareMarkfrontForViewing} from './mfview';
+import {prepareMarkfrontForViewing} from './view/mfview';
 prepareMarkfrontForViewing(inputNode);
 
 // Create `<body>` if it doesn't exist yet
@@ -60,7 +60,7 @@ body.appendChild(reactRoot);
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {App} from './view';
+import {App} from './view/view';
 
 ReactDOM.render(<App markfrontDocument={inputNode as HTMLElement} />, reactRoot);
 

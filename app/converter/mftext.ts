@@ -1,6 +1,6 @@
-import {transformHtmlWith} from './dom';
-import {removePrefix} from './utils';
-import {replaceTables} from './mftext-table';
+import {transformHtmlWith} from '../utils/dom';
+import {removePrefix} from '../utils/string';
+import {replaceTables} from './table';
 
 const MFTEXT_TAG_NAME = 'mf-text';
 

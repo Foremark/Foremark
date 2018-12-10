@@ -1,7 +1,7 @@
-import {highlightAuto} from '../lib/highlight';
+import {highlightAuto} from '../../lib/highlight';
 import * as katex from 'katex';
 
-import {forEachNodePreorder} from './dom';
+import {forEachNodePreorder} from '../utils/dom';
 
 /**
  * Transforms Markfront XML for viewing.
@@ -71,8 +71,6 @@ const katexDisplayOptions: katex.KatexOptions = {
     displayMode: true,
     ... katexInlineOptions,
 };
-
-require('../lib/katex.less');
 
 const HANDLERS: { [tagName: string]: (node: Element) => void } & Object = {
     'mf-eq': node => {
