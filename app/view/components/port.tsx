@@ -1,17 +1,21 @@
-import * as React from 'react';
+import * as React from 'preact';
 
 export interface PortProps {
     element: HTMLElement;
 
     className?: string;
-    style?: React.CSSProperties;
+    style?: any;
 }
 
 /**
  * Displays a given element in a `<div>` wrapper. Useful for stateful elements.
  */
-export class Port extends React.PureComponent<PortProps, {}> {
+export class Port extends React.Component<PortProps, {}> {
     private wrapper: null | HTMLDivElement = null;
+
+    refs: any;
+
+    shouldComponentUpdate() { return false; }
 
     componentDidMount(): void {
         if (!this.wrapper) {

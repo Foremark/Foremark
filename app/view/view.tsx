@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from 'preact';
 
 import {Port} from './components/port';
 
@@ -10,6 +10,8 @@ export interface AppProps {
 }
 
 export class App extends React.Component<AppProps> {
+    refs: any;
+
     constructor(props: AppProps) {
         super(props);
     }

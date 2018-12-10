@@ -58,9 +58,8 @@ if (basePathMatch) {
 const reactRoot = document.createElement('mf-app');
 body.appendChild(reactRoot);
 
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import * as React from 'preact';
 import {App} from './view/view';
 
-ReactDOM.render(<App markfrontDocument={inputNode as HTMLElement} />, reactRoot);
+React.render(<App markfrontDocument={inputNode as HTMLElement} />, reactRoot);
 
