@@ -2,7 +2,7 @@ import * as React from 'preact';
 
 import {Port} from './components/port';
 
-require('./view.less');
+require('./app.less');
 document.getElementsByTagName('html')[0].classList.add('mf-processed');
 
 export interface AppProps {

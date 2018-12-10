@@ -56,7 +56,7 @@ const reactRoot = document.createElement('mf-app');
 body.appendChild(reactRoot);
 
 import * as React from 'preact';
-import {App} from './view/view';
+import {App} from './view/app';
 
 React.render(<App markfrontDocument={inputNode as HTMLElement} />, reactRoot);
 
