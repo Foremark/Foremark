@@ -1,8 +1,9 @@
 import * as React from 'preact';
 
 import {Port} from './components/port';
+import {TableOfContents} from './toc';
 
-require('./app.less');
+const CN = require('./app.less');
 document.getElementsByTagName('html')[0].classList.add('mf-processed');
 
 export interface AppProps {
@@ -17,7 +18,14 @@ export class App extends React.Component<AppProps> {
     }
 
     render() {
-        return <Port element={this.props.markfrontDocument} />;
+        return <div className={CN.root}>
+            <aside className={CN.nav}>
+                <nav>
+                    <TableOfContents markfrontDocument={this.props.markfrontDocument} />
+                </nav>
+            </aside>
+            <Port element={this.props.markfrontDocument} />
+        </div>;
     }
 }
 

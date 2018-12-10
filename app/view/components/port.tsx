@@ -1,17 +1,15 @@
 import * as React from 'preact';
 
-export interface PortProps {
+export interface PortProps extends JSX.HTMLAttributes {
     element: HTMLElement;
-
-    className?: string;
-    style?: any;
+    tagName?: string;
 }
 
 /**
  * Displays a given element in a `<div>` wrapper. Useful for stateful elements.
  */
 export class Port extends React.Component<PortProps, {}> {
-    private wrapper: null | HTMLDivElement = null;
+    private wrapper: null | HTMLElement = null;
 
     refs: any;
 
@@ -43,9 +41,12 @@ export class Port extends React.Component<PortProps, {}> {
     }
 
     render() {
-        return <div
-                className={this.props.className}
-                style={this.props.style}
-                ref={(e) => {this.wrapper = e; }} />;
+        const {element, tagName, ...rest} = this.props;
+
+        const Tag = tagName || 'div';
+
+        return <Tag
+            ref={(e: HTMLElement) => {this.wrapper = e;}}
+            {...rest} />;
     }
 }
