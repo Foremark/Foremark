@@ -1,0 +1,60 @@
+/*
+ *  Source webfont
+ *
+ *  @license SIL Open Font License 1.1
+ *
+ *  Copyright 2014 Adobe Systems Incorporated (http://www.adobe.com/),
+ *  with Reserved Font Name 'Source'. All Rights Reserved. Source is a trademark
+ *  of Adobe Systems Incorporated in the United States and/or other countries.
+ *
+ *  This Font Software is licensed under the SIL Open Font License, Version 1.1.
+ */
+/*
+ *  Heuristica webfont
+ *
+ *  @license SIL Open Font License 1.1
+ *
+ *  Copyright 1989, 1991 Adobe Systems Incorporated. All rights reserved.
+ *  Utopia is either a registered trademark or trademark of Adobe Systems
+ *  Incorporated in the United States and/or other countries. Used under
+ *  license.
+ *
+ *  Copyright 2006 Han The Thanh, Vntopia font family, http://vntex.sf.net
+ *
+ *  Copyright (c) 2008-2012, Andrey V. Panov (panov@canopus.iacp.dvo.ru),
+ *  with Reserved Font Name Heuristica.
+ *
+ *  This Font Software is licensed under the SIL Open Font License, Version 1.1.
+ *  This license is copied below, and is also available with a FAQ at:
+ *  http://scripts.sil.org/OFL
+ */
+@font-face {
+    font-family: 'Source Serif Pro';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Source Serif Pro'), url("./SourceSerifPro-Regular.woff") format('woff');
+}
+@font-face {
+    font-family: 'Source Serif Pro';
+    font-style: italic;
+    font-weight: 400;
+    src: url("./Heuristica-Italic.woff") format('woff');
+}
+@font-face {
+    font-family: 'Source Serif Pro';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Source Serif Pro Bold'), url("./SourceSerifPro-Bold.woff") format('woff');
+}
+@font-face {
+    font-family: 'Source Code Pro';
+    font-style: normal;
+    font-weight: 400;
+    src: url("./SourceCodePro-Regular.woff") format('woff');
+}
+@font-face {
+    font-family: 'Source Code Pro';
+    font-style: normal;
+    font-weight: 600;
+    src: url("./SourceCodePro-Semibold.woff") format('woff');
+}

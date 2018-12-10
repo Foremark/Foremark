@@ -1,11 +1,14 @@
 @import "~./constants.less";
 
-@import "~../lib/et-book/fonts.css";
+@import "~../lib/source/fonts.css";
+@import "~../lib/fira/fonts.css";
+
+@namespace mf url(http://markfront.8vit.me);
 
 html, body {
     background: white;
-    font-family: 'et-book', serif;
-    font-size: 17px;
+    font-family: 'Source Serif Pro', serif;
+    font-size: 15px;
     color: #444;
     line-height: 1.5;
 }
@@ -18,16 +21,17 @@ html, body {
 }
 
 mf-title {
-    font-size: 300%;
+    font-size: 2.2rem;
     margin: 1em 0;
     display: block;
+    font-style: italic;
 }
 mf-lead {
     display: block;
     font-style: italic;
 }
 h1 {
-    font-size: 2.2rem;
+    font-size: 1.8rem;
     margin: 2rem 0 1.5rem;
     font-style: italic;
     font-weight: normal;
@@ -53,7 +57,7 @@ mf-codeblock {
 
 code, mf-code {
     font-size: 90%;
-    font-family: Menlo, Consolas, monospace;
+    font-family: 'Source Code Pro', Menlo, Consolas, monospace;
     letter-spacing: -0.02em;
     tab-size:4; -moz-tab-size:4; -o-tab-size:4;
     white-space: pre;

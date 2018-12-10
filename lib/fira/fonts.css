@@ -1,0 +1,29 @@
+/*
+ *  Fira Sans webfont
+ *
+ *  @license SIL Open Font License 1.1
+ *
+ *  Copyright (c) 2014, Mozilla Foundation https://mozilla.org/
+ *  with Reserved Font Name Fira Sans.
+ *
+ *  Copyright (c) 2014, Mozilla Foundation https://mozilla.org/
+ *  with Reserved Font Name Fira Mono.
+ *
+ *  Copyright (c) 2014, Telefonica S.A.
+ *
+ *  This Font Software is licensed under the SIL Open Font License, Version 1.1.
+ *  This license is copied below, and is also available with a FAQ at:
+ *  http://scripts.sil.org/OFL
+ */
+@font-face {
+    font-family: 'Fira Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Fira Sans'), url("./FiraSans-Regular.woff") format('woff');
+}
+@font-face {
+    font-family: 'Fira Sans';
+    font-style: normal;
+    font-weight: 500;
+    src: local('Fira Sans Medium'), url("./FiraSans-Medium.woff") format('woff');
+}
