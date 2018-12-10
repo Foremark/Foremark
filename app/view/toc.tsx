@@ -1,6 +1,9 @@
 import * as React from 'preact';
+import {bind} from 'bind-decorator';
+import * as classnames from 'classnames';
 
 import {Port} from './components/port';
+import {EventHook} from './components/eventhook';
 import {forEachNodePreorder} from '../utils/dom';
 
 const CN = require('./toc.less');
@@ -9,21 +12,111 @@ export interface TableOfContentsProps {
     markfrontDocument: HTMLElement;
 }
 
-export class TableOfContents extends React.Component<TableOfContentsProps> {
+interface TableOfContentsState {
+    /**
+     * The full path of the currently active node.
+     *
+     * This value is uniquely determined from the active node. Nevertheless we
+     * store the full path in order to determine the active state of a collapsed
+     * `NodeView` quickly.
+     */
+    activeNodePath: ReadonlyArray<Node>;
+}
+
+export class TableOfContents extends React.Component<TableOfContentsProps, TableOfContentsState> {
     refs: any;
 
     private root: Node;
+    private allNodes: Node[];
+
+    private suspendActiveNodeUpdate = false;
 
     constructor(props: TableOfContentsProps) {
         super(props);
 
-        this.root = scanNodes(props.markfrontDocument);
+        this.state = {
+            activeNodePath: [],
+        };
+
+        this.allNodes = enumerateNodes(props.markfrontDocument);
+        this.root = buildNodeTree(this.allNodes);
+    }
+
+    @bind
+    private handleScroll(): void {
+        this.recalculateAndSetActiveNode();
+    }
+
+    @bind
+    private handleResize(): void {
+        this.recalculateAndSetActiveNode();
+    }
+
+    private recalculateAndSetActiveNode(): void {
+        if (this.suspendActiveNodeUpdate) {
+            return;
+        }
+
+        const refY = document.body.scrollTop + 40;
+
+        let activeNode: Node | null = null;
+        for (const node of this.allNodes) {
+            let top = 0;
+            for (let e: HTMLElement | null = node.element!; e; e = e.offsetParent as HTMLElement) {
+                top += e.offsetTop;
+            }
+            if (top > refY) {
+                break;
+            }
+            activeNode = node;
+        }
+
+        this.setActiveNode(activeNode);
+    }
+
+    private setActiveNode(newActiveNode: Node | null): void {
+        const {activeNodePath} = this.state;
+        const activeNode = activeNodePath.length ?
+            activeNodePath[activeNodePath.length - 1] : null;
+
+        if (activeNode !== newActiveNode) {
+            const path = [];
+            for (let n: Node | null = newActiveNode; n; n = n.parent) {
+                path.unshift(n);
+            }
+            this.setState({
+                activeNodePath: path,
+            });
+        }
+    }
+
+    @bind
+    private handleNodeClick(node: Node): void {
+        // If a user clicks a node near the end of the document, the scroll
+        // position is limited by the bottom edge of the document. As a result,
+        // the active node determined by `recalculateAndSetActiveNode` might not
+        // point the node the user just clicked. This might feel weird to users.
+        //
+        // We fix this by temporarily overriding the decision by
+        // `recalculateAndSetActiveNode`.
+        this.suspendActiveNodeUpdate = true;
+        this.setActiveNode(node);
+        setTimeout(() => {
+            this.suspendActiveNodeUpdate = false;
+        }, 50);
     }
 
     render() {
         return <ul className={CN.root}>
+            <EventHook target={document} scroll={this.handleScroll} />
+            <EventHook target={window} resize={this.handleResize} />
+
             {this.root.children.map((child, i) =>
-                <NodeView key={i} node={child} />)}
+                <NodeView
+                    key={i}
+                    node={child}
+                    tocState={this.state}
+                    onNodeClick={this.handleNodeClick} />)}
         </ul>;
     }
 }
@@ -33,9 +126,10 @@ interface Node {
     element: HTMLElement | null;
     level: number;
     children: Node[];
+    parent: Node | null;
 }
 
-function scanNodes(document: HTMLElement): Node {
+function enumerateNodes(document: HTMLElement): Node[] {
     const nodes: Node[] = [];
 
     forEachNodePreorder(document, node => {
@@ -48,15 +142,23 @@ function scanNodes(document: HTMLElement): Node {
                 element: node,
                 level: parseInt(match[1], 10),
                 children: [],
+                parent: null,
             });
         }
     });
 
-    // Construct a tree from a flat list of nodes
+    return nodes;
+}
+
+/**
+ * Construct a tree from a flat list of nodes.
+ */
+function buildNodeTree(nodes: Node[]): Node {
     const root: Node = {
         element: null,
         level: 0,
         children: [],
+        parent: null,
     };
     const levels: Node[] = [];
     for (let i = 0; i < 10; ++i) {
@@ -65,6 +167,7 @@ function scanNodes(document: HTMLElement): Node {
 
     for (const node of nodes) {
         levels[node.level].children.push(node);
+        node.parent = levels[node.level];
         for (let i = node.level + 1; i < levels.length; ++i) {
             levels[i] = node;
         }
@@ -75,6 +178,8 @@ function scanNodes(document: HTMLElement): Node {
 
 interface NodeViewProps {
     node: Node;
+    onNodeClick: (node: Node) => void;
+    tocState: TableOfContentsState;
 }
 
 class NodeView extends React.Component<NodeViewProps> {
@@ -90,18 +195,35 @@ class NodeView extends React.Component<NodeViewProps> {
         label.removeAttribute('id');
     }
 
+    @bind
+    private handleClick(): void {
+        this.props.onNodeClick(this.props.node);
+    }
+
     render() {
-        const {node} = this.props;
-        return <li>
+        const {node, tocState, onNodeClick} = this.props;
+
+        // TODO: Expand/collapse nodes
+
+        const active =
+            tocState.activeNodePath.length == node.level + 1 &&
+            node === tocState.activeNodePath[node.level];
+
+        return <li class={classnames({[CN.active]: active})}>
             <Port
-                element={this.label}
                 tagName='a'
+                element={this.label}
+                onClick={this.handleClick}
                 href={'#' + node.element!.id} />
             {
                 node.children.length > 0 ?
                     <ul>
                         {node.children.map((child, i) =>
-                            <NodeView key={i} node={child} />)}
+                            <NodeView
+                                key={i}
+                                node={child}
+                                tocState={tocState}
+                                onNodeClick={onNodeClick} />)}
                     </ul>
                 :
                     null
