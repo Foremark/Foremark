@@ -21,12 +21,15 @@ export function prepareMarkfrontForViewing(node: Element): void {
                 counter[i] = 0;
             }
 
+            const id = Array.prototype.slice.call(counter, 1, level + 1).join('.');
+
             if (!node.getAttribute('id')) {
                 // `id` is missing. Assign a new one
-                const id = Array.prototype.slice.call(counter, 1, level + 1)
-                    .join('.');
                 node.setAttribute('id', id);
             }
+
+            // Also, display the section number
+            node.insertAdjacentHTML('afterbegin', `<span class="section-number">${id}</span> `);
         }
     });
 
