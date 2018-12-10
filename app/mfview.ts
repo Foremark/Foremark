@@ -7,6 +7,29 @@ import {forEachNodePreorder} from './dom';
  * Transforms Markfront XML for viewing.
  */
 export function prepareMarkfrontForViewing(node: Element): void {
+    // Assign identifiers to headings
+    const counter = new Float64Array(10);
+    forEachNodePreorder(node, node => {
+        if (!(node instanceof Element)) {
+            return;
+        }
+        const match = node.tagName.match(/^h([0-9])$/i);
+        if (match) {
+            const level = parseInt(match[1], 10);
+            counter[level] += 1;
+            for (let i = level + 1; i < counter.length; ++i) {
+                counter[i] = 0;
+            }
+
+            if (!node.getAttribute('id')) {
+                // `id` is missing. Assign a new one
+                const id = Array.prototype.slice.call(counter, 1, level + 1)
+                    .join('.');
+                node.setAttribute('id', id);
+            }
+        }
+    });
+
     // Render complex elements
     forEachNodePreorder(node, node => {
         if (node instanceof Element) {
