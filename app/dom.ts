@@ -104,3 +104,19 @@ export function transformHtmlWith(
 
     fillPlaceholders(node);
 }
+
+/**
+ * Iterate all nodes in pre-order using a callback function.
+ *
+ * Child nodes are not traversed if the callback function returns `false`.
+ */
+export function forEachNodePreorder(node: Node, f: (node: Node) => boolean | void) {
+    if (f(node) === false) {
+        return;
+    }
+    if (node instanceof Element) {
+        for (let n: Node | null = node.firstChild; n; n = n.nextSibling) {
+            forEachNodePreorder(n, f);
+        }
+    }
+}

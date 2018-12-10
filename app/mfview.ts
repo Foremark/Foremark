@@ -1,20 +1,23 @@
 import {highlightAuto} from '../lib/highlight';
 import * as katex from 'katex';
 
+import {forEachNodePreorder} from './dom';
+
 /**
  * Transforms Markfront XML for viewing.
  */
 export function prepareMarkfrontForViewing(node: Element): void {
-    const tagName = node.tagName.toLowerCase();
-    if (HANDLERS.hasOwnProperty(tagName)) {
-        HANDLERS[tagName](node);
-    } else {
-        for (let n: Node | null = node.firstChild; n; n = n.nextSibling) {
-            if (n instanceof Element) {
-                prepareMarkfrontForViewing(n);
+    // Render complex elements
+    forEachNodePreorder(node, node => {
+        if (node instanceof Element) {
+            const tagName = node.tagName.toLowerCase();
+            if (HANDLERS.hasOwnProperty(tagName)) {
+                HANDLERS[tagName](node);
+                return false;
             }
         }
-    }
+        return true;
+    });
 }
 
 const katexInlineOptions = {
