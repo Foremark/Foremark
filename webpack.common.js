@@ -5,7 +5,7 @@ const GitRevisionPlugin = require('git-revision-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const gitRevision = new GitRevisionPlugin();
 
-module.exports = debug => ({
+module.exports = (debug, selfContained) => ({
   entry: {
     markfront: './app/index.tsx',
   },
@@ -18,27 +18,33 @@ module.exports = debug => ({
       },
       {
         test: /\.less$/,
-        use: [{
-          loader: MiniCssExtractPlugin.loader,
-        }, {
-          loader: 'css-loader',
-          options: {
-            modules: true,
+        use: [
+          selfContained ? {
+            loader: 'style-loader'
+          } : {
+            loader: MiniCssExtractPlugin.loader,
           },
-        }, {
-          loader: 'less-loader',
-          options: {
-            strictMath: true,
-            strictUnits: true,
-            noIeCompat: true,
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+            },
           },
-        }],
+          {
+            loader: 'less-loader',
+            options: {
+              strictMath: true,
+              strictUnits: true,
+              noIeCompat: true,
+            },
+          }
+        ],
       },
       {
         test: /\.(svg|eot|ttf|woff|woff2|png|jpg)$/,
         loader: 'url-loader',
         options: {
-          limit: 8000,
+          limit: selfContained ? 1e6 : 8000,
           name: 'assets/[name].[ext]',
           publicPath: '.',
         },
@@ -52,7 +58,7 @@ module.exports = debug => ({
     ]
   },
   output: {
-    filename: '[name].js',
+    filename: selfContained ? '[name].bundle.js' : '[name].js',
     path: path.resolve(__dirname, 'dist'),
   },
   plugins: [
@@ -62,6 +68,7 @@ module.exports = debug => ({
         'COMMITHASH': JSON.stringify(gitRevision.commithash()),
         'BRANCH': JSON.stringify(gitRevision.branch()),
         'IS_BROWSER': JSON.stringify(true),
+        'INJECT_CSS': JSON.stringify(!selfContained),
       },
     }),
     new MiniCssExtractPlugin(),

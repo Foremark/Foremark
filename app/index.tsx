@@ -42,13 +42,15 @@ if (!body) {
 }
 
 // Inject stylesheet
-const script = document.querySelector('script[data-rel=markfront]');
-const basePathMatch = script && (script as HTMLScriptElement).src.match(/^(.*?)[^\/]+$/);
-if (basePathMatch) {
-    const style = document.createElement('link');
-    style.rel = 'stylesheet';
-    style.href = basePathMatch[1] + '/markfront.css';
-    body.appendChild(style);
+if (process.env.INJECT_CSS) {
+    const script = document.querySelector('script[data-rel=markfront]');
+    const basePathMatch = script && (script as HTMLScriptElement).src.match(/^(.*?)[^\/]+$/);
+    if (basePathMatch) {
+        const style = document.createElement('link');
+        style.rel = 'stylesheet';
+        style.href = basePathMatch[1] + '/markfront.css';
+        body.appendChild(style);
+    }
 }
 
 // Create a React root
