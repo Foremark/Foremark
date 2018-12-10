@@ -8,7 +8,6 @@
     "highlight.js": "^9.13.1",
     "katex": "^0.10.0",
     "preact": "^8.4.2",
-    "promise-polyfill": "^8.1.0",
     "react-dom": "^16.6.3"
   },
   "devDependencies": {
