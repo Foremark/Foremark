@@ -62,7 +62,7 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
         let activeNode: Node | null = null;
         for (const node of this.allNodes) {
             let top = 0;
-            for (let e: HTMLElement | null = node.element!; e; e = e.offsetParent as HTMLElement) {
+            for (let e: HTMLElement | null = node.anchor!; e; e = e.offsetParent as HTMLElement) {
                 top += e.offsetTop;
             }
             if (top > refY) {
@@ -123,7 +123,9 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
 
 interface Node {
     /** The HTML element of the heading. `null` for the root node. */
-    element: HTMLElement | null;
+    label: HTMLElement | null;
+    /** The HTML element of the anchor. `null` for the root node. */
+    anchor: HTMLElement | null;
     level: number;
     children: Node[];
     parent: Node | null;
@@ -132,14 +134,31 @@ interface Node {
 function enumerateNodes(document: HTMLElement): Node[] {
     const nodes: Node[] = [];
 
+    const idMap = new Map<string, HTMLElement>();
+    forEachNodePreorder(document, node => {
+        if (!(node instanceof HTMLElement)) {
+            return;
+        }
+        const {id} = node;
+        if (!id) {
+            return;
+        }
+        idMap.set(id, node);
+    });
+
     forEachNodePreorder(document, node => {
         if (!(node instanceof HTMLElement)) {
             return;
         }
         const match = node.tagName.match(/^h([0-9])$/i);
         if (match) {
+            // Find the anchor element
+            const id = node.getAttribute('data-anchor');
+            const anchor = (id && idMap.get(id)) || node;
+
             nodes.push({
-                element: node,
+                label: node,
+                anchor,
                 level: parseInt(match[1], 10),
                 children: [],
                 parent: null,
@@ -155,7 +174,8 @@ function enumerateNodes(document: HTMLElement): Node[] {
  */
 function buildNodeTree(nodes: Node[]): Node {
     const root: Node = {
-        element: null,
+        label: null,
+        anchor: null,
         level: 0,
         children: [],
         parent: null,
@@ -191,7 +211,7 @@ class NodeView extends React.Component<NodeViewProps> {
         super(props);
 
         // Clone the heading element to create a TOC label
-        const label = this.label = props.node.element!.cloneNode(true) as HTMLElement;
+        const label = this.label = props.node.label!.cloneNode(true) as HTMLElement;
         label.removeAttribute('id');
     }
 
@@ -214,7 +234,7 @@ class NodeView extends React.Component<NodeViewProps> {
                 tagName='a'
                 element={this.label}
                 onClick={this.handleClick}
-                href={'#' + node.element!.id} />
+                href={'#' + node.anchor!.id} />
             {
                 node.children.length > 0 ?
                     <ul>

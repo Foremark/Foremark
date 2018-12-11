@@ -20,17 +20,108 @@ html, body {
 }
 
 .root {
-    padding: 0 0 0 180px;
+    padding: 0;
+    &.sidebarVisible {
+        padding-left: @sidebar-width;
+    }
 }
 
-.nav {
+.sidebar {
     position: fixed;
-    left: 0; top: 0; bottom: 0; width: 180px;
-    overflow: auto;
+    left: 0; top: 0; bottom: 0; width: @sidebar-width;
+    pointer-events: none;
 
-    background: #fafafa;
-    @media (prefers-color-scheme: dark) {
-        background: #444;
+    .sidebarVisible & {
+        background: #fafafa;
+        @media (prefers-color-scheme: dark) {
+            background: #444;
+        }
+    }
+
+    .toolbar {
+        pointer-events: auto;
+
+        white-space: nowrap;
+        margin: 5px 4px;
+
+        > * { vertical-align: bottom }
+
+        > input.search {
+            font-family: "Fira Sans", sans-serif;
+            width: (@sidebar-width - 6px);
+            height: 24px;
+            box-sizing: border-box;
+            background: transparent;
+            border: 1px solid #aaa;
+            padding: 4px 4px;
+            margin: 0 4px 0 0;
+            border-radius: 3px;
+
+            opacity: 0.5;
+            &:hover {
+                opacity: 1;
+            }
+            .sidebarVisible & {
+                opacity: 1;
+                background: white;
+                @media (prefers-color-scheme: dark) {
+                    background: #222;
+                }
+            }
+        }
+
+        // Toolbar button
+        > input[type=checkbox] { display: none; }
+        > input[type=checkbox] + label {
+            height: 24px;
+            display: inline-block;
+            box-sizing: border-box;
+            border: 1px solid #aaa;
+            border-radius: 3px;
+            opacity: 0.5;
+            position: relative;
+            &:hover {
+                opacity: 1;
+            }
+        }
+        > input[type=checkbox]:checked + label {
+            border-color: #3060e0;
+            background: #3060e0;
+            color: #eee;
+            opacity: 1;
+        }
+
+        label.sidebarToggle { width: 40px; }
+        label.sidebarToggle > span {
+            left: 13px; top: 6px; width: 12px;
+            &:before, &:after {
+                content: "";
+                left: 0; right: 0;
+            }
+            &, &:before, &:after {
+                position: absolute;
+                background: black;
+                height: 1px;
+                @media (prefers-color-scheme: dark) { background: #eee; }
+            }
+            &:before { top: 4px; }
+            &:after { top: 8px; }
+        }
+        > input[type=checkbox]:checked + label.sidebarToggle > span {
+            &, &:before, &:after { background: #eee !important; }
+        }
+    }
+
+    > nav {
+        display: none;
+        position: absolute;
+        left: 0; top: 2em; right: 0; bottom: 0;
+        overflow: auto;
+        pointer-events: auto;
+
+        .sidebarVisible & {
+            display: block;
+        }
     }
 }
 
@@ -55,6 +146,11 @@ h2 {
     margin: 1rem 0 1rem;
     font-style: italic;
     font-weight: normal;
+}
+a:global(.anchor) {
+    position: relative;
+    display: block;
+    top: calc(-25px - 1em); // Move slightly so it won't overlap with the toolbar
 }
 
 // Section number

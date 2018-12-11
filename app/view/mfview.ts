@@ -7,7 +7,7 @@ import {forEachNodePreorder} from '../utils/dom';
  * Transforms Markfront XML for viewing.
  */
 export function prepareMarkfrontForViewing(node: Element): void {
-    // Assign identifiers to headings
+    // Add anchors to headings
     const counter = new Float64Array(10);
     forEachNodePreorder(node, node => {
         if (!(node instanceof Element)) {
@@ -21,15 +21,19 @@ export function prepareMarkfrontForViewing(node: Element): void {
                 counter[i] = 0;
             }
 
-            const id = Array.prototype.slice.call(counter, 1, level + 1).join('.');
+            const number = Array.prototype.slice.call(counter, 1, level + 1).join('.');
+            // Display the section number
+            node.insertAdjacentHTML('afterbegin', `<span class="section-number">${number}</span> `);
 
-            if (!node.getAttribute('id')) {
-                // `id` is missing. Assign a new one
-                node.setAttribute('id', id);
-            }
+            const id = node.getAttribute('id') || number;
 
-            // Also, display the section number
-            node.insertAdjacentHTML('afterbegin', `<span class="section-number">${id}</span> `);
+            // Insert `<a>` for each heading
+            node.removeAttribute('id');
+            node.setAttribute('data-anchor', id);
+            const a = document.createElement('a');
+            a.id = id;
+            a.className = 'anchor';
+            node.parentElement!.insertBefore(a, node);
         }
     });
 
