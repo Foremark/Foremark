@@ -24,7 +24,9 @@ export class App extends React.Component<AppProps> {
                     <TableOfContents markfrontDocument={this.props.markfrontDocument} />
                 </nav>
             </aside>
-            <Port element={this.props.markfrontDocument} />
+            <Port
+                tagName='main'
+                element={this.props.markfrontDocument} />
         </div>;
     }
 }
