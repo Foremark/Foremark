@@ -7,13 +7,14 @@ import {forEachNodePreorder} from '../utils/dom';
  * Transforms Markfront XML for viewing.
  */
 export function prepareMarkfrontForViewing(node: Element): void {
-    // Add anchors to headings
+    // Modify headings
     const counter = new Float64Array(10);
+    const names: string[] = ['', '', '', '', '', '', '', '', '', ''];
     forEachNodePreorder(node, node => {
         if (!(node instanceof Element)) {
             return;
         }
-        const match = node.tagName.match(/^h([0-9])$/i);
+        const match = node.tagName.match(/^h([1-9])$/i);
         if (match) {
             const level = parseInt(match[1], 10);
             counter[level] += 1;
@@ -21,11 +22,28 @@ export function prepareMarkfrontForViewing(node: Element): void {
                 counter[i] = 0;
             }
 
+            // Section number in `1.2.3` style
             const number = Array.prototype.slice.call(counter, 1, level + 1).join('.');
-            // Display the section number
-            node.insertAdjacentHTML('afterbegin', `<span class="section-number">${number}</span> `);
 
-            const id = node.getAttribute('id') || number;
+            // Determine the ID of the heading. If it doesn't have one, generate
+            // one in a Markdeep-compatible way.
+            names[level] = encodeURI((node.textContent || '').replace(/\s/g, '').toLowerCase());
+            if (!names[level]) {
+                // If the heading is empty for some reasons, just use the
+                // heading number
+                names[level] = number;
+            }
+            if (level > 1) {
+                names[level] = names[level - 1] + '/' + names[level];
+            }
+            for (let i = level + 1; i < counter.length; ++i) {
+                names[i] = names[level];
+            }
+
+            let id = node.getAttribute('id');
+            if (!id) {
+                id = names[level];
+            }
 
             // Insert `<a>` for each heading
             node.removeAttribute('id');
@@ -34,6 +52,9 @@ export function prepareMarkfrontForViewing(node: Element): void {
             a.id = id;
             a.className = 'anchor';
             node.parentElement!.insertBefore(a, node);
+
+            // Display the section number
+            node.insertAdjacentHTML('afterbegin', `<span class="section-number">${number}</span> `);
         }
     });
 
