@@ -3,6 +3,7 @@ import {encodeHTML} from 'entities';
 import {transformHtmlWith, escapeXmlText, legalizeAttributes} from '../utils/dom';
 import {removePrefix} from '../utils/string';
 import {replaceTables} from './table';
+import {replaceLists} from './list';
 
 const MFTEXT_TAG_NAME = 'mf-text';
 
@@ -185,6 +186,12 @@ export function expandMfText(node: Element): void {
         '<hr />',
     ));
 
+    // Lists
+    transformHtmlWith(node, replaceLists);
+
+    const isListElement = (e: Element) =>
+        e.tagName.match(/^(?:ul|ol|dl|li|dt|dd)$/i) != null;
+
     // Paragraphs
     transformHtmlWith(node, html => {
         const TAG = /<([-_a-zA-Z0-9]+)\s+.*?>/g;
@@ -269,17 +276,19 @@ export function expandMfText(node: Element): void {
             }
         }
 
+        if (inParagraph) {
+            output.push('</p>');
+        }
+
         if (output[output.length - 1] === '\n') {
             output.pop(); // Remove trailing newline
         }
 
         return output.join('');
-    });
+    }, isListElement);
 
     const isNonVerbatimElement = (e: Element) =>
         !VERBATIM_ELEMENTS_MAP.has(e.tagName.toLowerCase())
-
-    // TODO: Replace definition lists
 
     // TODO: Replace media
 
