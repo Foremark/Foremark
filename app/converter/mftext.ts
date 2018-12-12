@@ -161,11 +161,11 @@ export function expandMfText(node: Element): void {
 
     // Headings
     transformHtmlWith(node, html => html.replace(
-        /(?:^|\s*\n)(.+?)\n[ \t]*={3,}[ \t]*\n/g,
+        /^(.+?)\n[ \t]*={3,}[ \t]*$/gm,
         (_, inner) => `<h1>${inner}</h1>`,
     ));
     transformHtmlWith(node, html => html.replace(
-        /(?:^|\s*\n)(.+?)\n[ \t]*-{3,}[ \t]*\n/g,
+        /^(.+?)\n[ \t]*-{3,}[ \t]*$/gm,
         (_, inner) => `<h2>${inner}</h2>`,
     ));
     for (let i = 6; i >= 1; --i) {
@@ -178,6 +178,12 @@ export function expandMfText(node: Element): void {
 
     // Tables
     transformHtmlWith(node, replaceTables);
+
+    // Horizontal rule: `* * *`, `- - -`, `_ _ _`
+    transformHtmlWith(node, html => html.replace(
+        /^[ \t]*((\*|-|_)[ \t]*){3,}[ \t]*$/gm,
+        '<hr />',
+    ));
 
     // Paragraphs
     transformHtmlWith(node, html => {
