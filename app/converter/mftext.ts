@@ -1,4 +1,6 @@
-import {transformHtmlWith} from '../utils/dom';
+import {encodeHTML} from 'entities';
+
+import {transformHtmlWith, escapeXmlText, legalizeAttributes} from '../utils/dom';
 import {removePrefix} from '../utils/string';
 import {replaceTables} from './table';
 
@@ -273,11 +275,21 @@ export function expandMfText(node: Element): void {
 
     // TODO: Replace definition lists
 
-    // TODO: Replace headers
-
     // TODO: Replace media
 
-    // TODO: Replace hyperlinks
+    // Hyperlink: `[text](url)`
+    transformHtmlWith(node, html => html.replace(
+        /(^|[^!])\[([^\[\]]+?)\]\(("?)([^<>\s"]+?)\3(\s+[^\)]*?)?\)/g,
+        (match, pre, text, maybeQuote, url: string, attribs = '') => {
+            url = escapeXmlText(url);
+            attribs = legalizeAttributes(attribs, e => console.warn(e));
+            return pre + `<a href="${url}"${attribs}>${text}</a>`;
+        }
+    ), isNonVerbatimElement);
+
+    // TODO: Replace other types of hyperlinks
+    //       `[](url)`, `<url>`, `http://example.com`, `USER@example.com`,
+    //       `[text][ref]`, `[^footnoteref]`, `[#citeref]`
 
     // TODO: Replace admonitions
 

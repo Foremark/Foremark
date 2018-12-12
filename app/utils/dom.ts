@@ -120,3 +120,99 @@ export function forEachNodePreorder(node: Node, f: (node: Node) => boolean | voi
         }
     }
 }
+
+/**
+ * Attempts to fix malformed XML attributes.
+ *
+ * Example: `legalizeAttributes(' a b="<>"')` returns `' a="a" b="&lt;&gt;"'`.
+ */
+export function legalizeAttributes(xml: string, onwarning: (message: string) => void = () => {}): string {
+    const [_, spaces, inner] = xml.match(/^(\s*)(.*)$/)!;
+
+    return spaces + (' ' + inner).replace(
+        // This regex matches a XML attribute with rather forgiving syntax.
+        // The union of all matches must cover entire the input except for
+        // trailing whitespace characters (if any).
+        /(\s*)([^\s=]+)(?:(\s*=\s)*("[^"]*"?|'[^']*'?|[^"'\s]+)?)?/ig,
+        //^^^  ^^^^^^^^             ^^^^^^^^ ^^^^^^^^ ^^^^^^^^
+        // |    name                 "value"  'value'  value
+        // +-- separating space
+        (_, space, name, equal?: string, value?: string) => {
+            if (space === '') {
+                onwarning("A separator between attributes is missing.");
+                space = ' ';
+            }
+            if (!isValidXmlName(name)) {
+                onwarning(`Invalid attribute name: '${name}'`);
+                return '';
+            }
+
+            if (equal == null) {
+                // Value elision - valid in HTML, so do not issue a warning
+                equal = '=';
+                value = `"${escapeXmlText(name)}"`;
+            } else if (value == null) {
+                onwarning(`Value for attribute '${name}' is missing.`);
+                value = '""';
+            } else {
+                // Expand and re-escpae the value in either case
+                if (value.startsWith('"')) {
+                    if (value.endsWith('"')) {
+                        value = value.substring(1, value.length - 1);
+                    } else {
+                        value = value.substr(1);
+                        onwarning(`Value for attribute '${name}' has no closing quotation mark.`);
+                    }
+                } else if (value.startsWith("'")) {
+                    if (value.endsWith("'")) {
+                        value = value.substring(1, value.length - 1);
+                    } else {
+                        value = value.substr(1);
+                        onwarning(`Value for attribute '${name}' has no closing quotation mark.`);
+                    }
+                } else {
+                    // Quotation mark elision - probably valid in HTML
+                }
+
+                value = `"${escapeXmlText(value)}"`;
+            }
+
+            return space + name + equal + value;
+        }
+    ).substr(1);
+}
+
+const testElement = document.createElement('i');
+
+/**
+ * Matches a given string against [XML NCName](http://www.w3.org/TR/1999/REC-xml-names-19990114/#NT-NCName).
+ */
+function isValidXmlName(name: string): boolean {
+    // Fast path - This also prevents collision with the attributes that have
+    // a meaning predefined by the HTML specification.
+    if (name.match(/[a-zA-Z][-\w]*/)) {
+        return true;
+    }
+
+    return isValidXmlNameSlow(name);
+}
+
+function isValidXmlNameSlow(name: string): boolean {
+    // I could've used <https://www.npmjs.com/package/ncname>, but that would
+    // increase the bundle size and the number of dependencies.
+    try {
+        testElement.setAttribute(name, "1");
+        return true;
+    } finally {
+        testElement.removeAttribute(name);
+    }
+    return false;
+}
+
+export function escapeXmlText(text: string): string {
+    return text
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
