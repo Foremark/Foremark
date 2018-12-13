@@ -30,6 +30,12 @@ The following custom elements are defined:
 - `<mf-eq-display>` - A LaTeX display equation.
 - `<mf-title>`
 - `<mf-lead>`
+- `<ul>`
+    - `<li class="plus">`
+    - `<li class="minus">`
+    - `<li class="asterisk">`
+    - `<li class="checked">`
+    - `<li class="unchecked">`
 
 ### Step 2 - Complex styling (`mfview.ts`)
 

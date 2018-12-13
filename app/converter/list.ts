@@ -50,6 +50,10 @@ const MARKER_MAP = new Map<string, [LevelType, string | number | null]>([
     ['-', [LevelType.Unordered, 'minus']],
     ['+', [LevelType.Unordered, 'plus']],
     ['*', [LevelType.Unordered, 'asterisk']],
+    ['- [ ]', [LevelType.Unordered, 'unchecked']],
+    ['- [x]', [LevelType.Unordered, 'checked']],
+    ['[ ]', [LevelType.Unordered, 'unchecked']],
+    ['[x]', [LevelType.Unordered, 'checked']],
     [':', [LevelType.Definition, null]],
 ]);
 const markerInfoFromString = (s: string) => MARKER_MAP.get(s) ||
@@ -147,7 +151,12 @@ export function replaceLists(html: string): string {
         }
 
         // Detect list marker
-        const markerMatch = lineBody.match(/^(:|-|\+|\*|\d+\.)([ \t]+)(\S.*)/);
+        const markerMatch = lineBody.match(
+            /^(:|(?:- )?\[[x ]\]|-|\+|\*|\d+\.)([ \t]+)(\S.*)/);
+        //     ^ ^^^^^^^^^^^^^^^ ^^^^^^^  ^^^^^
+        //     |   checklist    unordered ordered
+        //     |
+        //     +--- definition
 
         if (!markerMatch) {
             // No marker's here

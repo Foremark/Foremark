@@ -160,6 +160,21 @@ mf {
         // ... except between adjacent `p`s.
         > p + p { margin-top: 0.5em; }
     }
+
+    li {
+        // Checklist
+        &:global(.checked),
+        &:global(.unchecked) {
+            list-style: none;
+            &:before {
+                font-size: 120%;
+                position: absolute;
+                transform: translate(-1.2em, -0.15em);
+            }
+        }
+        &:global(.checked):before { content: "\2611"; }
+        &:global(.unchecked):before { content: "\2610"; }
+    }
 }
 
 // Section number
