@@ -102,6 +102,7 @@ export function expandMfText(node: Element): void {
                 }
             } else {
                 if (matches) {
+                    output.push(matches[1]); // Preserve indentation
                     output.push('<mf-codeblock>');
                     output.push(`<mf-code type="${matches[3]}">`);
                     inCodeBlock = true;
