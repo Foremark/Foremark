@@ -23,8 +23,5 @@
     "include": [
         "app/**/*.ts",
         "app/**/*.tsx",
-        "gen/**/*.ts",
-        "gen/**/*.tsx",
-        "gen/**/*.js",
     ]
 }
