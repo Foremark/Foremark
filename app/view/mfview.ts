@@ -2,6 +2,7 @@ import {highlightAuto} from '../../lib/highlight';
 import * as katex from 'katex';
 
 import {forEachNodePreorder} from '../utils/dom';
+import {TagNames, AttributeNames} from '../markfront';
 
 /**
  * Transforms Markfront XML for viewing.
@@ -101,14 +102,14 @@ const katexDisplayOptions: katex.KatexOptions = {
 };
 
 const HANDLERS: { [tagName: string]: (node: Element) => void } & Object = {
-    'mf-eq': node => {
+    [TagNames.Equation]: node => {
         node.innerHTML = katex.renderToString(node.textContent || '', katexInlineOptions);
     },
-    'mf-eq-display': node => {
+    [TagNames.DisplayEquation]: node => {
         node.innerHTML = katex.renderToString(node.textContent || '', katexDisplayOptions);
     },
-    'mf-code': node => {
-        const type = (node.getAttribute('type') || '').split(' ');
+    [TagNames.Code]: node => {
+        const type = (node.getAttribute(AttributeNames.CodeType) || '').split(' ');
         const lang = type[0];
         if (lang === '') {
             return;
@@ -119,7 +120,7 @@ const HANDLERS: { [tagName: string]: (node: Element) => void } & Object = {
 
         // TODO: line numbers
     },
-    'mf-diagram': node => {
+    [TagNames.Diagram]: node => {
         // TODO
     },
 };

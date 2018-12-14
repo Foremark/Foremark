@@ -1,11 +1,12 @@
 import {encodeHTML} from 'entities';
 
-import {transformHtmlWith, escapeXmlText, legalizeAttributes} from '../utils/dom';
+import {TagNames} from '../markfront';
+import {
+    transformHtmlWith, escapeXmlText, legalizeAttributes, InternalTagNames,
+} from '../utils/dom';
 import {removePrefix} from '../utils/string';
 import {replaceTables} from './table';
 import {replaceLists} from './list';
-
-const MFTEXT_TAG_NAME = 'mf-text';
 
 const ARROWS: [string, string][] = [
     ['&lt;==', '⇐'],
@@ -26,8 +27,8 @@ const ARROWS_REGEX = new RegExp(
 const FENCE_REGEX = /([ \t]*)(~{3,}|`{3,})\s*([-_0-9a-zA-Z\s]*)$/;
 
 const PHRASING_ELEMENTS = [
-    'mf-ph', // default placeholder for non-element nodes
-    'mf-eq',
+    InternalTagNames.Placeholder, // default placeholder for non-element nodes
+    TagNames.Equation,
     'addr', 'audio', 'b', 'bdo', 'br', 'button', 'canvas', 'cite', 'code',
     'command', 'data', 'datalist', 'dfn', 'em', 'embed', 'i', 'iframe', 'img',
     'input', 'kbd', 'keygen', 'label', 'mark', 'math', 'meter', 'noscript',
@@ -43,7 +44,7 @@ const PHRASING_ELEMENTS_MAP = new Map(PHRASING_ELEMENTS.map(
 ));
 
 const VERBATIM_ELEMENTS = [
-    'code', 'mf-code', 'svg', 'mf-eq', 'mf-eq-display'
+    'code', TagNames.Code, 'svg', TagNames.Equation, TagNames.DisplayEquation,
 ];
 const VERBATIM_ELEMENTS_MAP = new Map(VERBATIM_ELEMENTS.map(
     (n): [string, boolean] => [n, true]
@@ -53,7 +54,7 @@ const VERBATIM_ELEMENTS_MAP = new Map(VERBATIM_ELEMENTS.map(
  * Expands all `<mf-text>` in a given DOM node.
  */
 export function expandMfText(node: Element): void {
-    if (node.tagName.toLowerCase() !== MFTEXT_TAG_NAME) {
+    if (node.tagName.toLowerCase() !== TagNames.Text) {
         for (let n: Node | null = node.firstChild; n; n = n.nextSibling) {
             if (n instanceof Element) {
                 expandMfText(n);
@@ -88,11 +89,11 @@ export function expandMfText(node: Element): void {
                     }
                     if (matches[3] === '') {
                         // End of code blocks
-                        output.push('</mf-code></mf-codeblock>\n');
+                        output.push(`</${TagNames.Code}></${TagNames.CodeBlock}>\n`);
                         inCodeBlock = false;
                     } else {
                         // Language switch
-                        output.push(`</mf-code><mf-code type="${matches[3]}">`);
+                        output.push(`</${TagNames.Code}><${TagNames.Code} type="${matches[3]}">`);
                         output.push('\n');
                         currentCodeBlockIndentation = matches[1];
                     }
@@ -103,8 +104,8 @@ export function expandMfText(node: Element): void {
             } else {
                 if (matches) {
                     output.push(matches[1]); // Preserve indentation
-                    output.push('<mf-codeblock>');
-                    output.push(`<mf-code type="${matches[3]}">`);
+                    output.push(`<${TagNames.CodeBlock}>`);
+                    output.push(`<${TagNames.Code} type="${matches[3]}">`);
                     inCodeBlock = true;
                     currentCodeBlockFence = matches[2];
                     currentCodeBlockIndentation = matches[1];
@@ -119,8 +120,8 @@ export function expandMfText(node: Element): void {
             if (output[output.length - 1] === '\n') {
                 output.pop(); // Remove trailing newline
             }
-            output.push('</mf-code></mf-codeblock>');
-            output.push('<mf-error>Unclosed fenced code block/mf-error>');
+            output.push(`</${TagNames.Code}></${TagNames.CodeBlock}>`);
+            output.push(`<${TagNames.Error}>Unclosed fenced code block</${TagNames.Error}>`);
         } else {
             output.pop(); // Remove trailing newline
         }
@@ -144,21 +145,21 @@ export function expandMfText(node: Element): void {
     // LaTeX display equations
     transformHtmlWith(node, html => html.replace(
         /\$\$(.*?)\$\$/g,
-        '<mf-eq-display>$1</mf-eq-display>',
+        `<${TagNames.DisplayEquation}>$1</${TagNames.DisplayEquation}>`,
     ));
     transformHtmlWith(node, html => html.replace(
         /\\begin{(equation\*?|eqnarray)}.*?\\end{\1}/g,
-        '<mf-eq-display>$&</mf-eq-display>',
+        `<${TagNames.DisplayEquation}>$&</${TagNames.DisplayEquation}>`,
     ));
 
     // LaTeX inline equations
     transformHtmlWith(node, html => html.replace(
         /((?:[^\w\d]))\$(\S(?:[^\$]*?\S(?!US|Can))??)\$(?![\w\d])/g,
-        '$1<mf-eq>$2</mf-eq>',
+        `$1<${TagNames.Equation}>$2</${TagNames.Equation}>`,
     ));
     transformHtmlWith(node, html => html.replace(
         /((?:[^\w\d]))\$([ \t][^\$]+?[ \t])\$(?![\w\d])/g,
-        '$1<mf-eq>$2</mf-eq>',
+        `$1<${TagNames.Equation}>$2</${TagNames.Equation}>`,
     ));
 
     // Headings
@@ -230,7 +231,7 @@ export function expandMfText(node: Element): void {
                         // Non-phrasing element found - stop right here
                         break;
                     }
-                    if (match[1] !== 'mf-ph' && match[1] !== 'MF-PH') {
+                    if (match[1] !== InternalTagNames.Placeholder) {
                         // Element possibly including a text node was found
                         foundVisualElement = true;
                     }
@@ -373,7 +374,7 @@ export function expandMfText(node: Element): void {
         }
 
         // Replace `<p><b>...</b></p>` with `<mf-title>...</mf-title>`
-        const title = node.ownerDocument!.createElement('mf-title');
+        const title = node.ownerDocument!.createElement(TagNames.Title);
         for (let n: Node | null = bold.firstChild; n; ) {
             const next = n.nextSibling;
             title.appendChild(n);
@@ -383,7 +384,7 @@ export function expandMfText(node: Element): void {
         firstPara.parentElement!.removeChild(firstPara);
 
         // If there are remaining contents, put them in `<mf-lead>...</mf-lead>`
-        const lead = node.ownerDocument!.createElement('mf-lead');
+        const lead = node.ownerDocument!.createElement(TagNames.Lead);
         let isEmpty = true;
         for (let n: Node | null = bold.nextSibling; n; ) {
             if (!(n instanceof Text) || !n.textContent!.match(/^\s*$/)) {
@@ -403,7 +404,7 @@ export function expandMfText(node: Element): void {
     // Unwrap `<mf-text>`
     const parent = node.parentElement;
     if (!parent) {
-        throw new Error("mf-text must bave a parent element.");
+        throw new Error(`${TagNames.Text} must bave a parent element.`);
     }
     while (node.firstChild) {
         parent.insertBefore(node.firstChild, node);

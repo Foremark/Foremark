@@ -9,17 +9,18 @@ const context = {
     lang: document.getElementsByTagName('html')[0].getAttribute('lang') || '',
 };
 
-let inputNode = document.querySelector('mf, mf-text');
-if (!inputNode) {
-    inputNode = document.createElement('mf');
-    inputNode.innerHTML = `<mf-error>
-        Could not find <code>&lt;mf&gt;</code> nor <code>&lt;mf-text&gt;</code>.
-    </mf-error>`;
+import {TagNames} from './markfront';
+let inputNode = document.querySelector(`${TagNames.Document}, ${TagNames.Text}`);
+if (inputNode == null) {
+    inputNode = document.createElement(TagNames.Document);
+    inputNode.innerHTML = `<${TagNames.Error}>
+        Could not find <code>&lt;${TagNames.Document}&gt;</code> nor <code>&lt;${TagNames.Text}&gt;</code>.
+    </${TagNames.Error}>`;
 }
 
 // `<mf-text>` is a shorthand syntax for `<mf><mf-text>...</mf-text></mf>`
-if (inputNode.tagName.toLowerCase() === 'mf-text') {
-    const mf = document.createElement('mf');
+if (inputNode.tagName.toLowerCase() === TagNames.Text) {
+    const mf = document.createElement(TagNames.Document);
     mf.appendChild(inputNode);
     inputNode = mf;
 } else {

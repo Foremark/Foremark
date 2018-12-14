@@ -1,5 +1,14 @@
 import {encodeHTML, decodeHTML} from 'entities';
 
+export const enum InternalTagNames {
+    /**
+     * The tag name used for placeholders by `transformHtmlWith`. However,
+     * if the replaced node is an element, then the name of the element will be
+     * used instead.
+     */
+    Placeholder = 'mf-ph',
+}
+
 /** Inlined constants from `NodeType`. */
 const enum NodeType {
     ELEMENT_NODE = 1,
@@ -27,7 +36,7 @@ const PLACEHOLDER_ATTR = 'ph-id';
  * child elements by replacing them with placeholders. A placeholder is a
  * self-closing tag that looks like `<tagname ph-id="12345" />`. The tag name is
  * identical to the original tag name (if the original node was an element), or
- * `mf-ph` (otherwise).
+ * `InternalTagNames.Placeholder` (otherwise).
  *
  * If `recursionFilter` is specified, the contents of a child element is
  * transformed as well if the element matches the predicate specified by
@@ -58,7 +67,7 @@ export function transformHtmlWith(
         } else {
             let placeholderId = String(nextPlaceholderId++);
             placeholders.set(placeholderId, n);
-            html += placeholderHtmlWithId('mf-ph', placeholderId);
+            html += placeholderHtmlWithId(InternalTagNames.Placeholder, placeholderId);
         }
     }
 
@@ -72,7 +81,7 @@ export function transformHtmlWith(
     // Replace the old contents
     html = html.replace(
         PLACEHOLDER_REGEX,
-        `<mf-ph ${PLACEHOLDER_ATTR}="$1"></mf-ph>`
+        `<${InternalTagNames.Placeholder} ${PLACEHOLDER_ATTR}="$1"></${InternalTagNames.Placeholder}>`
     );
     node.innerHTML = html;
 
@@ -82,7 +91,7 @@ export function transformHtmlWith(
 
     // Put the original elements back
     function fillPlaceholders(e: Element): void {
-        if (e.tagName === 'mf-ph' || e.tagName === 'MF-PH') {
+        if (e.tagName === InternalTagNames.Placeholder) {
             const id = e.getAttribute(PLACEHOLDER_ATTR);
             const original = id && placeholders.get(id);
             if (original) {
