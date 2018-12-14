@@ -3,7 +3,9 @@ import {bind} from 'bind-decorator';
 import * as classnames from 'classnames';
 
 import {Port} from './components/port';
+import {SignalHook} from './components/signalhook';
 import {TableOfContents} from './toc';
+import {onLoaderUpdate, isLoaderActive} from './loader';
 
 const CN = require('./app.less');
 document.getElementsByTagName('html')[0].classList.add('mf-processed');
@@ -14,6 +16,7 @@ export interface AppProps {
 
 interface AppState {
     tocVisible: boolean;
+    loaderActivity: boolean,
 }
 
 export class App extends React.Component<AppProps, AppState> {
@@ -24,6 +27,7 @@ export class App extends React.Component<AppProps, AppState> {
 
         this.state = {
             tocVisible: true,
+            loaderActivity: isLoaderActive(),
         };
     }
 
@@ -34,16 +38,28 @@ export class App extends React.Component<AppProps, AppState> {
         });
     }
 
+    @bind
+    private handleLoaderUpdate(): void {
+        this.setState({
+            loaderActivity: isLoaderActive(),
+        });
+    }
+
     render() {
         const {state} = this;
         return <div className={classnames({
                     [CN.root]: true,
                     [CN.sidebarVisible]: state.tocVisible
                 })}>
+
+            <SignalHook signal={onLoaderUpdate} slot={this.handleLoaderUpdate} />
+
             <aside className={CN.sidebar}>
                 <div className={CN.toolbar}>
+                    {/* Search field */}
                     <input className={CN.search} placeholder="Search" />
 
+                    {/* Toggle sidebar visibility */}
                     <input
                         id='sidebarToggle'
                         type='checkbox'
@@ -52,6 +68,9 @@ export class App extends React.Component<AppProps, AppState> {
                     <label for='sidebarToggle' className={CN.sidebarToggle}>
                         <span />
                     </label>
+
+                    {/* Activity indicator */}
+                    { state.loaderActivity && <span className={CN.spinner} /> }
                 </div>
                 <nav>
                     <TableOfContents markfrontDocument={this.props.markfrontDocument} />

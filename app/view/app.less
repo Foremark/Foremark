@@ -109,6 +109,37 @@ html, body {
         > input[type=checkbox]:checked + label.sidebarToggle > span {
             &, &:before, &:after { background: #eee !important; }
         }
+
+        .spinner {
+            position: relative;
+            display: inline-block;
+            width: 16px; height: 16px;
+            margin: 0 8px;
+            vertical-align: -4px;
+
+            animation: 2000ms both infinite linear;
+            animation-name: spin;
+
+            &:before, &:after {
+                box-sizing: border-box;
+                content: "";
+                position: absolute;
+                left: 0; top: 0; width: 100%; height: 100%;
+                border: 1px solid #555;
+                border-top-color: transparent;
+                border-right-color: transparent;
+                border-bottom-color: transparent;
+                border-radius: 100%;
+                animation: 600ms both infinite ease-in-out;
+                animation-name: spin;
+                @media (prefers-color-scheme: dark) {
+                    border-left-color: #bbb;
+                }
+            }
+            &:after {
+                animation-delay: 50ms;
+            }
+        }
     }
 
     > nav {
@@ -217,4 +248,9 @@ mf-error {
     border: 2px solid red;
     margin: 0.5em; padding: 0.5em;
     font-size: 80%;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
