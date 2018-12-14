@@ -54,6 +54,12 @@ if (!body) {
         body = document.createElement('body'));
 }
 
+// Set the page title
+const title = inputNode.getElementsByTagName(TagNames.Title)[0];
+if (title != null) {
+    document.title = title.textContent!.trim();
+}
+
 // Inject stylesheet
 if (process.env.INJECT_CSS) {
     const style = document.createElement('link');
