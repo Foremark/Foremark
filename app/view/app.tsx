@@ -5,6 +5,7 @@ import * as classnames from 'classnames';
 import {Port} from './components/port';
 import {SignalHook} from './components/signalhook';
 import {TableOfContents} from './toc';
+import {SearchPane} from './search';
 import {onLoaderUpdate, isLoaderActive} from './loader';
 
 const CN = require('./app.less');
@@ -21,7 +22,9 @@ export interface AppProps {
 
 interface AppState {
     tocVisible: boolean;
-    loaderActivity: boolean,
+    loaderActivity: boolean;
+    searchQuery: string;
+    searchFocus: boolean;
 }
 
 export class App extends React.Component<AppProps, AppState> {
@@ -33,13 +36,19 @@ export class App extends React.Component<AppProps, AppState> {
         this.state = {
             tocVisible: shouldShowTocByDefault(props.markfrontDocument),
             loaderActivity: isLoaderActive(),
+            searchQuery: '',
+            searchFocus: false,
         };
     }
 
     @bind
     private handleSidebarToggle(e: Event): void {
+        const tocVisible = (e.target as HTMLInputElement).checked;
         this.setState({
-            tocVisible: (e.target as HTMLInputElement).checked,
+            tocVisible,
+            // The sidebar is always visible when there's a search query. So,
+            // erase the search query if the user wants to hide the sidebar.
+            searchQuery: tocVisible ? this.state.searchQuery : '',
         });
     }
 
@@ -50,11 +59,38 @@ export class App extends React.Component<AppProps, AppState> {
         });
     }
 
-    render() {
+    @bind
+    private handleSearchQuery(e: Event): void {
+        this.setState({
+            searchQuery: (e.target as HTMLInputElement).value,
+        });
+    }
+
+    @bind
+    private handleSearchEnter(): void {
+        this.setState({ searchFocus: true });
+    }
+
+    @bind
+    private handleSearchLeave(): void {
+        this.setState({ searchFocus: false });
+    }
+
+    private get isSearchPaneVisible(): boolean {
         const {state} = this;
+        return state.searchQuery !== '' || state.searchFocus
+    }
+
+    private get isSidebarVisible(): boolean {
+        const {state} = this;
+        return state.tocVisible || this.isSearchPaneVisible;
+    }
+
+    render() {
+        const {state, isSidebarVisible, isSearchPaneVisible} = this;
         return <div className={classnames({
                     [CN.root]: true,
-                    [CN.sidebarVisible]: state.tocVisible
+                    [CN.sidebarVisible]: isSidebarVisible,
                 })}>
 
             <SignalHook signal={onLoaderUpdate} slot={this.handleLoaderUpdate} />
@@ -62,14 +98,22 @@ export class App extends React.Component<AppProps, AppState> {
             <aside className={CN.sidebar}>
                 <div className={CN.toolbar}>
                     {/* Search field */}
-                    <input className={CN.search} placeholder="Search" />
+                    <input
+                        className={CN.search}
+                        onChange={this.handleSearchQuery}
+                        onFocus={this.handleSearchEnter}
+                        onBlur={this.handleSearchLeave}
+                        value={state.searchQuery}
+                        placeholder="Search" />
+                    {/* TODO: "clear" button */}
+                    {/* TODO: hotkeys: ESC, '/' */}
 
                     {/* Toggle sidebar visibility */}
                     <input
                         id='sidebarToggle'
                         type='checkbox'
                         onChange={this.handleSidebarToggle}
-                        checked={state.tocVisible} />
+                        checked={isSidebarVisible} />
                     <label for='sidebarToggle' className={CN.sidebarToggle}>
                         <span />
                     </label>
@@ -77,8 +121,17 @@ export class App extends React.Component<AppProps, AppState> {
                     {/* Activity indicator */}
                     { state.loaderActivity && <span className={CN.spinner} /> }
                 </div>
-                <nav>
+                <nav className={classnames({
+                    [CN.show]: !isSearchPaneVisible && isSidebarVisible,
+                })}>
                     <TableOfContents markfrontDocument={this.props.markfrontDocument} />
+                </nav>
+                <nav className={classnames({
+                    [CN.show]: isSearchPaneVisible && isSidebarVisible,
+                })}>
+                    <SearchPane
+                        markfrontDocument={this.props.markfrontDocument}
+                        query={state.searchQuery} />
                 </nav>
             </aside>
             <Port
