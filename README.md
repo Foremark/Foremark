@@ -57,6 +57,29 @@ This step may involve:
 
 The final HTML is displayed by a web-based viewer application embedded in `markfront.js`, which provides rich functionalities such as table of contents.
 
+## Directory structure
+
+- `app/` — The source code of this program.
+    - `converter/` — Markfront processor.
+    - `index.ts` — The entry point of the library.
+    - `view/` — The viewer application.
+    - `browser.tsx` — The entry point for a web browser.
+    - `markfront.ts` — Common definitions of the Markfront format.
+    - `utils/` — Utilities.
+- `lib/` — Helper code for using external libraries.
+- `examples/` — Example Markfront files.
+    - `browser` → `../browser` (symlink)
+    - `*.mf.xhtml`
+
+**NPM package:**
+
+- `browser/` — Markfront processor + viewer to be loaded by Markfront files.
+    - `markfront.js` — The main file of the viewer.
+    - `markfront-*.js`, `*.css`, `assets/` — Asset files that are loaded on demand.
+    - `markfront.bundle.js` — Includes all of the above files in a single large package. (Self-contained bundle)
+- `dist/` — Provides a Markfront processor library.
+    - `index.js` — The entry point of the library.
+
 ## Meta
 
 - "Front" was chosen as another adjective indicating a direction. It also refers to the front end of the layered transformation architecture.

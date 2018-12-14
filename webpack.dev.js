@@ -10,7 +10,7 @@ module.exports = merge(common(true, false), {
   mode: 'development',
   devServer: {
     contentBase: './examples',
-    publicPath: '/dist/',
+    publicPath: '/browser/',
     historyApiFallback: true,
     inline: false,
     openPage: 'basic.mf.xhtml',

@@ -17,11 +17,11 @@
             "ES2015.Promise",
             "ES2015.Core",
         ],
-        "allowJs": true,
         "experimentalDecorators": true,
     },
     "include": [
-        "app/**/*.ts",
-        "app/**/*.tsx",
+        "app/converter/*.ts",
+        "app/utils/*.ts",
+        "app/*.ts",
     ]
 }

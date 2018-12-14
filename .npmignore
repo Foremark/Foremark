@@ -1,0 +1,17 @@
+# Source code
+/app
+/lib
+
+# Build configurations
+/tsconfig.json
+/*.js
+
+# Development artifacts
+/*.tgz
+/yarn.lock
+
+# TypeScript source maps (which are useless without source code)
+/dist/**/*.map
+
+# Examples
+/examples

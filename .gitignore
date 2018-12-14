@@ -1,6 +1,13 @@
 # Node.js local modules and build artifacts
 /node_modules
+/browser
 /dist
+/*.tgz
 
 # macOS thing
 .DS_Store
+
+# Editor
+*.swp
+*.sublime-project
+*.sublime-workspace

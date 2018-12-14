@@ -7,7 +7,7 @@ const gitRevision = new GitRevisionPlugin();
 
 module.exports = (debug, selfContained) => ({
   entry: {
-    markfront: './app/index.tsx',
+    markfront: './app/browser.tsx',
   },
   module: {
     rules: [
@@ -68,7 +68,7 @@ module.exports = (debug, selfContained) => ({
   output: {
     filename: selfContained ? 'markfront.bundle.js' : 'markfront.js',
     chunkFilename: 'markfront-[name].js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'browser'),
   },
   plugins: [
     new webpack.DefinePlugin({

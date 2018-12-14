@@ -1,3 +1,4 @@
+// The main code to be loaded and executed by a web browser.
 if ('あ'.charCodeAt(0) !== 0x3042) {
     throw new Error('The application was loaded with a wrong encoding.');
 }
@@ -15,12 +16,6 @@ if (basePathMatch) {
 }
 
 // Load the input from the current document
-import {Context} from './context';
-const context = {
-    document: window.document,
-    lang: document.getElementsByTagName('html')[0].getAttribute('lang') || '',
-};
-
 import {TagNames} from './markfront';
 let inputNode = document.querySelector(`${TagNames.Document}, ${TagNames.Text}`);
 if (inputNode == null) {

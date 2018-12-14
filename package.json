@@ -1,15 +1,11 @@
 {
   "name": "markfront",
-  "version": "1.0.0",
-  "description": "Markfront is a technology for writing semi-plain text documents that extends upon the concept of Markdeep.",
-  "main": "index.js",
+  "version": "0.0.1",
+  "description": "A technology for writing semi-plain text documents that extends upon the concept of Markdeep.",
+  "main": "dist/index.js",
+  "unpkg": "browser/",
   "dependencies": {
-    "bind-decorator": "^1.0.11",
-    "classnames": "^2.2.6",
-    "entities": "^1.1.2",
-    "highlight.js": "^9.13.1",
-    "katex": "^0.10.0",
-    "preact": "^8.4.2"
+    "entities": "^1.1.2"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.6",
@@ -32,12 +28,19 @@
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.10",
-    "webpack-merge": "^4.1.4"
+    "webpack-merge": "^4.1.4",
+    "highlight.js": "^9.13.1",
+    "katex": "^0.10.0",
+    "preact": "^8.4.2",
+    "bind-decorator": "^1.0.11",
+    "classnames": "^2.2.6"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js && webpack --config webpack.bundle.js"
+    "build": "npm run build:browser && npm run build:dist",
+    "build:browser": "webpack --config webpack.prod.js && webpack --config webpack.bundle.js",
+    "build:dist": "tsc -d"
   },
   "author": "",
   "license": "BSD-2-Clause"
