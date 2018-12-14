@@ -41,7 +41,15 @@ module.exports = (debug, selfContained) => ({
         ],
       },
       {
-        test: /\.(svg|eot|ttf|woff|woff2|png|jpg)$/,
+        test: /\.(eot|ttf|woff|woff2)$/,
+        loader: selfContained ? 'url-loader' : 'file-loader',
+        options: {
+          name: 'assets/[name].[ext]',
+          publicPath: '.',
+        },
+      },
+      {
+        test: /\.(svg|png|jpg)$/,
         loader: 'url-loader',
         options: {
           limit: selfContained ? 1e6 : 8000,
