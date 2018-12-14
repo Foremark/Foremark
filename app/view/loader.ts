@@ -11,14 +11,14 @@ export const isLoaderActive = () => modulesInProgress.length > 0;
 // TODO: Display a spinner using this API
 
 let loaderHighlightJS: () => Promise<typeof import('../../lib/highlight')>;
-let loaderKatex: () => Promise<typeof import('katex')>;
+let loaderKatex: () => Promise<typeof import('../../lib/katex')>;
 
 if (process.env.LAZY_LOADING) {
     loaderHighlightJS = () => import(/* webpackChunkName: 'hljs' */ '../../lib/highlight');
-    loaderKatex = () => import(/* webpackChunkName: 'katex' */ 'katex');
+    loaderKatex = () => import(/* webpackChunkName: 'katex' */ '../../lib/katex');
 } else {
     loaderHighlightJS = () => Promise.resolve(require('../../lib/highlight'));
-    loaderKatex = () => Promise.resolve(require('katex'));
+    loaderKatex = () => Promise.resolve(require('../../lib/katex'));
 }
 const loaders = [
     loaderHighlightJS,

@@ -81,7 +81,9 @@ module.exports = (debug, selfContained) => ({
         'LAZY_LOADING': JSON.stringify(!selfContained),
       },
     }),
-    new MiniCssExtractPlugin(),
+    new MiniCssExtractPlugin({
+      chunkFilename: 'markfront-[name].css',
+    }),
   ],
   optimization: {
     splitChunks: {
