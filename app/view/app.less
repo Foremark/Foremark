@@ -24,75 +24,106 @@ html, body {
     &.sidebarVisible {
         padding-left: @sidebar-width;
     }
+    @media (max-width: @screen-medium-max) { padding-left: 0 !important; }
 }
 
-.sidebar {
+.modalBackground {
     position: fixed;
-    left: 0; top: 0; bottom: 0; width: @sidebar-width;
-    pointer-events: none;
+    left: 0; top: 0; right: 0; bottom: 0;
+    z-index: 50;
 
-    .sidebarVisible & {
-        background: #fafafa;
-        @media (prefers-color-scheme: dark) {
-            background: #444;
+    background: black;
+    display: none;
+    pointer-events: none;
+    opacity: 0;
+
+    transition: 200ms opacity;
+
+    @media (max-width: @screen-medium-max) {
+        display: block;
+        .sidebarModalVisible & {
+            opacity: 0.5;
+            pointer-events: auto;
+        }
+    }
+}
+
+.toolbar {
+    position: fixed;
+    left: 0; top: 0;
+    z-index: 200;
+    white-space: nowrap;
+    margin: 5px 4px;
+
+    > * { vertical-align: bottom }
+
+    > input.search {
+        font-family: "Fira Sans", sans-serif;
+        width: (@sidebar-width - 6px);
+        height: 24px;
+        box-sizing: border-box;
+        background: transparent;
+        border: 1px solid #aaa;
+        padding: 4px 4px;
+        margin: 0 4px 0 0;
+        border-radius: 3px;
+
+        opacity: 0.5;
+        &:hover {
+            opacity: 1;
+        }
+        .sidebarVisible & {
+            opacity: 1;
+            background: white;
+            @media (prefers-color-scheme: dark) {
+                background: #222;
+            }
+        }
+
+        // Matching the style to the sidebar visibility in the "medium" screen
+        // size is complex, so we just opt to use the "sidebar is visible" style
+        // all the times.
+        @media (max-width: @screen-medium-max) {
+            opacity: 1;
+            background: white;
+            @media (prefers-color-scheme: dark) {
+                background: #222;
+            }
         }
     }
 
-    .toolbar {
-        pointer-events: auto;
-
-        white-space: nowrap;
-        margin: 5px 4px;
-
-        > * { vertical-align: bottom }
-
-        > input.search {
-            font-family: "Fira Sans", sans-serif;
-            width: (@sidebar-width - 6px);
-            height: 24px;
-            box-sizing: border-box;
-            background: transparent;
-            border: 1px solid #aaa;
-            padding: 4px 4px;
-            margin: 0 4px 0 0;
-            border-radius: 3px;
-
-            opacity: 0.5;
-            &:hover {
-                opacity: 1;
-            }
-            .sidebarVisible & {
-                opacity: 1;
-                background: white;
-                @media (prefers-color-scheme: dark) {
-                    background: #222;
-                }
-            }
-        }
-
-        // Toolbar button
-        > input[type=checkbox] { display: none; }
-        > input[type=checkbox] + label {
-            height: 24px;
-            display: inline-block;
-            box-sizing: border-box;
-            border: 1px solid #aaa;
-            border-radius: 3px;
-            opacity: 0.5;
-            position: relative;
-            &:hover {
-                opacity: 1;
-            }
-        }
-        > input[type=checkbox]:checked + label {
-            border-color: @accent-color;
-            background: @accent-color;
-            color: #eee;
+    // Toolbar button
+    > input[type=checkbox] { display: none; }
+    > input[type=checkbox] + label {
+        height: 24px;
+        display: inline-block;
+        box-sizing: border-box;
+        border: 1px solid #aaa;
+        border-radius: 3px;
+        opacity: 0.5;
+        position: relative;
+        &:hover {
             opacity: 1;
         }
 
-        label.sidebarToggle { width: 40px; @text-hidden(); }
-        label.sidebarToggle > span {
+        @media (max-width: @screen-medium-max) {
+            opacity: 1;
+            background: white;
+            @media (prefers-color-scheme: dark) {
+                background: #222;
+            }
+        }
+    }
+    > input[type=checkbox]:checked + label {
+        border-color: @accent-color;
+        background: @accent-color;
+        color: #eee;
+        opacity: 1;
+    }
+
+    label.sidebarToggle, label.sidebarToggleModal {
+        width: 40px; @text-hidden();
+        > span {
             left: 13px; top: 6px; width: 12px;
             &:before, &:after {
                 content: "";
@@ -107,39 +138,71 @@ html, body {
             &:before { top: 4px; }
             &:after { top: 8px; }
         }
-        > input[type=checkbox]:checked + label.sidebarToggle > span {
-            &, &:before, &:after { background: #eee !important; }
-        }
+    }
+    > input[type=checkbox]:checked + label.sidebarToggle > span,
+    > input[type=checkbox]:checked + label.sidebarToggleModal > span {
+        &, &:before, &:after { background: #eee !important; }
+    }
 
-        .spinner {
-            position: relative;
-            display: inline-block;
-            width: 16px; height: 16px;
-            margin: 0 8px;
-            vertical-align: -4px;
+    // Display the appropriate button depending on the screen size.
+    label.sidebarToggleModal { display: none !important; }
+    @media (max-width: @screen-medium-max) {
+        label.sidebarToggle { display: none !important; }
+        label.sidebarToggleModal { display: inline-block !important; }
+    }
 
-            animation: 2000ms both infinite linear;
+    .spinner {
+        position: relative;
+        display: inline-block;
+        width: 16px; height: 16px;
+        margin: 0 8px;
+        vertical-align: -4px;
+
+        animation: 2000ms both infinite linear;
+        animation-name: spin;
+
+        &:before, &:after {
+            box-sizing: border-box;
+            content: "";
+            position: absolute;
+            left: 0; top: 0; width: 100%; height: 100%;
+            border: 1px solid #555;
+            border-top-color: transparent;
+            border-right-color: transparent;
+            border-bottom-color: transparent;
+            border-radius: 100%;
+            animation: 600ms both infinite ease-in-out;
             animation-name: spin;
+            @media (prefers-color-scheme: dark) {
+                border-left-color: #bbb;
+            }
+        }
+        &:after {
+            animation-delay: 50ms;
+        }
+    }
+}
 
-            &:before, &:after {
-                box-sizing: border-box;
-                content: "";
-                position: absolute;
-                left: 0; top: 0; width: 100%; height: 100%;
-                border: 1px solid #555;
-                border-top-color: transparent;
-                border-right-color: transparent;
-                border-bottom-color: transparent;
-                border-radius: 100%;
-                animation: 600ms both infinite ease-in-out;
-                animation-name: spin;
-                @media (prefers-color-scheme: dark) {
-                    border-left-color: #bbb;
-                }
-            }
-            &:after {
-                animation-delay: 50ms;
-            }
+.sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0; width: @sidebar-width;
+    z-index: 100;
+
+    @media (max-width: @screen-small-max) { width: 90%; }
+
+    background: #fafafa;
+    @media (prefers-color-scheme: dark) {
+        background: #444;
+    }
+
+    .root:not(.sidebarVisible) & {
+        display: none;
+    }
+    @media (max-width: @screen-medium-max) {
+        display: block !important;
+        transition: 200ms transform;
+        .root:not(.sidebarModalVisible) & {
+            transform: translateX(-100%);
         }
     }
 

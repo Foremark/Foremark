@@ -21,7 +21,16 @@ export interface AppProps {
 }
 
 interface AppState {
+    /**
+     * `true` if the user wants to display the TOC. This does not apply to
+     * screen sizes where the sidebar is displayed in a modal window.
+     */
     tocVisible: boolean;
+    /**
+     * `true` if the user wants to display the sidebar. Only applicable to
+     * screen sizes where the sidebar is displayed in a modal window.
+     */
+    sidebarModalVisible: boolean;
     loaderActivity: boolean;
     searchQuery: string;
     searchFocus: boolean;
@@ -35,6 +44,7 @@ export class App extends React.Component<AppProps, AppState> {
 
         this.state = {
             tocVisible: shouldShowTocByDefault(props.markfrontDocument),
+            sidebarModalVisible: false,
             loaderActivity: isLoaderActive(),
             searchQuery: '',
             searchFocus: false,
@@ -53,6 +63,12 @@ export class App extends React.Component<AppProps, AppState> {
     }
 
     @bind
+    private handleSidebarModalToggle(e: Event): void {
+        const sidebarModalVisible = (e.target as HTMLInputElement).checked;
+        this.setState({ sidebarModalVisible });
+    }
+
+    @bind
     private handleLoaderUpdate(): void {
         this.setState({
             loaderActivity: isLoaderActive(),
@@ -68,7 +84,10 @@ export class App extends React.Component<AppProps, AppState> {
 
     @bind
     private handleSearchEnter(): void {
-        this.setState({ searchFocus: true });
+        this.setState({
+            searchFocus: true,
+            sidebarModalVisible: true,
+        });
     }
 
     @bind
@@ -76,26 +95,36 @@ export class App extends React.Component<AppProps, AppState> {
         this.setState({ searchFocus: false });
     }
 
+    @bind
+    private handleModalBackgroundClick(): void {
+        this.setState({ sidebarModalVisible: false });
+    }
+
     private get isSearchPaneVisible(): boolean {
         const {state} = this;
         return state.searchQuery !== '' || state.searchFocus
     }
 
-    private get isSidebarVisible(): boolean {
+    private get isModelessSidebarVisible(): boolean {
         const {state} = this;
         return state.tocVisible || this.isSearchPaneVisible;
     }
 
     render() {
-        const {state, isSidebarVisible, isSearchPaneVisible} = this;
+        const {state, isModelessSidebarVisible, isSearchPaneVisible} = this;
         return <div className={classnames({
                     [CN.root]: true,
-                    [CN.sidebarVisible]: isSidebarVisible,
+                    [CN.sidebarModalVisible]: state.sidebarModalVisible,
+                    [CN.sidebarVisible]: isModelessSidebarVisible,
                 })}>
 
             <SignalHook signal={onLoaderUpdate} slot={this.handleLoaderUpdate} />
 
-            <aside className={CN.sidebar}>
+            <aside>
+                <div className={CN.modalBackground}
+                    onClick={this.handleModalBackgroundClick}
+                    />
+
                 <div className={CN.toolbar}>
                     {/* Search field */}
                     <input
@@ -108,33 +137,50 @@ export class App extends React.Component<AppProps, AppState> {
                     {/* TODO: "clear" button */}
                     {/* TODO: hotkeys: ESC, '/' */}
 
-                    {/* Toggle sidebar visibility */}
+                    {/* Toggle sidebar visibility. */}
                     <input
                         id='sidebarToggle'
                         type='checkbox'
                         onChange={this.handleSidebarToggle}
-                        checked={isSidebarVisible} />
+                        checked={isModelessSidebarVisible} />
                     <label for='sidebarToggle' className={CN.sidebarToggle}>
                         <span />
-                        {isSidebarVisible ? 'Hide sidebar' : 'Show hidebar'}
+                        {isModelessSidebarVisible ? 'Hide sidebar' : 'Show hidebar'}
+                    </label>
+
+                    {/*
+                      * Toggle sidebar visibility (for screen sizes where
+                      * the sidebar is displayed in a modal window).
+                      */}
+                    <input
+                        id='sidebarToggleModal'
+                        type='checkbox'
+                        onChange={this.handleSidebarModalToggle}
+                        checked={state.sidebarModalVisible} />
+                    <label for='sidebarToggleModal' className={CN.sidebarToggleModal}>
+                        <span />
+                        {state.sidebarModalVisible ? 'Hide sidebar' : 'Show hidebar'}
                     </label>
 
                     {/* Activity indicator */}
                     { state.loaderActivity && <span className={CN.spinner} /> }
                 </div>
-                <nav className={classnames({
-                    [CN.show]: !isSearchPaneVisible && isSidebarVisible,
-                })}>
-                    <TableOfContents markfrontDocument={this.props.markfrontDocument} />
-                </nav>
-                <nav className={classnames({
-                    [CN.show]: isSearchPaneVisible && isSidebarVisible,
-                })}>
-                    <SearchPane
-                        markfrontDocument={this.props.markfrontDocument}
-                        query={state.searchQuery} />
-                </nav>
+                <div className={CN.sidebar}>
+                    <nav className={classnames({
+                        [CN.show]: !isSearchPaneVisible && isModelessSidebarVisible,
+                    })}>
+                        <TableOfContents markfrontDocument={this.props.markfrontDocument} />
+                    </nav>
+                    <nav className={classnames({
+                        [CN.show]: isSearchPaneVisible && isModelessSidebarVisible,
+                    })}>
+                        <SearchPane
+                            markfrontDocument={this.props.markfrontDocument}
+                            query={state.searchQuery} />
+                    </nav>
+                </div>
             </aside>
+
             <Port
                 tagName='main'
                 element={this.props.markfrontDocument} />

@@ -55,6 +55,12 @@ if (title != null) {
     document.title = title.textContent!.trim();
 }
 
+// Add viewport size hint
+document.head.insertAdjacentHTML(
+    'beforeend',
+    '<meta name="viewport" content="width=device-width, initial-scale=1.0" />'
+);
+
 // Inject stylesheet
 if (process.env.INJECT_CSS) {
     const style = document.createElement('link');
