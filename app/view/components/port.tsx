@@ -13,8 +13,6 @@ export class Port extends React.Component<PortProps, {}> {
 
     refs: any;
 
-    shouldComponentUpdate() { return false; }
-
     componentDidMount(): void {
         if (!this.wrapper) {
             throw new Error();
@@ -41,12 +39,12 @@ export class Port extends React.Component<PortProps, {}> {
     }
 
     render() {
-        const {element, tagName, ...rest} = this.props;
+        const {element, tagName, children, ...rest} = this.props;
 
         const Tag = tagName || 'div';
 
         return <Tag
             ref={(e: HTMLElement) => {this.wrapper = e;}}
-            {...rest} />;
+            {...rest}>{children}</Tag>;
     }
 }

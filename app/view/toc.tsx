@@ -129,6 +129,8 @@ interface Node {
     level: number;
     children: Node[];
     parent: Node | null;
+
+    expanded: boolean | null;
 }
 
 function enumerateNodes(document: HTMLElement): Node[] {
@@ -162,6 +164,7 @@ function enumerateNodes(document: HTMLElement): Node[] {
                 level: parseInt(match[1], 10),
                 children: [],
                 parent: null,
+                expanded: null,
             });
         }
     });
@@ -179,6 +182,7 @@ function buildNodeTree(nodes: Node[]): Node {
         level: 0,
         children: [],
         parent: null,
+        expanded: true,
     };
     const levels: Node[] = [];
     for (let i = 0; i < 10; ++i) {
@@ -202,7 +206,11 @@ interface NodeViewProps {
     tocState: TableOfContentsState;
 }
 
-class NodeView extends React.Component<NodeViewProps> {
+interface NodeViewState {
+    expanded: boolean | null;
+}
+
+class NodeView extends React.Component<NodeViewProps, NodeViewState> {
     refs: any;
 
     private label: HTMLElement;
@@ -210,9 +218,38 @@ class NodeView extends React.Component<NodeViewProps> {
     constructor(props: NodeViewProps) {
         super(props);
 
+        this.state = {
+            expanded: props.node.expanded,
+        };
+
         // Clone the heading element to create a TOC label
         const label = this.label = props.node.label!.cloneNode(true) as HTMLElement;
         label.removeAttribute('id');
+    }
+
+    private get shouldExpandByDefault(): boolean {
+        const {node, tocState} = this.props;
+
+        // Expand by default if the active node is `node` or
+        // a descendant of `node`
+        return node === tocState.activeNodePath[node.level];
+    }
+
+    private get isExpanded(): boolean {
+        return this.state.expanded != null ? this.state.expanded :
+            this.shouldExpandByDefault;
+    }
+
+    private get isActive(): boolean {
+        const {node, tocState} = this.props;
+
+        // If the node is expanded, do not display it as active unless the
+        // node is exactly the active node (not an ancestor of it).
+        if (this.isExpanded && tocState.activeNodePath.length != node.level + 1) {
+            return false;
+        }
+
+        return node === tocState.activeNodePath[node.level];
     }
 
     @bind
@@ -220,23 +257,38 @@ class NodeView extends React.Component<NodeViewProps> {
         this.props.onNodeClick(this.props.node);
     }
 
+    @bind
+    private handleToggle(): void {
+        const expanded = !this.isExpanded;
+        this.props.node.expanded = expanded;
+        this.setState({ expanded });
+    }
+
     render() {
         const {node, tocState, onNodeClick} = this.props;
 
-        // TODO: Expand/collapse nodes
+        const {isActive, isExpanded} = this;
 
-        const active =
-            tocState.activeNodePath.length == node.level + 1 &&
-            node === tocState.activeNodePath[node.level];
+        const expandable = node.children.length > 0;
 
-        return <li class={classnames({[CN.active]: active})}>
+        return <li class={classnames({
+                [CN.active]: isActive,
+                [CN['L' + node.level]]: true,
+            })}>
             <Port
                 tagName='a'
                 element={this.label}
                 onClick={this.handleClick}
-                href={'#' + node.anchor!.id} />
+                href={'#' + node.anchor!.id}>
+                {
+                    <button onClick={this.handleToggle} type='button'
+                        className={isExpanded ? CN.expanded : CN.collapsed}
+                        disabled={!expandable}><i />
+                    </button>
+                }
+            </Port>
             {
-                node.children.length > 0 ?
+                isExpanded && node.children.length > 0 ?
                     <ul>
                         {node.children.map((child, i) =>
                             <NodeView
