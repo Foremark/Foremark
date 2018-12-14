@@ -155,35 +155,46 @@ html, body {
     }
 }
 
-mf-title {
-    font-size: 2.2rem;
-    margin: 1em 0;
-    display: block;
-    font-style: italic;
-}
-mf-lead {
-    display: block;
-    font-style: italic;
-}
-h1 {
-    font-size: 1.8rem;
-    margin: 2rem 0 1.5rem;
-    font-style: italic;
-    font-weight: normal;
-}
-h2 {
-    font-size: 1.5rem;
-    margin: 1rem 0 1rem;
-    font-style: italic;
-    font-weight: normal;
-}
-a:global(.anchor) {
-    position: relative;
-    display: block;
-    top: calc(-25px - 1em); // Move slightly so it won't overlap with the toolbar
-}
+main {
+    // Title
+    mf-title {
+        font-size: 2.2rem;
+        margin: 1em 0;
+        display: block;
+        font-style: italic;
+    }
+    mf-lead {
+        display: block;
+        font-style: italic;
+    }
 
-mf {
+    // Headings
+    h1 {
+        font-size: 1.8rem;
+        margin: 2rem 0 1.5rem;
+        font-style: italic;
+        font-weight: normal;
+    }
+    h2 {
+        font-size: 1.5rem;
+        margin: 1rem 0 1rem;
+        font-style: italic;
+        font-weight: normal;
+    }
+    a:global(.anchor) {
+        position: relative;
+        display: block;
+        top: calc(-25px - 1em); // Move slightly so it won't overlap with the toolbar
+    }
+
+    // Section number
+    mf-title, h1, h2, h3, h4, h5, h6, h7, h8, h9 {
+        > :global(span.section-number) {
+            font-style: normal;
+        }
+    }
+
+    // Lists
     li, dt, dd {
         // Remove margins from top-level `p` of list items.
         > p { margin: 0; }
@@ -205,49 +216,43 @@ mf {
         &:global(.checked):before { content: "\2611"; }
         &:global(.unchecked):before { content: "\2610"; }
     }
-}
 
-// Section number
-mf-title, h1, h2, h3, h4, h5, h6, h7, h8, h9 {
-    > :global(span.section-number) {
-        font-style: normal;
+    // Code blocks (a set of `mf-code`s)
+    mf-codeblock {
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+        display: block;
+        padding: 0.5em 0.25em;
+        margin: 0.25em;
+
+        @media (prefers-color-scheme: dark) {
+            border-color: #eee;
+        }
+    }
+
+    // Code (inline/block)
+    code, mf-code {
+        font-size: 90%;
+        font-family: 'Source Code Pro', Menlo, Consolas, monospace;
+        letter-spacing: -0.02em;
+        tab-size:4; -moz-tab-size:4; -o-tab-size:4;
+        white-space: pre;
+    }
+    code {
+        page-break-inside: avoid;
+    }
+
+    mf-error {
+        display: inline-block;
+        border: 2px solid red;
+        margin: 0.5em; padding: 0.5em;
+        font-size: 80%;
     }
 }
-
-mf-codeblock {
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
-    display: block;
-    padding: 0.5em 0.25em;
-    margin: 0.25em;
-
-    @media (prefers-color-scheme: dark) {
-        border-color: #eee;
-    }
-}
-
-code, mf-code {
-    font-size: 90%;
-    font-family: 'Source Code Pro', Menlo, Consolas, monospace;
-    letter-spacing: -0.02em;
-    tab-size:4; -moz-tab-size:4; -o-tab-size:4;
-    white-space: pre;
-}
-code {
-    page-break-inside: avoid;
-}
-
 
 :global { @import (less) "~highlight.js/styles/tomorrow.css"; }
 @media (prefers-color-scheme: dark) {
     :global { @import (less) "~highlight.js/styles/tomorrow-night.css"; }
-}
-
-mf-error {
-    display: inline-block;
-    border: 2px solid red;
-    margin: 0.5em; padding: 0.5em;
-    font-size: 80%;
 }
 
 @keyframes spin {
