@@ -283,7 +283,11 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
                 {
                     <button onClick={this.handleToggle} type='button'
                         className={isExpanded ? CN.expanded : CN.collapsed}
-                        disabled={!expandable}><i />
+                        disabled={!expandable}>
+                        {
+                            expandable ? isExpanded ? 'Collapse' : 'Expand'
+                                : 'Leaf'
+                        }
                     </button>
                 }
             </Port>

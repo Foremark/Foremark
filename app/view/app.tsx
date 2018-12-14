@@ -116,6 +116,7 @@ export class App extends React.Component<AppProps, AppState> {
                         checked={isSidebarVisible} />
                     <label for='sidebarToggle' className={CN.sidebarToggle}>
                         <span />
+                        {isSidebarVisible ? 'Hide sidebar' : 'Show hidebar'}
                     </label>
 
                     {/* Activity indicator */}
