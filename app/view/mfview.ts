@@ -1,6 +1,4 @@
-import {highlightAuto} from '../../lib/highlight';
-import * as katex from 'katex';
-
+import {lazyModules} from './loader';
 import {forEachNodePreorder} from '../utils/dom';
 import {TagNames, AttributeNames} from '../markfront';
 
@@ -102,20 +100,24 @@ const katexDisplayOptions: katex.KatexOptions = {
 };
 
 const HANDLERS: { [tagName: string]: (node: Element) => void } & Object = {
-    [TagNames.Equation]: node => {
+    [TagNames.Equation]: async (node) => {
+        const katex = await lazyModules.katex();
         node.innerHTML = katex.renderToString(node.textContent || '', katexInlineOptions);
     },
-    [TagNames.DisplayEquation]: node => {
+    [TagNames.DisplayEquation]: async (node) => {
+        const katex = await lazyModules.katex();
         node.innerHTML = katex.renderToString(node.textContent || '', katexDisplayOptions);
     },
-    [TagNames.Code]: node => {
+    [TagNames.Code]: async (node) => {
         const type = (node.getAttribute(AttributeNames.CodeType) || '').split(' ');
         const lang = type[0];
         if (lang === '') {
             return;
         }
 
-        const highlighted = highlightAuto(node.textContent || '', [lang]);
+        const hljs = await lazyModules.highlightJS();
+
+        const highlighted = hljs.highlightAuto(node.textContent || '', [lang]);
         node.innerHTML = highlighted.value;
 
         // TODO: line numbers

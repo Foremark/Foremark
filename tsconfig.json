@@ -5,7 +5,7 @@
         "sourceMap": true,
         "strict": true,
         "strictNullChecks": true,
-        "module": "es6",
+        "module": "esNext",
         "target": "es5",
         "jsx": "react",
         "jsxFactory": "React.h", /* Preact */

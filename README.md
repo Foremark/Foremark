@@ -2,6 +2,12 @@
 
 Markfront is a technology for writing semi-plain text documents that extends upon the concept of [Markdeep](http://casual-effects.com/markdeep/).
 
+## Features
+
+- Lazy loading — Markfront's code is broken into multiple modules and they are loaded as needed. This is implemented using Webpack's [code splitting feature](https://webpack.js.org/guides/code-splitting/).
+- The optional self-contained bundle (`markfront.bundle.js`) includes every required asset in a single `.js` file and does not require an internet connection.
+- TODO
+
 ## Differences from Markdeep
 
 - Improved internal design — The rendering process is broken into multiple meaningful passes.

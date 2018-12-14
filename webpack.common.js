@@ -58,7 +58,8 @@ module.exports = (debug, selfContained) => ({
     ]
   },
   output: {
-    filename: selfContained ? '[name].bundle.js' : '[name].js',
+    filename: selfContained ? 'markfront.bundle.js' : 'markfront.js',
+    chunkFilename: 'markfront-[name].js',
     path: path.resolve(__dirname, 'dist'),
   },
   plugins: [
@@ -69,8 +70,16 @@ module.exports = (debug, selfContained) => ({
         'BRANCH': JSON.stringify(gitRevision.branch()),
         'IS_BROWSER': JSON.stringify(true),
         'INJECT_CSS': JSON.stringify(!selfContained),
+        'LAZY_LOADING': JSON.stringify(!selfContained),
       },
     }),
     new MiniCssExtractPlugin(),
   ],
+  optimization: {
+    splitChunks: {
+      // Disable `SplitChunksPlugin` since there aren't much code shared among
+      // lazy loaded modules (for now).
+      chunks: () => false,
+    },
+  },
 });

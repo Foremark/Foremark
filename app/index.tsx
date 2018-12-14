@@ -2,6 +2,18 @@ if ('あ'.charCodeAt(0) !== 0x3042) {
     throw new Error('The application was loaded with a wrong encoding.');
 }
 
+declare var __webpack_public_path__: string;
+
+// Guess the public path based on the script tag.
+//
+// Without this, late loaded resources (webpack lazy loaded chunks
+// and stylesheets) will not load.
+const script = document.querySelector('script[data-rel=markfront]');
+const basePathMatch = script && (script as HTMLScriptElement).src.match(/^(.*?)[^\/]+$/);
+if (basePathMatch) {
+    __webpack_public_path__ = basePathMatch[1] + '/';
+}
+
 // Load the input from the current document
 import {Context} from './context';
 const context = {
@@ -44,14 +56,10 @@ if (!body) {
 
 // Inject stylesheet
 if (process.env.INJECT_CSS) {
-    const script = document.querySelector('script[data-rel=markfront]');
-    const basePathMatch = script && (script as HTMLScriptElement).src.match(/^(.*?)[^\/]+$/);
-    if (basePathMatch) {
-        const style = document.createElement('link');
-        style.rel = 'stylesheet';
-        style.href = basePathMatch[1] + '/markfront.css';
-        body.appendChild(style);
-    }
+    const style = document.createElement('link');
+    style.rel = 'stylesheet';
+    style.href = __webpack_public_path__ + '/markfront.css';
+    body.appendChild(style);
 }
 
 // Create a React root
