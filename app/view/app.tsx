@@ -10,6 +10,11 @@ import {onLoaderUpdate, isLoaderActive} from './loader';
 const CN = require('./app.less');
 document.getElementsByTagName('html')[0].classList.add('mf-processed');
 
+function shouldShowTocByDefault(document: HTMLElement): boolean {
+    return document.querySelectorAll('h1, h2, h3, h4, h5, h6, h7, h8, h9')
+        .length > 6;
+}
+
 export interface AppProps {
     markfrontDocument: HTMLElement;
 }
@@ -26,7 +31,7 @@ export class App extends React.Component<AppProps, AppState> {
         super(props);
 
         this.state = {
-            tocVisible: true,
+            tocVisible: shouldShowTocByDefault(props.markfrontDocument),
             loaderActivity: isLoaderActive(),
         };
     }
