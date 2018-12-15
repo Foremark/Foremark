@@ -95,13 +95,15 @@ Prerequisite:
 - `cargo install` [`wasm-snip`](https://github.com/rustwasm/wasm-snip)
 - [Binaryen](https://github.com/WebAssembly/binaryen) (`brew install binaryen` on Homebrew) including: `wasm-opt`
     
-    $ yarn install
+```shell
+$ yarn install
 
-    $ npm run build
+$ npm run build
 
-    # Alternatively, start the Webpack development server:
-    $ npm run build:wasm
-    $ npm start -- --open
+# Alternatively, start the Webpack development server:
+$ npm run build:wasm
+$ npm start -- --open
+```
 
 ## Meta
 
