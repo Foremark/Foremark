@@ -310,6 +310,12 @@ main {
         page-break-inside: avoid;
     }
 
+    // Diagram fallback
+    mf-diagram {
+        &:extend(main mf-code);
+        line-height: 1.0;
+    }
+
     mf-error {
         display: inline-block;
         border: 2px solid red;
