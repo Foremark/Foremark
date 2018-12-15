@@ -1,0 +1,31 @@
+- name: test
+  hide: true
+  task:
+    - echo "Error: no test specified"
+    - exit 1
+
+- name: start
+  task: webpack-dev-server --config webpack.dev.js
+
+- name: build
+  tasks:
+    # `build:wasm` generates ES modules, so run it before other tasks
+    - taskfile build:wasm
+    - - taskfile build:browser
+      - taskfile build:dist
+
+- name: build:wasm
+  tasks:
+    - cd rust/diagram
+    - cargo +nightly build --release --target wasm32-unknown-unknown
+    - cd ../..
+    - mkdir -p wasm
+    - wasm-bindgen target/wasm32-unknown-unknown/release/diagram.wasm --out-dir wasm
+
+- name: build:browser
+  tasks:
+    - - webpack --config webpack.prod.js
+      - webpack --config webpack.bundle.js
+
+- name: build:dist
+  task: tsc -d

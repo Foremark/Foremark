@@ -27,6 +27,7 @@
     "mini-css-extract-plugin": "^0.5.0",
     "preact": "^8.4.2",
     "style-loader": "^0.23.1",
+    "taskfile": "^0.8.5",
     "terser-webpack-plugin": "^1.1.0",
     "ts-loader": "^5.3.1",
     "typescript": "^3.2.2",
@@ -37,12 +38,12 @@
     "webpack-merge": "^4.1.4"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --config webpack.dev.js",
-    "build": "npm run build:browser && npm run build:dist",
-    "build:wasm": "cd rust/diagram && cargo +nightly build --release --target wasm32-unknown-unknown && cd ../.. && mkdir -p wasm && wasm-bindgen target/wasm32-unknown-unknown/release/diagram.wasm --out-dir wasm",
-    "build:browser": "webpack --config webpack.prod.js && webpack --config webpack.bundle.js",
-    "build:dist": "tsc -d"
+    "test": "taskfile test",
+    "start": "taskfile start",
+    "build": "taskfile build",
+    "build:wasm": "taskfile build:wasm",
+    "build:browser": "taskfile build:browser",
+    "build:dist": "taskfile build:dist"
   },
   "author": "",
   "license": "BSD-2-Clause"
