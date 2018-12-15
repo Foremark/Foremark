@@ -6,7 +6,7 @@
 
 html, body {
     background: white;
-    font-family: 'Source Serif Pro', serif;
+    font-family: @font-family;
     font-size: 15px;
     color: #444;
     line-height: 1.5;
@@ -58,7 +58,7 @@ html, body {
     > * { vertical-align: bottom }
 
     > input.search {
-        font-family: "Fira Sans", sans-serif;
+        font-family: @ui-font-family;
         width: (@sidebar-width - 6px);
         height: 24px;
         box-sizing: border-box;
@@ -301,7 +301,7 @@ main {
     // Code (inline/block)
     code, mf-code {
         font-size: 90%;
-        font-family: 'Source Code Pro', Menlo, Consolas, monospace;
+        font-family: @monospace-font-family;
         letter-spacing: -0.02em;
         tab-size:4; -moz-tab-size:4; -o-tab-size:4;
         white-space: pre;
