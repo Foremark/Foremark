@@ -23,5 +23,6 @@
         "app/converter/*.ts",
         "app/utils/*.ts",
         "app/*.ts",
+        "lib/*.d.ts",
     ]
 }

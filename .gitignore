@@ -4,6 +4,10 @@
 /dist
 /*.tgz
 
+# Rust build artifacts
+/target
+/wasm
+
 # macOS thing
 .DS_Store
 

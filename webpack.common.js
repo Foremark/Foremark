@@ -63,6 +63,7 @@ module.exports = (debug, selfContained) => ({
     extensions: [
       '.tsx', '.ts', '.js', '.glsl', '.less', '.png',
       '.woff', '.svg', '.woff2', '.otf', '.ttf', '.eot',
+      '.wasm',
     ]
   },
   output: {
