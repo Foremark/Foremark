@@ -1,3 +1,8 @@
+// Use `wee_alloc` as the global allocator to produce a small module.
+use wee_alloc;
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
 use wasm_bindgen::prelude::*;
 use svgbob;
 

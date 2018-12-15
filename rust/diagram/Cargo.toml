@@ -10,3 +10,4 @@ crate-type = ["cdylib"]
 [dependencies]
 wasm-bindgen = "0.2"
 svgbob = "0.4.1"
+wee_alloc = "0.4.2"

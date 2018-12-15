@@ -16,11 +16,30 @@
 
 - name: build:wasm
   tasks:
-    - cd rust/diagram
-    - cargo +nightly build --release --target wasm32-unknown-unknown
-    - cd ../..
-    - mkdir -p wasm
-    - wasm-bindgen target/wasm32-unknown-unknown/release/diagram.wasm --out-dir wasm
+    - - cd rust/diagram
+    - - cargo +nightly build --release --target wasm32-unknown-unknown
+    - - cd ../..
+    - - mkdir -p wasm
+    - - cp target/wasm32-unknown-unknown/release/diagram.wasm wasm/diagram.wasm
+
+    - - ls -l wasm/diagram.wasm && echo "wasm-snip panicking-code..."
+    - - wasm-snip --snip-rust-panicking-code wasm/diagram.wasm -o wasm/diagram.wasm
+
+    # We shouldn't blanket strip all `std::fmt` items b/c SVG output needs those
+
+    # Strip all `std::fmt::builders::Debug*` and `std::fmt::Debug` impls
+    - - ls -l wasm/diagram.wasm && echo "wasm-snip debug formatting..."
+    - - wasm-snip wasm/diagram.wasm -o wasm/diagram.wasm -p 'core3fmt8builders11Debug' -p 'core\.\.fmt\.\.Debug'
+
+    # Strip `core::str::slice_error_fail`
+    - - ls -l wasm/diagram.wasm && echo "wasm-snip slice_error_fail..."
+    - - wasm-snip wasm/diagram.wasm -o wasm/diagram.wasm -p 'slice_error_fail'
+
+    - - ls -l wasm/diagram.wasm && echo "wasm-opt..."
+    - - wasm-opt -Oz --dce --strip wasm/diagram.wasm -o wasm/diagram.wasm
+
+    - - ls -l wasm/diagram.wasm && echo "wasm-bindgen..."
+    - - wasm-bindgen wasm/diagram.wasm --out-dir wasm
 
 - name: build:browser
   tasks:

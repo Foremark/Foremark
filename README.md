@@ -91,7 +91,9 @@ Prerequisite:
 - [Node.js](https://nodejs.org) ≥ 10
 - Yarn (`npm install -g yarn`)
 - Rust, a nightly toolchain, which can be installed through [rustup](https://rustup.rs)
-- [`wasm-bindgen-cli`](https://rustwasm.github.io/wasm-bindgen/whirlwind-tour/basic-usage.html)
+- `cargo install` [`wasm-bindgen-cli`](https://rustwasm.github.io/wasm-bindgen/whirlwind-tour/basic-usage.html)
+- `cargo install` [`wasm-snip`](https://github.com/rustwasm/wasm-snip)
+- [Binaryen](https://github.com/WebAssembly/binaryen) (`brew install binaryen` on Homebrew) including: `wasm-opt`
     
     $ yarn install
 
