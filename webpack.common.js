@@ -37,8 +37,17 @@ module.exports = (debug, selfContained) => ({
               strictUnits: true,
               noIeCompat: true,
             },
+          },
+          // Exclude WOFF2 from the self-contained bundle to optimize the size.
+          selfContained && {
+            loader: 'string-replace-loader',
+            options: {
+              search: "url\\([^()]+\\)\\s*format\\('woff2'\\),\\s*",
+              replace: '',
+              flags: 'g',
+            },
           }
-        ],
+        ].filter(x => x),
       },
       {
         test: /\.(eot|ttf|woff|woff2)$/,
