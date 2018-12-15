@@ -56,8 +56,14 @@ module.exports = (debug, selfContained) => ({
           name: 'assets/[name].[ext]',
           publicPath: '.',
         },
+      },
+      selfContained && {
+        test: /\.wasm$/,
+        loader: 'wasm-fake-sync-loader',
+        type: 'javascript/auto',
+        options: {},
       }
-    ]
+    ].filter(x => x),
   },
   resolve: {
     extensions: [
@@ -65,6 +71,11 @@ module.exports = (debug, selfContained) => ({
       '.woff', '.svg', '.woff2', '.otf', '.ttf', '.eot',
       '.wasm',
     ]
+  },
+  resolveLoader: {
+    alias: {
+      'wasm-fake-sync-loader': path.resolve(__dirname, 'tools/wasm-fake-sync-loader.js'),
+    },
   },
   output: {
     filename: selfContained ? 'markfront.bundle.js' : 'markfront.js',

@@ -123,9 +123,7 @@ const HANDLERS: { [tagName: string]: (node: Element) => void } & Object = {
         // TODO: line numbers
     },
     [TagNames.Diagram]: async (node) => {
-        // TODO: Move this to `loader`
-        // TODO: Find a way to inline the WebAssembly module
-        const diagram = await import(/* webpackChunkName: 'diagram' */ '../../wasm/diagram');
+        const diagram = await lazyModules.diagram();
         const svg = diagram.to_svg(node.textContent!);
         node.innerHTML = svg;
     },

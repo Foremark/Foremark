@@ -17,6 +17,7 @@
     "bind-decorator": "^1.0.11",
     "classnames": "^2.2.6",
     "css-loader": "^2.0.0",
+    "describe-wasm": "^0.1.5",
     "file-loader": "^2.0.0",
     "git-revision-webpack-plugin": "^3.0.3",
     "highlight.js": "^9.13.1",
