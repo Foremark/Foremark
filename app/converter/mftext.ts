@@ -6,7 +6,7 @@ import {
 } from '../utils/dom';
 import {removePrefix} from '../utils/string';
 import {replaceTables} from './table';
-import {replaceLists} from './list';
+import {replaceBlocks} from './blocks';
 
 const ARROWS: [string, string][] = [
     ['&lt;==', '⇐'],
@@ -188,10 +188,11 @@ export function expandMfText(node: Element): void {
         '<hr />',
     ));
 
-    // Lists
-    transformHtmlWith(node, replaceLists);
+    // Nestable block elements
+    //  - `<ul>`, `<ol>`, `<dl>`
+    transformHtmlWith(node, replaceBlocks);
 
-    const isListElement = (e: Element) =>
+    const isBlock = (e: Element) =>
         e.tagName.match(/^(?:ul|ol|dl|li|dt|dd)$/i) != null;
 
     // Paragraphs
@@ -287,7 +288,7 @@ export function expandMfText(node: Element): void {
         }
 
         return output.join('');
-    }, isListElement);
+    }, isBlock);
 
     const isNonVerbatimElement = (e: Element) =>
         !VERBATIM_ELEMENTS_MAP.has(e.tagName.toLowerCase())

@@ -12,54 +12,180 @@ interface Level {
      */
     bodyIndentation: string;
 
-    type: LevelType;
-
-    nextCounter: number;
+    state: BlockState;
 }
 
-const enum LevelType {
-    TopLevel = 0,
-    Unordered = 1,
-    Ordered = 2,
-    Definition = 3,
+interface BlockMarkerTraits {
+    /**
+     * Specific to `DefinitionList`. If this indicates `true`, a marker takes
+     * the preceding line as the caption text.
+     */
+    readonly needsCaption?: boolean;
 }
 
-const LEVEL_PARTS: {
-    initiator: (attr: string | number | null) => string;
-    continue: (attr: string | number | null) => string;
-    terminator: string;
-}[] = [];
+interface BlockInitiator extends BlockMarkerTraits {
+    /**
+     * The regex that can be used as a marker text for this `BlockInitiator`.
+     */
+    readonly markerPattern: RegExp;
 
-LEVEL_PARTS[LevelType.Unordered] = {
-    initiator: s => `<ul><li class="${s}">`,
-    continue: s => `</li><li class="${s}">`,
-    terminator: '</li></ul>',
-};
-LEVEL_PARTS[LevelType.Ordered] = {
-    initiator: s => `<ol start="${s}"><li>`,
-    continue: s => `</li><li>`,
-    terminator: '</li></ol>',
-};
-LEVEL_PARTS[LevelType.Definition] = {
-    initiator: s => `<dd>`,
-    continue: _ => '</dd><dd>',
-    terminator: '</dd></dl>',
+    /**
+     * Constructs a `BlockState` given a marker text (like `451.` or `- [x]`).
+     *
+     * Returns the constructed `BlockState` and a HTML fragment.
+     */
+    start(marker: string, caption: string | null): [BlockState, string];
+}
+
+interface BlockState extends BlockMarkerTraits {
+    /**
+     * Returns whether this block can assimilate a given marker as a new item.
+     *
+     * If this returns false, this block will be closed and a new block will be
+     * created.
+     */
+    canContinue(marker: string): boolean;
+
+    /**
+     * Emits a HTML fragment that generates another item of this block.
+     */
+    continue(marker: string, caption: string | null): string;
+
+    /**
+     * Emits a HTML fragment that close this block.
+     */
+    close(): string;
+}
+
+/** Represents the top-level block state. */
+const TopLevel: BlockState = {
+    canContinue: () => { return false; },
+    continue: () => { throw new Error(); },
+    close: () => { throw new Error(); },
 };
 
-const MARKER_MAP = new Map<string, [LevelType, string | number | null]>([
-    ['-', [LevelType.Unordered, 'minus']],
-    ['+', [LevelType.Unordered, 'plus']],
-    ['*', [LevelType.Unordered, 'asterisk']],
-    ['- [ ]', [LevelType.Unordered, 'unchecked']],
-    ['- [x]', [LevelType.Unordered, 'checked']],
-    ['[ ]', [LevelType.Unordered, 'unchecked']],
-    ['[x]', [LevelType.Unordered, 'checked']],
-    [':', [LevelType.Definition, null]],
-]);
-const markerInfoFromString = (s: string) => MARKER_MAP.get(s) ||
-    [LevelType.Ordered, parseInt(s, 10)];
+/**
+ * `BlockInitiator`/`BlockState` for unordered lists.
+ */
+const UnorderedList = {
+    markerPattern: /(?:(?:-\s+)?\[[x ]\])|-|\+|\*/,
 
-export function replaceLists(html: string): string {
+    start(marker: string, caption: string | null): [BlockState, string] {
+        return [
+            UnorderedList,
+            `<ul><li class="${unorderedListMarkerToClass(marker)}">`,
+        ];
+    },
+
+    canContinue(marker: string): boolean {
+        return /^(?:-|\+|\*|(?:-\s+)\[[x ]\])$/.test(marker);
+    },
+    continue(marker: string, caption: string | null): string {
+        return `</li><li class="${unorderedListMarkerToClass(marker)}">`;
+    },
+    close(): string {
+        return '</li></ul>';
+    },
+};
+
+function unorderedListMarkerToClass(marker: string): string {
+    if (marker.indexOf('[x]') >= 0) {
+        return 'checked';
+    } else if (marker.indexOf('[ ]') >= 0) {
+        return 'unchecked';
+    }
+    switch (marker) {
+        case '-':
+            return 'minus';
+        case '+':
+            return 'plus';
+        case '*':
+            return 'asterisk';
+        default:
+            throw new Error();
+    }
+}
+
+/**
+ * `BlockInitiator`/`BlockState` for ordered lists.
+ */
+class OrderedList implements BlockState {
+    static markerPattern = /\d+\./;
+
+    private constructor(private nextCounter: number) {}
+
+    static start(marker: string, caption: string | null): [BlockState, string] {
+        const i = parseInt(marker, 10);
+        return [
+            new OrderedList(i + 1),
+            `<ol start="${i}"><li>`,
+        ];
+    }
+
+    canContinue(marker: string): boolean {
+        const i = parseInt(marker, 10);
+        return i === this.nextCounter;
+    }
+    continue(marker: string, caption: string | null): string {
+        this.nextCounter += 1;
+        return `</li><li>`;
+    }
+    close(): string {
+        return '</li></ol>';
+    }
+};
+
+/**
+ * `BlockInitiator`/`BlockState` for definition lists.
+ */
+const DefinitionList = {
+    markerPattern: /:/,
+    needsCaption: true,
+
+    start(marker: string, caption: string | null): [BlockState, string] {
+        return [
+            DefinitionList,
+            `<dl><dt>${caption}</dt><dd>`,
+        ];
+    },
+
+    canContinue(marker: string): boolean {
+        return marker === ':';
+    },
+    continue(marker: string, caption: string | null): string {
+        return `</dd><dt>${caption}</dt><dd>`;
+    },
+    close(): string {
+        return '</dd></dl>';
+    },
+};
+
+const BLOCK_INITIATORS: ReadonlyArray<BlockInitiator> = [
+    UnorderedList,
+    OrderedList,
+    DefinitionList,
+];
+
+const MARKER_LINE_PATTERN = new RegExp(
+    '^(' +
+    BLOCK_INITIATORS.map(i => i.markerPattern.source).join('|') +
+    ')' +
+    /([ \t]+)(\S.*)/.source
+);
+
+const EXACT_MARKER_PATTERNS = BLOCK_INITIATORS
+    .map(i => [
+        i,
+        new RegExp('^' + i.markerPattern.source + '$')
+    ] as [BlockInitiator, RegExp]);
+
+const blockInitiatorFromString = (marker: string) =>
+    EXACT_MARKER_PATTERNS.find(([_, pattern]) => pattern.test(marker))![0];
+
+/**
+ * Replace nestable block elements.
+ */
+export function replaceBlocks(html: string): string {
     const lines = html.split('\n');
     const output: string[] = [];
 
@@ -71,8 +197,7 @@ export function replaceLists(html: string): string {
         {
             originalIndentation: '',
             bodyIndentation: '',
-            type: LevelType.TopLevel,
-            nextCounter: NaN,
+            state: TopLevel,
         },
     ];
     let numPendingNewlines = 0;
@@ -103,7 +228,7 @@ export function replaceLists(html: string): string {
         removeTrailingNewline();
 
         lastOutputIsText = false;
-        output.push(LEVEL_PARTS[levels[0].type].terminator);
+        output.push(levels[0].state.close());
 
         levels.shift();
 
@@ -151,18 +276,13 @@ export function replaceLists(html: string): string {
         }
 
         // Detect list marker
-        const markerMatch = lineBody.match(
-            /^(:|(?:- )?\[[x ]\]|-|\+|\*|\d+\.)([ \t]+)(\S.*)/);
-        //     ^ ^^^^^^^^^^^^^^^ ^^^^^^^  ^^^^^
-        //     |   checklist    unordered ordered
-        //     |
-        //     +--- definition
+        const markerMatch = lineBody.match(MARKER_LINE_PATTERN);
 
         if (!markerMatch) {
             // No marker's here
 
             if (indentCommand != IndentCommand.Indent) {
-                if (levels[0].type == LevelType.Definition) {
+                if (levels[0].state.needsCaption) {
                     if (definitionTermBuffer != null) {
                         // A definiton list item cannot contain more than one
                         // line. So, the current definition list ends here.
@@ -198,37 +318,27 @@ export function replaceLists(html: string): string {
         numPendingNewlines = 0;
 
         const [_, markerText, markerSpace, markerBody] = markerMatch;
-        const [markerType, markerAttr] = markerInfoFromString(markerText);
+        //const [markerType, markerAttr] = markerInfoFromString(markerText);
 
         // Is this marker is an addition to the current list?
-        let isContinuation = markerType == levels[0].type &&
-            indentCommand == IndentCommand.Preserve;
-
-        if (
-            markerType === levels[0].type &&
-            markerType == LevelType.Definition &&
-            definitionTermBuffer != null
-        ) {
-            // ```
-            // term1
-            // :    definition1
-            // term2
-            //      :   definition2   <----
-            // ```
-            isContinuation = true;
-        }
+        //
+        // If `definitionTermBuffer != null`, then the input looks like:
+        // ```
+        // term1
+        // :    definition1
+        // term2
+        //      :   definition2   <----
+        // ```
+        let isContinuation =
+            (
+                indentCommand == IndentCommand.Preserve ||
+                definitionTermBuffer != null
+            ) &&
+            levels[0].state.canContinue(markerText);
 
         if (!isContinuation && indentCommand != IndentCommand.Indent && levels.length > 1) {
             // Close the current list first.
             closeCurrentList();
-        }
-
-        if (isContinuation && markerType == LevelType.Ordered) {
-            // Do we have to restart `<ol>`?
-            if (markerAttr !== levels[0].nextCounter) {
-                isContinuation = false;
-                closeCurrentList();
-            }
         }
 
         // Compute the indentation level of the item's body. Example:
@@ -239,65 +349,54 @@ export function replaceLists(html: string): string {
         const markerBodyIndentation = indent + ' '
             .repeat(markerText.length + markerSpace.length);
 
+        let caption: string | null = null;
+
         if (isContinuation) {
             levels[0].bodyIndentation = markerBodyIndentation;
 
             removeTrailingNewline();
 
-            if (markerType == LevelType.Definition && definitionTermBuffer != null) {
-                // Emit a `<dt>`.
-                removeTrailingNewline();
-                output.push('</dd><dt>');
-
-                const term = removePrefix(definitionTermBuffer[0],
+            if (definitionTermBuffer != null) {
+                // Create `<dt>` between `<dd>`s
+                caption = removePrefix(definitionTermBuffer[0],
                     levels[0].originalIndentation) + definitionTermBuffer[1];
-                output.push(term);
-                output.push('</dt><dd>');
                 definitionTermBuffer = null;
-
-                lastOutputIsText = true;
-                output.push(markerBody);
-                output.push('\n');
-                continue;
             }
 
+            output.push(levels[0].state.continue(markerText, caption));
+
             lastOutputIsText = true;
-            output.push(LEVEL_PARTS[markerType].continue(markerAttr));
             output.push(markerBody);
             output.push('\n');
-
-            ++levels[0].nextCounter;
         } else {
             // Start a new list.
             if (definitionTermBuffer) {
                 throw new Error();
             }
 
-            if (markerType === LevelType.Definition) {
+            const initiator = blockInitiatorFromString(markerText);
+
+            if (initiator.needsCaption) {
                 // A definition list takes the last line as the contents of `<dt>`.
-                let term: string;
                 if (lastOutputIsText) {
                     output.pop();
-                    term = output.pop()!;
+                    caption = output.pop()!;
                 } else {
-                    term = '';
+                    caption = '';
                 }
-
-                output.push('<dl><dt>');
-                output.push(term);
-                output.push('</dt>');
             }
 
+            const [state, fragment] = initiator.start(markerText, caption);
+
             lastOutputIsText = true;
-            output.push(LEVEL_PARTS[markerType].initiator(markerAttr));
+            output.push(fragment);
             output.push(markerBody);
             output.push('\n');
 
             levels.unshift({
                 bodyIndentation: markerBodyIndentation,
                 originalIndentation: indent,
-                type: markerType,
-                nextCounter: (markerAttr as number) + 1,
+                state,
             });
         }
     }
