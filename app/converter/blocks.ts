@@ -8,19 +8,25 @@ interface Level {
     originalIndentation: string;
 
     /**
-     * The indentation of the contents.
+     * The indentation of the contents. `null` if unknown.
      */
-    bodyIndentation: string;
+    bodyIndentation: string | null;
 
     state: BlockState;
 }
 
 interface BlockMarkerTraits {
-    /**
-     * Specific to `DefinitionList`. If this indicates `true`, a marker takes
-     * the preceding line as the caption text.
-     */
-    readonly needsCaption?: boolean;
+    readonly captionStyle?: CaptionStyle;
+}
+
+const enum CaptionStyle {
+    None,
+
+    /** A marker takes the preceding line as the caption text. */
+    PrecedingLine,
+
+    /** A marker takes the rest of the current line as the caption text. */
+    SameLine,
 }
 
 interface BlockInitiator extends BlockMarkerTraits {
@@ -140,7 +146,7 @@ class OrderedList implements BlockState {
  */
 const DefinitionList = {
     markerPattern: /:/,
-    needsCaption: true,
+    captionStyle: CaptionStyle.PrecedingLine,
 
     start(marker: string, caption: string | null): [BlockState, string] {
         return [
@@ -246,7 +252,7 @@ export function replaceBlocks(html: string): string {
      */
     function flushDefinitionTermBuffer(): void {
         const notTerm = removePrefix(definitionTermBuffer![0],
-            levels[0].bodyIndentation) + definitionTermBuffer![1];
+            levels[0].bodyIndentation!) + definitionTermBuffer![1];
 
         lastOutputIsText = true;
         output.push(notTerm);
@@ -275,6 +281,12 @@ export function replaceBlocks(html: string): string {
             closeCurrentList();
         }
 
+        // If we don't know the body indentation level yet, then guess one from
+        // the first line of the body.
+        if (levels[0].bodyIndentation == null) {
+            levels[0].bodyIndentation = indent;
+        }
+
         // Detect list marker
         const markerMatch = lineBody.match(MARKER_LINE_PATTERN);
 
@@ -282,7 +294,7 @@ export function replaceBlocks(html: string): string {
             // No marker's here
 
             if (indentCommand != IndentCommand.Indent) {
-                if (levels[0].state.needsCaption) {
+                if (levels[0].state.captionStyle === CaptionStyle.PrecedingLine) {
                     if (definitionTermBuffer != null) {
                         // A definiton list item cannot contain more than one
                         // line. So, the current definition list ends here.
@@ -306,7 +318,7 @@ export function replaceBlocks(html: string): string {
             }
 
             // Preserve indentation
-            lineBody = removePrefix(indent, levels[0].bodyIndentation) + lineBody;
+            lineBody = removePrefix(indent, levels[0].bodyIndentation!) + lineBody;
 
             lastOutputIsText = true;
             output.push(lineBody);
@@ -363,11 +375,12 @@ export function replaceBlocks(html: string): string {
                 definitionTermBuffer = null;
             }
 
-            output.push(levels[0].state.continue(markerText, caption));
+            if (levels[0].state.captionStyle === CaptionStyle.SameLine) {
+                caption = markerBody;
+                levels[0].bodyIndentation = null;
+            }
 
-            lastOutputIsText = true;
-            output.push(markerBody);
-            output.push('\n');
+            output.push(levels[0].state.continue(markerText, caption));
         } else {
             // Start a new list.
             if (definitionTermBuffer) {
@@ -376,7 +389,7 @@ export function replaceBlocks(html: string): string {
 
             const initiator = blockInitiatorFromString(markerText);
 
-            if (initiator.needsCaption) {
+            if (initiator.captionStyle === CaptionStyle.PrecedingLine) {
                 // A definition list takes the last line as the contents of `<dt>`.
                 if (lastOutputIsText) {
                     output.pop();
@@ -386,18 +399,29 @@ export function replaceBlocks(html: string): string {
                 }
             }
 
+            let bodyIndentation: string | null = markerBodyIndentation;
+
+            if (initiator.captionStyle === CaptionStyle.SameLine) {
+                caption = markerBody;
+                bodyIndentation = null;
+            }
+
             const [state, fragment] = initiator.start(markerText, caption);
 
-            lastOutputIsText = true;
             output.push(fragment);
-            output.push(markerBody);
-            output.push('\n');
 
             levels.unshift({
-                bodyIndentation: markerBodyIndentation,
+                bodyIndentation,
                 originalIndentation: indent,
                 state,
             });
+        }
+
+        if (levels[0].state.captionStyle !== CaptionStyle.SameLine) {
+            // The first line of the body is treated as a caption text.
+            lastOutputIsText = true;
+            output.push(markerBody);
+            output.push('\n');
         }
     }
 
