@@ -10,6 +10,8 @@ html, body {
     font-size: 15px;
     color: #444;
     line-height: 1.5;
+    margin: 0;
+    padding: 0;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -221,6 +223,14 @@ html, body {
 }
 
 main {
+    margin: 3em 2em;
+    @media (max-width: @screen-medium-max) {
+        margin: 3em 1em;
+    }
+    @media (max-width: @screen-small-max) {
+        margin: 3em 0.5em;
+    }
+
     // Title
     mf-title {
         font-size: 2.2rem;
