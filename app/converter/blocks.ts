@@ -85,7 +85,7 @@ const UnorderedList = {
     },
 
     canContinue(marker: string): boolean {
-        return /^(?:-|\+|\*|(?:-\s+)\[[x ]\])$/.test(marker);
+        return /^(?:(?:-\s+)?\[[x ]\]|-|\+|\*)$/.test(marker);
     },
     continue(marker: string, caption: string | null): string {
         return `</li><li class="${unorderedListMarkerToClass(marker)}">`;
