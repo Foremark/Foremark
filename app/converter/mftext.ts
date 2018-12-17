@@ -190,10 +190,11 @@ export function expandMfText(node: Element): void {
 
     // Nestable block elements
     //  - `<ul>`, `<ol>`, `<dl>`
+    //  - `<mf-admonition>`
     transformHtmlWith(node, replaceBlocks);
 
     const isBlock = (e: Element) =>
-        e.tagName.match(/^(?:ul|ol|dl|li|dt|dd)$/i) != null;
+        e.tagName.match(/^(?:ul|ol|dl|li|dt|dd|mf-admonition)$/i) != null;
 
     // Paragraphs
     transformHtmlWith(node, html => {
@@ -308,8 +309,6 @@ export function expandMfText(node: Element): void {
     // TODO: Replace other types of hyperlinks
     //       `[](url)`, `<url>`, `http://example.com`, `USER@example.com`,
     //       `[text][ref]`, `[^footnoteref]`, `[#citeref]`
-
-    // TODO: Replace admonitions
 
     // TODO: Replace footnotes/endnotes
 

@@ -10,6 +10,8 @@ export const enum TagNames {
     Title = 'mf-title',
     Lead = 'mf-lead',
     Diagram = 'mf-diagram',
+    Admonition = 'mf-admonition',
+    AdmonitionTitle = 'mf-admonition-title',
 }
 
 export const enum AttributeNames {

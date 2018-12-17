@@ -1,3 +1,4 @@
+import {TagNames} from '../markfront';
 import {removePrefix, analyzeIndent, IndentCommand} from '../utils/string';
 
 interface Level {
@@ -166,17 +167,44 @@ const DefinitionList = {
     },
 };
 
+/**
+ * `BlockInitiator`/`BlockState` for admonitions.
+ */
+const Admonition = {
+    markerPattern: /!!!/,
+    captionStyle: CaptionStyle.SameLine,
+
+    start(marker: string, caption: string | null): [BlockState, string] {
+        // Markdeep admonition types (tip, warning, error) +  reStructuredText
+        // standard admonitions
+        // (http://docutils.sourceforge.net/0.7/docs/ref/rst/directives.html#specific-admonitions)
+        const [_, type, title] = caption!.match(
+            /^(?:(tip|warning|error|attention|caution|danger|hint|important|note|admonition)(?::\s*|$))?(.*)/i)!;
+
+        return [
+            Admonition,
+            `<${TagNames.Admonition} type="${type || ''}">` +
+            (title != '' ? `<${TagNames.AdmonitionTitle}>${title}</${TagNames.AdmonitionTitle}>` : ''),
+        ];
+    },
+
+    canContinue(marker: string): boolean { return false; },
+    continue(marker: string, caption: string | null): string { throw new Error(); },
+    close(): string { return `</${TagNames.Admonition}>`; },
+};
+
 const BLOCK_INITIATORS: ReadonlyArray<BlockInitiator> = [
     UnorderedList,
     OrderedList,
     DefinitionList,
+    Admonition,
 ];
 
 const MARKER_LINE_PATTERN = new RegExp(
     '^(' +
     BLOCK_INITIATORS.map(i => i.markerPattern.source).join('|') +
     ')' +
-    /([ \t]+)(\S.*)/.source
+    /([ \t]+|$)(\S.*|$)/.source
 );
 
 const EXACT_MARKER_PATTERNS = BLOCK_INITIATORS

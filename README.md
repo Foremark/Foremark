@@ -36,6 +36,8 @@ The following custom elements are defined:
 - `<mf-eq-display>` - A LaTeX display equation.
 - `<mf-title>`
 - `<mf-lead>`
+- `<mf-admonition>`
+    - `<mf-admonition-title>`
 - `<ul>`
     - `<li class="plus">`
     - `<li class="minus">`
