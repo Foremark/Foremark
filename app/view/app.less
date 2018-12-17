@@ -381,6 +381,21 @@ main {
         }
     }
 
+    div:global(.tableWrapper) {
+        overflow-x: auto;
+        max-width: 100%;
+    }
+    table {
+        border-collapse: collapse;
+        margin: 1em 0;
+        min-width: 80%;
+    }
+    td, th {
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        padding: 0.4em 0.6em;
+    }
+
     mf-error {
         display: inline-block;
         border: 2px solid red;

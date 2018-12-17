@@ -124,8 +124,10 @@ export function forEachNodePreorder(node: Node, f: (node: Node) => boolean | voi
         return;
     }
     if (node instanceof Element) {
-        for (let n: Node | null = node.firstChild; n; n = n.nextSibling) {
+        for (let n: Node | null = node.firstChild; n; ) {
+            const next = n.nextSibling;
             forEachNodePreorder(n, f);
+            n = next;
         }
     }
 }

@@ -127,4 +127,12 @@ const HANDLERS: { [tagName: string]: (node: Element) => void } & Object = {
         const svg = diagram.to_svg(node.textContent!);
         node.innerHTML = svg;
     },
+    'table': (node) => {
+        // Wrap `<table>` with a `<div>` to display a horizontal scrollbar
+        // as needed
+        const wrapper = node.ownerDocument!.createElement('div');
+        wrapper.className = 'tableWrapper';
+        node.parentElement!.insertBefore(wrapper, node);
+        wrapper.appendChild(node);
+    },
 };
