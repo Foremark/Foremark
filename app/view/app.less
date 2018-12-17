@@ -269,6 +269,14 @@ main {
         }
     }
 
+    a[href] {
+        color: @accent-color;
+        text-decoration: none;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
     // Lists
     li, dt, dd {
         // Remove margins from top-level `p` of list items.
