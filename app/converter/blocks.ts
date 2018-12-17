@@ -175,15 +175,12 @@ const Admonition = {
     captionStyle: CaptionStyle.SameLine,
 
     start(marker: string, caption: string | null): [BlockState, string] {
-        // Markdeep admonition types (tip, warning, error) +  reStructuredText
-        // standard admonitions
-        // (http://docutils.sourceforge.net/0.7/docs/ref/rst/directives.html#specific-admonitions)
         const [_, type, title] = caption!.match(
-            /^(?:(tip|warning|error|attention|caution|danger|hint|important|note|admonition)(?::\s*|$))?(.*)/i)!;
+            /^(?:([^:]+)(?::\s*|$))?(.*)/i)!;
 
         return [
             Admonition,
-            `<${TagNames.Admonition} type="${type || ''}">` +
+            `<${TagNames.Admonition} type="${(type || '').toLowerCase()}">` +
             (title != '' ? `<${TagNames.AdmonitionTitle}>${title}</${TagNames.AdmonitionTitle}>` : ''),
         ];
     },
