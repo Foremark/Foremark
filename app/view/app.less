@@ -340,6 +340,50 @@ main {
         }
     }
 
+    mf-admonition {
+        display: block;
+        position: relative;
+        margin: 1em 0;
+        padding: 0em 1em;
+        border-left: 4px solid rgba(128, 128, 128,.3);
+        background-color: rgba(128, 128, 128,.08);
+        overflow: hidden;
+        border-radius: 3px;
+
+        > mf-admonition-title {
+            display: block;
+            font-weight: bold;
+            border-color: rgba(68,138,255,.4);
+            margin-top: 1em;
+        }
+
+        > mf-admonition-title::before {
+            font-weight: bold;
+            font-size: 150%;
+        }
+
+        // Markdeep admonition types (tip, warning, error) +  reStructuredText
+        // standard admonitions
+        // (http://docutils.sourceforge.net/0.7/docs/ref/rst/directives.html#specific-admonitions)
+        &[type=tip], &[type=hint] {
+            border-left-color: rgba(50, 255, 90, .4);
+            background-color: rgba(50, 255, 90, .15);
+        }
+
+        &[type=warning], &[type=attention], &[type=caution], &[type=important] {
+            border-left-color: rgba(255, 205, 0, .4);
+            background-color: rgba(255, 205, 0, .15);
+        }
+
+        &[type=error], &[type=danger] {
+            border-left-color: rgba(255, 23, 68, .25);
+            background-color: rgba(255, 23, 68, .1);
+        }
+    }
+    .admonition p:last-child {
+        margin-bottom:0
+    }
+
     mf-error {
         display: inline-block;
         border: 2px solid red;
