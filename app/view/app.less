@@ -29,6 +29,22 @@ html, body {
     @media (max-width: @screen-medium-max) { padding-left: 0 !important; }
 }
 
+main {
+    // Animate the left position when the sidebar visibility is toggled
+    position: relative;
+    left: 0;
+    .sidebarVisible & { left: -@sidebar-width; }
+
+    transition: 200ms transform;
+    .sidebarVisible & { transform: translateX(@sidebar-width); }
+
+    // But not in screen sizes where the sidebar is displayed in a modal window.
+    @media (max-width: @screen-medium-max) {
+        transform: none !important;
+        left: 0 !important;
+    }
+}
+
 .modalBackground {
     position: fixed;
     left: 0; top: 0; right: 0; bottom: 0;
@@ -197,15 +213,12 @@ html, body {
         background: #444;
     }
 
-    .root:not(.sidebarVisible) & {
-        display: none;
-    }
+    // Animate toggling the sidebar
+    transition: 200ms transform;
+    .root:not(.sidebarVisible) & { transform: translateX(-100%); }
     @media (max-width: @screen-medium-max) {
-        display: block !important;
-        transition: 200ms transform;
-        .root:not(.sidebarModalVisible) & {
-            transform: translateX(-100%);
-        }
+        .root.sidebarModalVisible & { transform: none; }
+        .root:not(.sidebarModalVisible) & { transform: translateX(-100%); }
     }
 
     > nav {
