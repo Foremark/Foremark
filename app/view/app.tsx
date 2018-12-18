@@ -167,12 +167,12 @@ export class App extends React.Component<AppProps, AppState> {
                 </div>
                 <div className={CN.sidebar}>
                     <nav className={classnames({
-                        [CN.show]: !isSearchPaneVisible && isModelessSidebarVisible,
+                        [CN.show]: !isSearchPaneVisible,
                     })}>
                         <TableOfContents markfrontDocument={this.props.markfrontDocument} />
                     </nav>
                     <nav className={classnames({
-                        [CN.show]: isSearchPaneVisible && isModelessSidebarVisible,
+                        [CN.show]: isSearchPaneVisible,
                     })}>
                         <SearchPane
                             markfrontDocument={this.props.markfrontDocument}
