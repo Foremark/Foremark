@@ -1,0 +1,138 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head><mf-text><![CDATA[
+<!-- Markfront header -->
+
+                  **Markfront Reference Manual**
+
+This document describes the features supported by Markfront.
+
+# Markfront Text
+
+## Isolated contents
+
+Figures and sidenotes are distinguished by the syntax of their labels:
+
+|    Reference    |  Result  | Can be a sidenote |
+|-----------------|----------|-------------------------|
+| `[^sidenote]`   | ¹        | Yes                     |
+| `[Figure fig]`  | Figure 1 | No                      |
+| `[図:fig]`      | 図1      | No                      |
+| `[^Figure fig]` | Figure 1 | Yes                     |
+| `[^図:fig]`     | 図1      | Yes                     |
+
+# Markfront XML
+
+## HTML elements
+
+The following HTML elements are supported and styled appropriately.
+
+- `<code>`
+- `<ul>`, `<ol>`, `<ll>`
+- `<dl>`, `<dt>`, `<dd>`
+
+## Header — `<mf-title>`
+
+~~~~~~~~~~~~xml
+<mf-title>I Have No Mouth and I Must Scream</mf-title>
+<mf-lead>Harlan Ellison</mf-lead>
+~~~~~~~~~~~~
+
+`<mf-title>` inserts a document title. `<mf-lead>` inserts a subtitle and if it exists it must follow `<mf-title>`.
+
+## Lists
+
+~~~~~~~~~~~~xml
+<ul>
+    <li><p>unordered list</p></li>
+</ul>
+<ol>
+    <li><p>ordered list</p></li>
+</ol>
+<dl>
+    <dt><p>caption</p></dt>
+    <dd><p>decsription</p></dd>
+</dl>
+~~~~~~~~~~~~
+
+HTML lists `<ul>` (unordered list), `<ol>` (ordered list), and `<dl>` (definition list) are supported.
+
+`ul > li` may have one of the following CSS classes:
+
+- `checked` indicates that a checked checkbox should be displayed next the item.
+- `unchecked` indicates that an unchecked checkbox should be displayed next the item.
+
+## Code blocks — `<mf-code>`
+
+~~~~~~~~~~~~xml
+<mf-codeblock>
+    <mf-code type="Python input">&gt;&gt;&gt; x = [1, 2, 3, 4]
+&gt;&gt;&gt; [y * 2 for y in x]</mf-code>
+    <mf-code type="none output">[2, 4, 6, 8]</mf-code>
+</mf-codeblock>
+~~~~~~~~~~~~
+
+**`<mf-code>`** displays a code block with syntax highlighting.
+`type` attribute is a space-separated string and the first element indicates the syntax name used for syntax highlighting.
+
+One or more `<mf-code>` elements can be wrapped by **`<mf-codeblock>`**.
+
+!!! Warning
+    `<mf-code>` is a block element that should not be confused with `<code>`, which is an inline element used to insert a inline code fragment.
+
+!!! TODO: Yet to be written about...
+    The semantics of the rest of `type` attribute value.
+
+## LaTeX equations — `<mf-eq>`
+
+~~~~~~~~~~~~xml
+<mf-eq-display>
+    \Lo(X, \wo) = \Le(X, \wo) + \int_\Omega \Li(X, \wi) ~ f_X(\wi, \wo) ~ | \n \cdot \wi | ~ d\wi
+</mf-eq-display>
+<p>
+    The LLVM target <i>triplet</i> is comprised of <i>five</i> elements. 
+    Therefore, <mf-eq>3 = 5</mf-eq>.
+</p>
+~~~~~~~~~~~~
+
+`<mf-eq>` inserts an inline LaTeX equation. Similarly, `<mf-eq-display>` inserts a display LaTeX equation.
+
+## Admonitions — `<mf-admonition>`
+
+~~~~~~~~~~~~xml
+<mf-admonition type="danger">
+    <mf-admonition-title>
+        Can I have your attention please?!
+    </mf-admonition-title>
+    <p>
+        The message follows...
+    </p>
+</mf-admonition>
+~~~~~~~~~~~~
+
+## Diagrams — `<mf-diagram>`
+
+]]>
+<mf-codeblock>
+<mf-code type="xml">&lt;mf-diagram&gt;&lt;![CDATA[<![CDATA[
+ .---------.
+ |  Server |<------.
+ '----+----'       |
+      |            |
+      | DATA CYCLE |
+      v            |
+ .---------.  .----+----.
+ | Security|  |  File   |
+ | Policy  +->| Manager |
+ '---------'  '---------'
+]]>]]&gt;&lt;/mf-diagram&gt;</mf-code>
+</mf-codeblock>
+<![CDATA[
+
+## Miscellaneous elements
+
+- `<mf-error>` indicates an error encountered while processing `<mf-text>`.
+
+- `<mf-ref>`
+
+<!-- Markfront footer -->
+]]></mf-text><script src="browser/markfront.js" data-rel="markfront" />
+</head></html>

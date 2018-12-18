@@ -25,26 +25,6 @@ Annotations in the text contents of `mf-text` elements are parsed and converted 
 
 The output of this step is a mixture of XHTML and custom elements, which we call Markfront XML. At this point, most constructs are represented using semantic markups, thus the document is ready to be styled using CSS. On the other hand, a few complex constructs are preserved in their original plain text form. Thus, the raw code of the format is still human-read/writable. The next step will further process complex constructs for optimal browser viewing.
 
-### Markfront XML
-
-The following custom elements are defined:
-
-- `<mf-error>` — indicates an error encountered while processing `<mf-text>`.
-- `<mf-codeblock>` — Wraps one or more `<mf-code>` code blocks (optional).
-- `<mf-code>` — A code block with syntax highlighting. Not to be confused with `<code>`.
-- `<mf-eq>` - A LaTeX inline equation.
-- `<mf-eq-display>` - A LaTeX display equation.
-- `<mf-title>`
-- `<mf-lead>`
-- `<mf-admonition>`
-    - `<mf-admonition-title>`
-- `<ul>`
-    - `<li class="plus">`
-    - `<li class="minus">`
-    - `<li class="asterisk">`
-    - `<li class="checked">`
-    - `<li class="unchecked">`
-
 ### Step 2 - Complex styling (`mfview.ts`)
 
 This step processes custom elements of Markfront XML. The result looks pretty when viewed via a web browser, but the raw code might not no longer retain human-readability.
