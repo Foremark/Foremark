@@ -1,4 +1,4 @@
-import {encodeHTML, decodeHTML} from 'entities';
+import {decodeHTML} from 'entities';
 
 export const enum InternalTagNames {
     /**
