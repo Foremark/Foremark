@@ -1,5 +1,7 @@
 import {TagNames} from '../markfront';
+import {InternalTagNames} from './common';
 import {removePrefix, analyzeIndent, IndentCommand} from '../utils/string';
+import {escapeXmlText} from '../utils/dom';
 
 interface Level {
     /**
@@ -190,11 +192,33 @@ const Admonition = {
     close(): string { return `</${TagNames.Admonition}>`; },
 };
 
+/**
+ * `BlockInitiator`/`BlockState` for link target definitons like `[linkname]: ...`.
+ */
+const LinkTargetDefinition = {
+    markerPattern: new RegExp(/\[[^!^][^\][\s<>]*?\]:/),
+    captionStyle: CaptionStyle.None,
+
+    start(marker: string, caption: string | null): [BlockState, string] {
+        const id = marker.substring(1, marker.length - 2);
+
+        return [
+            LinkTargetDefinition,
+            `<${InternalTagNames.LinkTarget} link-id="${escapeXmlText(id)}">`,
+        ];
+    },
+
+    canContinue(marker: string): boolean { return false; },
+    continue(marker: string, caption: string | null): string { throw new Error(); },
+    close(): string { return `</${InternalTagNames.LinkTarget}>`; },
+};
+
 const BLOCK_INITIATORS: ReadonlyArray<BlockInitiator> = [
     UnorderedList,
     OrderedList,
     DefinitionList,
     Admonition,
+    LinkTargetDefinition,
 ];
 
 const MARKER_LINE_PATTERN = new RegExp(
