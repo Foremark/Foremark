@@ -12,8 +12,22 @@ export const enum TagNames {
     Diagram = 'mf-diagram',
     Admonition = 'mf-admonition',
     AdmonitionTitle = 'mf-admonition-title',
+    Note = 'mf-note',
+    Figure = 'mf-figure',
+    FigureCaption = 'mf-figure-caption',
+    Ref = 'mf-ref',
 }
 
 export const enum AttributeNames {
     CodeType = 'type',
 }
+
+/**
+ * A `TagNames.Figure` element having an identifier conforming to this pattern
+ * can have some attributes implied from the identifier.
+ *
+ * This pattern includes three matches: figure type, a symbol specifying
+ * a separator between the figure type and number, and base name (identifies
+ * a figure of a particular type).
+ */
+export const FIGURE_STANDARD_ID_RE = /^(.+)([ :])([^ :]+)$/;

@@ -1,4 +1,4 @@
-import {encodeHTML} from 'entities';
+import {decodeHTML} from 'entities';
 
 import {TagNames} from '../markfront';
 import {
@@ -7,6 +7,7 @@ import {
 import {removePrefix} from '../utils/string';
 import {replaceTables} from './table';
 import {replaceBlocks} from './blocks';
+import {FIGURE_ID_RE, ENDNOTE_ID_RE, TextInternalTagNames} from './common';
 
 const ARROWS: [string, string][] = [
     ['&lt;==', '⇐'],
@@ -28,6 +29,7 @@ const FENCE_REGEX = /([ \t]*)(~{3,}|`{3,})\s*([-_0-9a-zA-Z\s]*)$/;
 
 const PHRASING_ELEMENTS = [
     InternalTagNames.Placeholder, // default placeholder for non-element nodes
+    TagNames.Ref,
     TagNames.Equation,
     'addr', 'audio', 'b', 'bdo', 'br', 'button', 'canvas', 'cite', 'code',
     'command', 'data', 'datalist', 'dfn', 'em', 'embed', 'i', 'iframe', 'img',
@@ -45,6 +47,7 @@ const PHRASING_ELEMENTS_MAP = new Map(PHRASING_ELEMENTS.map(
 
 const VERBATIM_ELEMENTS = [
     'code', TagNames.Code, 'svg', TagNames.Equation, TagNames.DisplayEquation,
+    TextInternalTagNames.LinkTarget,
 ];
 const VERBATIM_ELEMENTS_MAP = new Map(VERBATIM_ELEMENTS.map(
     (n): [string, boolean] => [n, true]
@@ -194,7 +197,7 @@ export function expandMfText(node: Element): void {
     transformHtmlWith(node, replaceBlocks);
 
     const isBlock = (e: Element) =>
-        e.tagName.match(/^(?:ul|ol|dl|li|dt|dd|mf-admonition)$/i) != null;
+        e.tagName.match(/^(?:ul|ol|dl|li|dt|dd|mf-admonition|mf-figure|mf-note)$/i) != null;
 
     // Paragraphs
     transformHtmlWith(node, html => {
@@ -295,6 +298,15 @@ export function expandMfText(node: Element): void {
         !VERBATIM_ELEMENTS_MAP.has(e.tagName.toLowerCase())
 
     // TODO: Replace media
+
+    // Reference to a figure or endnote: `[^link]`
+    transformHtmlWith(node, html => html.replace(
+        new RegExp(`\\[[\\^!](${ENDNOTE_ID_RE.source}|${FIGURE_ID_RE.source})\\]`, 'g'),
+        (_, id) => {
+            id = decodeHTML(id);
+            return `<${TagNames.Ref} to="${escapeXmlText(id)}" />`;
+        }
+    ), isNonVerbatimElement);
 
     // Hyperlink: `[text](url)`
     transformHtmlWith(node, html => html.replace(

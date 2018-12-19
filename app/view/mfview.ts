@@ -1,6 +1,11 @@
 import {lazyModules} from './loader';
 import {forEachNodePreorder} from '../utils/dom';
-import {TagNames, AttributeNames} from '../markfront';
+import {TagNames, AttributeNames, FIGURE_STANDARD_ID_RE} from '../markfront';
+
+/** Tags introduced by `prepareMarkfrontForViewing`. */
+const enum ViewTagNames {
+    FloatingElementLabel = 'mf-label',
+}
 
 /**
  * Transforms Markfront XML for viewing.
@@ -56,6 +61,119 @@ export function prepareMarkfrontForViewing(node: Element): void {
             node.insertAdjacentHTML('afterbegin', `<span class="section-number">${number}</span> `);
         }
     });
+
+    // Process figures and endnotes
+    const figureUsageError =
+        `<${TagNames.Error}>` +
+        `Usage error: <code>${TagNames.Figure}</code>` +
+        `</${TagNames.Error}>`;
+    const nextFigureNumber = new Map<string, number>();
+    let nextEndnoteNumber = 1;
+
+    const refLabelMap = new Map<string, [boolean, string]>();
+
+    forEachNodePreorder(node, node => {
+        if (!(node instanceof Element)) {
+            return;
+        }
+
+        // Generate `computer` and `label` from `id`
+        if (node.tagName === TagNames.Figure) {
+            const id = node.getAttribute('id');
+            let counter = node.getAttribute('counter');
+            let label = node.getAttribute('label');
+
+            if (counter == null && label == null) {
+                const match = id && FIGURE_STANDARD_ID_RE.exec(id);
+                if (!match) {
+                    node.insertAdjacentHTML('beforebegin', figureUsageError);
+                    return;
+                }
+
+                const [_, type, sep, base] = match;
+                counter = type.toLowerCase();
+                label = type.replace(/\{\}/g, '{\u200b}') + (sep === ' ' ? ' ' : '') + '{}';
+            }
+
+            // FIXME: How to handle these cases?
+            if (counter == null) {
+                counter = '';
+            }
+            if (label == null) {
+                label = `??? {}`;
+            }
+
+            // Assign a figure number
+            const number = (nextFigureNumber.get(counter) || 1);
+            nextFigureNumber.set(counter, number + 1);
+
+            label = label.replace(/\{\}/g, `${number}`) + ' ';
+
+            // Generate a label
+            const caption = node.getElementsByTagName(TagNames.FigureCaption)[0];
+            if (caption) {
+                const labelElem = document.createElement(ViewTagNames.FloatingElementLabel);
+                labelElem.textContent = label;
+                caption.insertBefore(labelElem, caption.firstChild);
+            }
+
+            // Move the caption under a figure
+            if (caption) {
+                node.appendChild(caption);
+            }
+
+            if (id) {
+                refLabelMap.set(id, [false, label]);
+            }
+        } else if (node.tagName === TagNames.Note) {
+            const id = node.getAttribute('id');
+
+            // Assign a note number
+            const number = nextEndnoteNumber++;
+
+            // Generate a label
+            const labelElem = document.createElement(ViewTagNames.FloatingElementLabel);
+            const label = `${number}`;
+            labelElem.textContent = label;
+            node.insertBefore(labelElem, node.firstChild);
+
+            if (id) {
+                refLabelMap.set(id, [true, label]);
+            }
+        }
+    });
+
+    // Resolve `<TagNames.Ref>`s using `refLabelMap` created by the previous step
+    forEachNodePreorder(node, node => {
+        if (!(node instanceof Element)) {
+            return;
+        }
+        if (node.tagName !== TagNames.Ref) {
+            return;
+        }
+
+        const target = node.getAttribute('to') || '';
+        const [endnote, label] = refLabelMap.get(target) || [false, '?'];
+
+        const link = document.createElement('a');
+        link.href = '#' + encodeURIComponent(target);
+
+        if (endnote) {
+            const sup = document.createElement('sup');
+            sup.textContent = label;
+            link.appendChild(sup);
+        } else {
+            link.textContent = label;
+        }
+
+        // Replace <TagNames.Ref>` with a link
+        node.parentElement!.insertBefore(link, node);
+        node.parentElement!.removeChild(node);
+
+        return false;
+    });
+
+    // TODO: sidenotes
 
     // Render complex elements
     forEachNodePreorder(node, node => {

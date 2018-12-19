@@ -409,6 +409,34 @@ main {
         padding: 0.4em 0.6em;
     }
 
+    // Floating contents
+    mf-figure, mf-note {
+        display: block;
+        margin: 1em 1em;
+    }
+
+    mf-figure {
+        text-align: center;
+        > mf-figure-caption {
+            display: block;
+            > mf-label {
+                font-weight: bold;
+            }
+        }
+    }
+
+    mf-note {
+        > mf-label {
+            display: block;
+            float: left;
+            vertical-align: super;
+            font-size: smaller;
+            margin-right: 0.5em;
+        }
+
+        font-size: 90%;
+    }
+
     mf-error {
         display: inline-block;
         border: 2px solid red;

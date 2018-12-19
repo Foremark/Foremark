@@ -1,5 +1,7 @@
+import {decodeHTML} from 'entities';
+
 import {TagNames} from '../markfront';
-import {InternalTagNames} from './common';
+import {TextInternalTagNames, ENDNOTE_ID_RE, FIGURE_ID_RE} from './common';
 import {removePrefix, analyzeIndent, IndentCommand} from '../utils/string';
 import {escapeXmlText} from '../utils/dom';
 
@@ -204,13 +206,58 @@ const LinkTargetDefinition = {
 
         return [
             LinkTargetDefinition,
-            `<${InternalTagNames.LinkTarget} link-id="${escapeXmlText(id)}">`,
+            `<${TextInternalTagNames.LinkTarget} link-id="${escapeXmlText(id)}">`,
         ];
     },
 
     canContinue(marker: string): boolean { return false; },
     continue(marker: string, caption: string | null): string { throw new Error(); },
-    close(): string { return `</${InternalTagNames.LinkTarget}>`; },
+    close(): string { return `</${TextInternalTagNames.LinkTarget}>`; },
+};
+
+/**
+ * `BlockInitiator`/`BlockState` for endnotes like `[^notename]: ...`.
+ */
+const Endnote = {
+    markerPattern: new RegExp(`\\[[\\^!]${ENDNOTE_ID_RE.source}\\]:`),
+    captionStyle: CaptionStyle.None,
+
+    start(marker: string, caption: string | null): [BlockState, string] {
+        const size = marker.substr(1, 1) === '!' ? ' size="large"' : '';
+        const id = decodeHTML(marker.substring(2, marker.length - 2));
+
+        return [
+            Endnote,
+            `<${TagNames.Note} id="${escapeXmlText(id)}"${size}>`,
+        ];
+    },
+
+    canContinue(marker: string): boolean { return false; },
+    continue(marker: string, caption: string | null): string { throw new Error(); },
+    close(): string { return `</${TagNames.Note}>`; },
+};
+
+/**
+ * `BlockInitiator`/`BlockState` for endnotes like `[^Figure figid]: capture`.
+ */
+const Figure = {
+    markerPattern: new RegExp(`\\[[\\^!]${FIGURE_ID_RE.source}\\]:`),
+    captionStyle: CaptionStyle.SameLine,
+
+    start(marker: string, caption: string | null): [BlockState, string] {
+        const size = marker.substr(1, 1) === '!' ? ' size="large"' : '';
+        const id = decodeHTML(marker.substring(2, marker.length - 2));
+
+        return [
+            Figure,
+            `<${TagNames.Figure} id="${escapeXmlText(id)}"${size}>` +
+            `<${TagNames.FigureCaption}>${caption}</${TagNames.FigureCaption}>`,
+        ];
+    },
+
+    canContinue(marker: string): boolean { return false; },
+    continue(marker: string, caption: string | null): string { throw new Error(); },
+    close(): string { return `</${TagNames.Figure}>`; },
 };
 
 const BLOCK_INITIATORS: ReadonlyArray<BlockInitiator> = [
@@ -219,6 +266,8 @@ const BLOCK_INITIATORS: ReadonlyArray<BlockInitiator> = [
     DefinitionList,
     Admonition,
     LinkTargetDefinition,
+    Endnote,
+    Figure,
 ];
 
 const MARKER_LINE_PATTERN = new RegExp(
