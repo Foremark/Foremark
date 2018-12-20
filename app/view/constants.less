@@ -13,7 +13,14 @@
 @screen-medium-max: 800px;
 @screen-small-max: 600px;
 
+// Since range expressions (e.g., `@media (width > 400px)`) are not commonly
+// supported...
+@screen-large-min: (@screen-medium-max + 0.00001px);
+
 @sidebar-width: 180px;
+
+@sidenote-width: 160px;
+@sidenote-vertical-adjustment: 40px;
 
 // Color theme
 @accent-color: #3060e0;

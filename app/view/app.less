@@ -244,6 +244,10 @@ main {
         margin: 3em 0.5em;
     }
 
+    mf {
+        display: block;
+    }
+
     // Title
     mf-title {
         font-size: 2.2rem;
@@ -435,6 +439,38 @@ main {
         }
 
         font-size: 90%;
+        line-height: 1.4;
+    }
+
+    mf-sidenote { display: none; }
+
+    :global(.only-sidenote) { display: none; }
+
+    @media (min-width: @screen-large-min) {
+        mf:global(.has-sidenotes) {
+            margin-right: @sidenote-width;
+        }
+
+        :global(.only-sidenote) { display: inline; }
+        :global(.hide-sidenote) { display: none; }
+        mf-sidenote {
+            float: right;
+            clear: right;
+
+            // Do not allocate a space in the content box - it's displayed
+            // outside of the content box.
+            width: 0;
+
+            display: block;
+            > * {
+                position: relative;
+                width: @sidenote-width;
+                top: -@sidenote-vertical-adjustment;
+                font-size: 80%;
+                line-height: 1.4;
+                text-align: left;
+            }
+        }
     }
 
     mf-error {

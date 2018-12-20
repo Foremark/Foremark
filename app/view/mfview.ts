@@ -5,6 +5,7 @@ import {TagNames, AttributeNames, FIGURE_STANDARD_ID_RE} from '../markfront';
 /** Tags introduced by `prepareMarkfrontForViewing`. */
 const enum ViewTagNames {
     FloatingElementLabel = 'mf-label',
+    Sidenote = 'mf-sidenote',
 }
 
 /**
@@ -70,7 +71,8 @@ export function prepareMarkfrontForViewing(node: Element): void {
     const nextFigureNumber = new Map<string, number>();
     let nextEndnoteNumber = 1;
 
-    const refLabelMap = new Map<string, [boolean, string]>();
+    const refLabelMap = new Map<string, [boolean, boolean, string]>();
+    const floatingContentUsageMap = new Map<string, Element[]>();
 
     forEachNodePreorder(node, node => {
         if (!(node instanceof Element)) {
@@ -123,7 +125,7 @@ export function prepareMarkfrontForViewing(node: Element): void {
             }
 
             if (id) {
-                refLabelMap.set(id, [false, label]);
+                refLabelMap.set(id, [false, false, label]);
             }
         } else if (node.tagName === TagNames.Note) {
             const id = node.getAttribute('id');
@@ -138,10 +140,71 @@ export function prepareMarkfrontForViewing(node: Element): void {
             node.insertBefore(labelElem, node.firstChild);
 
             if (id) {
-                refLabelMap.set(id, [true, label]);
+                refLabelMap.set(id, [true, false, label]);
             }
+        } else if (node.tagName === TagNames.Ref) {
+            const target = node.getAttribute('to') || '';
+
+            let refs = floatingContentUsageMap.get(target);
+            if (refs == null) {
+                refs = [];
+                floatingContentUsageMap.set(target, refs);
+            }
+
+            refs.push(node);
+            return false;
         }
     });
+
+    const sidenotesDisabled = node.classList.contains('no-sidenotes');
+
+    // Copy each floating content and wrap it with `<ViewTagNames.Sidenote>`,
+    // and then insert it to the first place where it's referenced.
+    // On a large screen, the original floating content is hidden and
+    // the sidenote is displayed instead.
+    // FIXME: This won't work as intended if `<TagNames.Ref>` is in a table
+    let hasSidenote = false;
+    if (!sidenotesDisabled) {
+        forEachNodePreorder(node, node => {
+            if (!(node instanceof Element)) {
+                return;
+            }
+            if (node.tagName !== TagNames.Figure && node.tagName !== TagNames.Note) {
+                return;
+            }
+            if (node.getAttribute('size') === 'large') {
+                // Sidenote creation is disabled for this elemnet.
+                return;
+            }
+
+            const refs = floatingContentUsageMap.get(node.id);
+            if (refs == null) {
+                // This element is not referenced anywhere. Can't create
+                // a side note.
+                return;
+            }
+
+            const cloned = node.cloneNode(true) as Element;
+            const sidenote = node.ownerDocument!.createElement(ViewTagNames.Sidenote);
+            cloned.id = 'sidenote.' + node.id;
+            sidenote.appendChild(cloned);
+
+            const at = refs[0];
+            at.parentElement!.insertBefore(sidenote, at);
+
+            // Hide the original element on a large screen
+            node.classList.add('hide-sidenote');
+
+            refLabelMap.get(node.id)![1] = true;
+
+            hasSidenote = true;
+        });
+    }
+
+    if (hasSidenote) {
+        // Make a margin for sidenotes
+        node.classList.add('has-sidenotes');
+    }
 
     // Resolve `<TagNames.Ref>`s using `refLabelMap` created by the previous step
     forEachNodePreorder(node, node => {
@@ -153,7 +216,7 @@ export function prepareMarkfrontForViewing(node: Element): void {
         }
 
         const target = node.getAttribute('to') || '';
-        const [endnote, label] = refLabelMap.get(target) || [false, '?'];
+        const [endnote, sidenote, label] = refLabelMap.get(target) || [false, false, '?'];
 
         const link = document.createElement('a');
         link.href = '#' + encodeURIComponent(target);
@@ -170,10 +233,18 @@ export function prepareMarkfrontForViewing(node: Element): void {
         node.parentElement!.insertBefore(link, node);
         node.parentElement!.removeChild(node);
 
+        if (sidenote) {
+            // Link to the sidenote version on a large screen
+            const link2 = link.cloneNode(true) as HTMLAnchorElement;
+            link2.href = '#' + encodeURIComponent('sidenote.' + target);
+            link.parentElement!.insertBefore(link2, link);
+
+            link.classList.add('hide-sidenote');
+            link2.classList.add('only-sidenote');
+        }
+
         return false;
     });
-
-    // TODO: sidenotes
 
     // Render complex elements
     forEachNodePreorder(node, node => {
