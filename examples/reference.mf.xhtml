@@ -7,6 +7,62 @@ This document describes the features supported by Markfront.
 
 # Markfront Text
 
+## Hyperlinks
+
+### Normal hyperlinks
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+[This](https://www.example.com) is a normal Markdown hyperlink.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+### Symbolic hyperlinks
+
+Link targets can be placed out-of-text:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+[**This**][] is a symbolic hyperlink with an implied symbol name.
+
+[This][example] is a symbolic hyperlink with an explicit symbol name.
+ALso, notice that the link target can span across multiple lines.
+All link breaks within a link target are removed.
+
+[**This**]:  https://www.example.com
+[example]:   https://
+             www.example.com
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Symbol names are case-sensitive.
+
+A link target definition is only associated with the closest preceding symbolic
+hyperlink. A symbolic hyperlink is associated with a link target definition
+only if:
+
+- The hyperlink precedes the link target definition.
+- There is no hyperlink or link target definiton with an identical symbol name
+  between the hyperlink and the link target definition.
+
+A symbolic hyperlink is not formed if no link target could be associated.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+[This][example] is not a hyperlink and is displayed as `[This][example]`.
+
+[This][example] is a hyperlink.
+
+[example]: https://www.example.com
+[example]: https://www.example.com/this-link-target-definition-is-ignored
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The association cannot be formed across the boundaries of `<mf-text>`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML
+<mf-text>
+[This][example] is not a hyperlink and is displayed as `[This][example]`.
+</mf-text>
+<mf-text>
+[example]: https://www.example.com
+</mf-text>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ## Images
 
 !!! TODO: Yet to be written about...
@@ -19,7 +75,7 @@ This document describes the features supported by Markfront.
 Figures and sidenotes use a (somewhat) unified syntax:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
-Let there be some paragraph text[^sidenote]. 
+Let there be some paragraph text[^sidenote].
 See [^Figure fig1] as well as [!Table table]. [!図:fig2]も併せてご覧下さい。
 .i ko zgana [!le pixra pe li mupli-pixra]
 
@@ -171,7 +227,7 @@ One or more `<mf-code>` elements can be wrapped by **`<mf-codeblock>`**.
     \Lo(X, \wo) = \Le(X, \wo) + \int_\Omega \Li(X, \wi) ~ f_X(\wi, \wo) ~ | \n \cdot \wi | ~ d\wi
 </mf-eq-display>
 <p>
-    The LLVM target <i>triplet</i> is comprised of <i>five</i> elements. 
+    The LLVM target <i>triplet</i> is comprised of <i>five</i> elements.
     Therefore, <mf-eq>3 = 5</mf-eq>.
 </p>
 ~~~~~~~~~~~~

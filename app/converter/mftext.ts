@@ -3,6 +3,7 @@ import {decodeHTML} from 'entities';
 import {TagNames} from '../markfront';
 import {
     transformHtmlWith, escapeXmlText, legalizeAttributes, InternalTagNames,
+    transformTextNodeWith,
 } from '../utils/dom';
 import {removePrefix} from '../utils/string';
 import {replaceTables} from './table';
@@ -295,7 +296,10 @@ export function expandMfText(node: Element): void {
     }, isBlock);
 
     const isNonVerbatimElement = (e: Element) =>
-        !VERBATIM_ELEMENTS_MAP.has(e.tagName.toLowerCase())
+        !VERBATIM_ELEMENTS_MAP.has(e.tagName.toLowerCase());
+
+    const isNonVerbatimElementAndNotLink = (e: Element) =>
+        isNonVerbatimElement(e) && e.tagName !== 'a';
 
     // TODO: Replace media
 
@@ -318,9 +322,70 @@ export function expandMfText(node: Element): void {
         }
     ), isNonVerbatimElement);
 
+    // Symbolic hyperlink: `[text][linkname]`
+    const linkSymbolTable = new Map<string, string>();
+    transformTextNodeWith(
+        node,
+        html => {
+            if (linkSymbolTable.size === 0) {
+                return html;
+            }
+
+            // Can't use `String#replace` here because it only scans a string in
+            // the forward direction.
+            const parts = html.split(/(\[([^\]]+)\]\[([^\^#!<>[\]][^<>[\]]*)?\])/g);
+            //                            ^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+            //                             text        symbol name
+            if (parts.length === 1) {
+                return html;
+            }
+
+            const output: string[] = [];
+            output.unshift(parts.pop()!);
+            for (let i = parts.length; i > 0; i -= 4) {
+                const pre = parts[i - 4];
+                const source = parts[i - 3];
+                const text = parts[i - 2];
+                let symbolName = parts[i - 1];
+
+                if (symbolName == null) {
+                    symbolName = text;
+                }
+
+                const linkTarget = linkSymbolTable.get(symbolName);
+                if (linkTarget != null) {
+                    linkSymbolTable.delete(symbolName);
+
+                    output.unshift(`<a href="${escapeXmlText(linkTarget)}">${text}</a>`);
+                } else {
+                    // Link target wasn't found; treat the fragment as a normal text
+                    output.unshift(source);
+                }
+
+                output.unshift(pre);
+            }
+
+            return output.join('');
+        }, element => {
+            if (element.tagName === TextInternalTagNames.LinkTarget) {
+                const symbolName = element.getAttribute('link-id')!;
+                const linkTarget = element.textContent!.replace(/[\r\n]/g, '');
+                linkSymbolTable.set(symbolName, linkTarget);
+
+                // Consume `<TextInternalTagNames.LinkTarget>`
+                element.parentElement!.removeChild(element);
+
+                return false;
+            }
+            return isNonVerbatimElementAndNotLink(element);
+        },
+        // Traverse in the reverse order so that
+        true,
+    );
+
     // TODO: Replace other types of hyperlinks
-    //       `[](url)`, `<url>`, `http://example.com`, `USER@example.com`,
-    //       `[text][ref]`, `[^footnoteref]`, `[#citeref]`
+    //       `<url>`, `http://example.com`, `USER@example.com`,
+    //       `[#citeref]`
 
     // TODO: Replace footnotes/endnotes
 

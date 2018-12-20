@@ -198,6 +198,7 @@ const Admonition = {
  * `BlockInitiator`/`BlockState` for link target definitons like `[linkname]: ...`.
  */
 const LinkTargetDefinition = {
+    // TODO: The content is verbatim (shouldn't be processed)
     markerPattern: new RegExp(/\[[^!^][^\][\s<>]*?\]:/),
     captionStyle: CaptionStyle.None,
 

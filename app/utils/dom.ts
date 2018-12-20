@@ -28,6 +28,8 @@ function placeholderHtmlWithId(name: string, i: any): string {
 const PLACEHOLDER_REGEX = /<[-_a-zA-Z0-9]+ ph-id="([0-9]+)" \/>/g;
 const PLACEHOLDER_ATTR = 'ph-id';
 
+const testElement = document.createElement('i');
+
 /**
  * Transforms the HTML markup of a given node's contents using a supplied
  * function.
@@ -115,6 +117,52 @@ export function transformHtmlWith(
 }
 
 /**
+ * Transforms the HTML markup of text nodes in a given node using a supplied
+ * function.
+ *
+ * The HTML markup of a text node is passed to `tx`. `tx` returns a transformed
+ * HTML markup, which may include other kinds of nodes.
+ *
+ * If `recursionFilter` is specified, the contents of a child element is
+ * transformed as well if the element matches the predicate specified by
+ * `recursionFilter`.
+ */
+export function transformTextNodeWith(
+    node: Node,
+    tx: (s: string) => string,
+    recursionFilter: (e: Element) => boolean | void,
+    reverse: boolean,
+) {
+    (reverse ? forEachNodeReversePreorder : forEachNodePreorder)(node, node => {
+        if (node instanceof Element) {
+            return recursionFilter(node);
+        } else if (node instanceof Text) {
+            let html = node.textContent!
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+
+            const orig = html;
+            html = tx(html);
+
+            if (orig === html) {
+                return;
+            }
+
+            // Deserialize the transformed XML (Yep, `Text` does not have
+            // `outerHTML` or `insertAdjacentHTML`.)
+            testElement.innerHTML = html;
+
+            while (testElement.firstChild != null) {
+                node.parentElement!.insertBefore(testElement.firstChild, node);
+            }
+
+            node.parentElement!.removeChild(node);
+        }
+    });
+}
+
+/**
  * Iterate all nodes in pre-order using a callback function.
  *
  * Child nodes are not traversed if the callback function returns `false`.
@@ -126,6 +174,25 @@ export function forEachNodePreorder(node: Node, f: (node: Node) => boolean | voi
     if (node instanceof Element) {
         for (let n: Node | null = node.firstChild; n; ) {
             const next = n.nextSibling;
+            forEachNodePreorder(n, f);
+            n = next;
+        }
+    }
+}
+
+/**
+ * Iterate all nodes in pre-order using a callback function. The iteration order
+ * of child nodes is reversed.
+ *
+ * Child nodes are not traversed if the callback function returns `false`.
+ */
+export function forEachNodeReversePreorder(node: Node, f: (node: Node) => boolean | void) {
+    if (f(node) === false) {
+        return;
+    }
+    if (node instanceof Element) {
+        for (let n: Node | null = node.lastChild; n; ) {
+            const next = n.previousSibling;
             forEachNodePreorder(n, f);
             n = next;
         }
@@ -192,8 +259,6 @@ export function legalizeAttributes(xml: string, onwarning: (message: string) => 
         }
     ).substr(1);
 }
-
-const testElement = document.createElement('i');
 
 /**
  * Matches a given string against [XML NCName](http://www.w3.org/TR/1999/REC-xml-names-19990114/#NT-NCName).
