@@ -132,6 +132,9 @@ Let there be some paragraph text[^sidenote].
 See [!!Figure fig1] as well as [!Table table]. [!図:fig2]も併せてご覧下さい。
 .i ko zgana [!le pixra pe li mupli-pixra]
 
+[^]:
+    This is displayed as a sidenote without numbering.
+
 [^sidenote]: Here comes the sidenote.
     Sidenotes are different from figures in the point that
     the first line is not treated specially as a caption.
@@ -164,16 +167,18 @@ The part surrounded by brackets is called a *label*. A label consists of the fol
     - `!` — Translated to `size="large"`. The content is not moved to the side margin and always occupies a row.
     - `!!` — Translated to `size="full"`. The content occupies the maximum available width (including the side margin).
 
-- An optional number prefix. This serves the purpose of identifying an independent counter for each figure type (e.g., figure/table), and as a text to be displayed before a number. There are two forms:
+- An optional label identifier, which consists of:
 
-    - The space-delimited form like `[^Figure fig]` inserts a whitespace between the prefix and a number.
-    - The non-space-delimited form like `[^図:fig]` does not insert a whitespace.
+    - An optional number prefix. This serves the purpose of identifying an independent counter for each figure type (e.g., figure/table), and as a text to be displayed before a number. There are two forms:
 
-  This component is included in the floating element ID along with the base name.
+        - The space-delimited form like `[^Figure fig]` inserts a whitespace between the prefix and a number.
+        - The non-space-delimited form like `[^図:fig]` does not insert a whitespace.
 
-- A non-empty base name.
+      This component is included in the floating element ID along with the base name.
 
-  A base name may not include `:` or a whitespace character. Therefore, a label `[^le pixra pe li mupli-pixra]` is interpreted as `le pixra pe li` + `mupli-pixra`[^jbopixra].
+    - A non-empty base name.
+
+      A base name may not include `:` or a whitespace character. Therefore, a label `[^le pixra pe li mupli-pixra]` is interpreted as `le pixra pe li` + `mupli-pixra`[^jbopixra].
 
 A label not including a preceding symbol like `[this is a mere link or not]` is not treated as a floating element label but rather as a potential normal link.
 

@@ -219,7 +219,7 @@ const LinkTargetDefinition = {
     close(): string { return `</${TextInternalTagNames.LinkTarget}>`; },
 };
 
-const endnotePattern = new RegExp(`\\[(${FLOATING_SIZE_RE.source})(${ENDNOTE_ID_RE.source})\\]:`);
+const endnotePattern = new RegExp(`\\[(${FLOATING_SIZE_RE.source})(${ENDNOTE_ID_RE.source})?\\]:`);
 
 /**
  * `BlockInitiator`/`BlockState` for endnotes like `[^notename]: ...`.
@@ -229,16 +229,21 @@ const Endnote = {
     captionStyle: CaptionStyle.None,
 
     start(marker: string, caption: string | null): [BlockState, string] {
-        const [_, sizeRaw, idRaw] = endnotePattern.exec(marker)!;
+        const [_, sizeRaw, idRaw  = ''] = endnotePattern.exec(marker)!;
 
         let size: string | null = parseFloatingSize(marker.substr(1, 1));
         size = size ? ` size="${size}"` : '';
 
-        const id = decodeHTML(idRaw);
+        let id = decodeHTML(idRaw);
+
+        // `id` is optional
+        if (id !== '') {
+            id = ` id="${escapeXmlText(id)}"`;
+        }
 
         return [
             Endnote,
-            `<${TagNames.Note} id="${escapeXmlText(id)}"${size}>`,
+            `<${TagNames.Note}${id}${size}>`,
         ];
     },
 
