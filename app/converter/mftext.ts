@@ -202,6 +202,7 @@ export function expandMfText(node: Element): void {
         return tagName === TagNames.Admonition ||
             tagName === TagNames.Figure ||
             tagName === TagNames.Note ||
+            tagName === TagNames.Block ||
             tagName.match(/^(?:ul|ol|dl|li|dt|dd)$/i) != null;
     };
 

@@ -5,6 +5,7 @@ export const enum TagNames {
     Equation = 'mf-eq',
     DisplayEquation = 'mf-eq-display',
     Error = 'mf-error',
+    Block = 'mf-block',
     Code = 'mf-code',
     CodeBlock = 'mf-codeblock',
     Title = 'mf-title',

@@ -158,13 +158,51 @@ export function prepareMarkfrontForViewing(node: Element): void {
 
     const sidenotesDisabled = node.classList.contains('no-sidenotes');
 
-    // Copy each floating content and wrap it with `<ViewTagNames.Sidenote>`,
-    // and then insert it to the first place where it's referenced.
-    // On a large screen, the original floating content is hidden and
-    // the sidenote is displayed instead.
-    // FIXME: This won't work as intended if `<TagNames.Ref>` is in a table
     let hasSidenote = false;
     if (!sidenotesDisabled) {
+        // Scan for `<TagNames.Block>` that can be displayed in the side margin.
+        //
+        // Unlike others, `<TagNames.Block>` do not use a surrogate element for
+        // display a sidenote in a desired position. However, the original
+        // contents must be wrapped by an additional container for the styling
+        // to work like:
+        //
+        //     <TagNames.Block>
+        //         <div>
+        //             { children }
+        //         </div>
+        //     </TagNames.Block>
+        forEachNodePreorder(node, node => {
+            if (!(node instanceof Element)) {
+                return;
+            }
+            if (node.tagName !== TagNames.Block) {
+                return;
+            }
+            const size = node.getAttribute('size');
+            if (size === 'large' || size === 'full') {
+                // Sidenote creation is disabled for this elemnet.
+                return;
+            }
+
+            // Wrap the contents
+            const div = node.ownerDocument!.createElement('div');
+            while (node.firstChild != null) {
+                div.appendChild(node.firstChild);
+            }
+            node.appendChild(div);
+
+            // Enable the sidenote styling.
+            node.classList.add('sidenote');
+
+            hasSidenote = true;
+        });
+
+        // Copy each floating content and wrap it with `<ViewTagNames.Sidenote>`,
+        // and then insert it to the first place where it's referenced.
+        // On a large screen, the original floating content is hidden and
+        // the sidenote is displayed instead.
+        // FIXME: This won't work as intended if `<TagNames.Ref>` is in a table
         forEachNodePreorder(node, node => {
             if (!(node instanceof Element)) {
                 return;

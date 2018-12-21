@@ -20,3 +20,9 @@ export const enum TextInternalTagNames {
 
 export const ENDNOTE_ID_RE = /[^[\]<> :\t]+/;
 export const FIGURE_ID_RE = /[^[\]<>\t]+[ :][^[\]<> :\t]+/;
+
+/** The URL and attributes part of the media tag. */
+export const MEDIA_PARAM_RE = /("[^"<>]*"|[^"\s<>]+)(\s+[^\)]*?)?/;
+//                              ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^
+//                               URL (maybe quoted)  unvalidated attribs
+//                                                    e.g., ` class="a"`

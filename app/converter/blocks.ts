@@ -1,9 +1,11 @@
 import {decodeHTML} from 'entities';
 
 import {TagNames} from '../markfront';
-import {TextInternalTagNames, ENDNOTE_ID_RE, FIGURE_ID_RE} from './common';
+import {
+    TextInternalTagNames, ENDNOTE_ID_RE, FIGURE_ID_RE, MEDIA_PARAM_RE,
+} from './common';
 import {removePrefix, analyzeIndent, IndentCommand} from '../utils/string';
-import {escapeXmlText} from '../utils/dom';
+import {escapeXmlText, legalizeAttributes} from '../utils/dom';
 
 interface Level {
     /**
@@ -216,15 +218,18 @@ const LinkTargetDefinition = {
     close(): string { return `</${TextInternalTagNames.LinkTarget}>`; },
 };
 
+const FLOATING_SIZE_RE = /[\^!]/;
+const replaceFloatingSize = (s: string) => s === '!' ? ' size="large"' : '';
+
 /**
  * `BlockInitiator`/`BlockState` for endnotes like `[^notename]: ...`.
  */
 const Endnote = {
-    markerPattern: new RegExp(`\\[[\\^!]${ENDNOTE_ID_RE.source}\\]:`),
+    markerPattern: new RegExp(`\\[${FLOATING_SIZE_RE.source}${ENDNOTE_ID_RE.source}\\]:`),
     captionStyle: CaptionStyle.None,
 
     start(marker: string, caption: string | null): [BlockState, string] {
-        const size = marker.substr(1, 1) === '!' ? ' size="large"' : '';
+        const size = replaceFloatingSize(marker.substr(1, 1));
         const id = decodeHTML(marker.substring(2, marker.length - 2));
 
         return [
@@ -242,11 +247,11 @@ const Endnote = {
  * `BlockInitiator`/`BlockState` for endnotes like `[^Figure figid]: capture`.
  */
 const Figure = {
-    markerPattern: new RegExp(`\\[[\\^!]${FIGURE_ID_RE.source}\\]:`),
+    markerPattern: new RegExp(`\\[${FLOATING_SIZE_RE.source}${FIGURE_ID_RE.source}\\]:`),
     captionStyle: CaptionStyle.SameLine,
 
     start(marker: string, caption: string | null): [BlockState, string] {
-        const size = marker.substr(1, 1) === '!' ? ' size="large"' : '';
+        const size = replaceFloatingSize(marker.substr(1, 1));
         const id = decodeHTML(marker.substring(2, marker.length - 2));
 
         return [
@@ -261,6 +266,59 @@ const Figure = {
     close(): string { return `</${TagNames.Figure}>`; },
 };
 
+const imageBlockPattern = new RegExp(
+    // `![^FigType basename]`
+    `!\\[(${FLOATING_SIZE_RE.source})(${FIGURE_ID_RE.source})?\\]` +
+    // `[alttext]`
+    `\s*\\[([^\\]]*)\\]` +
+    // `(URL attr...)`
+    `\s*\\(${MEDIA_PARAM_RE.source}\\):`
+);
+
+/**
+ * `BlockInitiator`/`BlockState` for image blocks.
+ */
+class ImageBlock implements BlockState {
+    static readonly markerPattern =
+        new RegExp(imageBlockPattern.source.replace(/([^\\]|^)\(/g, '$1(?:'));
+
+    private constructor(private terminator: string) {}
+
+    static start(marker: string, caption: string | null): [BlockState, string] {
+        let [_, sizesym, idRaw = '', altRaw, urlRaw, attribsRaw = ''] = imageBlockPattern.exec(marker)!;
+        const size = replaceFloatingSize(sizesym);
+
+        if (urlRaw.startsWith('"')) {
+            urlRaw = urlRaw.substring(1, urlRaw.length - 1);
+        }
+
+        let id = decodeHTML(idRaw || '');
+        const alt = decodeHTML(altRaw);
+        const url = decodeHTML(urlRaw), attribs = decodeHTML(attribsRaw);
+
+        const img = `<p><img src="${escapeXmlText(url)}"${legalizeAttributes(attribs)} /></p>`;
+
+        if (id === '') {
+            return [
+                new ImageBlock(`</${TagNames.Block}>`),
+                `<${TagNames.Block}${size}>` +
+                img,
+            ];
+        } else {
+            return [
+                new ImageBlock(`</${TagNames.FigureCaption}></${TagNames.Figure}>`),
+                `<${TagNames.Figure} id="${escapeXmlText(id)}"${size}>` +
+                img +
+                `<${TagNames.FigureCaption}>`,
+            ];
+        }
+    }
+
+    canContinue(marker: string): boolean { return false; }
+    continue(marker: string, caption: string | null): string { throw new Error(); }
+    close(): string { return this.terminator; }
+};
+
 const BLOCK_INITIATORS: ReadonlyArray<BlockInitiator> = [
     UnorderedList,
     OrderedList,
@@ -269,6 +327,7 @@ const BLOCK_INITIATORS: ReadonlyArray<BlockInitiator> = [
     LinkTargetDefinition,
     Endnote,
     Figure,
+    ImageBlock,
 ];
 
 const MARKER_LINE_PATTERN = new RegExp(
@@ -281,7 +340,7 @@ const MARKER_LINE_PATTERN = new RegExp(
 const EXACT_MARKER_PATTERNS = BLOCK_INITIATORS
     .map(i => [
         i,
-        new RegExp('^' + i.markerPattern.source + '$')
+        new RegExp('^(?:' + i.markerPattern.source + ')$')
     ] as [BlockInitiator, RegExp]);
 
 const blockInitiatorFromString = (marker: string) =>

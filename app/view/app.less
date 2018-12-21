@@ -413,13 +413,24 @@ main {
         padding: 0.4em 0.6em;
     }
 
-    // Floating contents
-    mf-figure, mf-note {
+    // Floating contents and blocks
+    mf-figure, mf-note, mf-block {
         display: block;
         margin: 1em 1em;
+        p {
+            margin: 0.25em 0;
+        }
     }
 
-    mf-figure {
+    // Automatically scale images in blocks if they are the only child of
+    // the containing paragraph
+    mf-figure, mf-note, mf-block > div {
+        > p > img:first-child:last-child {
+            max-width: 100%;
+        }
+    }
+
+    mf-figure, mf-block {
         text-align: center;
         > mf-figure-caption {
             display: block;
@@ -442,6 +453,7 @@ main {
         line-height: 1.4;
     }
 
+    // Sidenotes. Read `mfview.ts` to understand how they work.
     mf-sidenote { display: none; }
 
     :global(.only-sidenote) { display: none; }
@@ -453,13 +465,25 @@ main {
 
         :global(.only-sidenote) { display: inline; }
         :global(.hide-sidenote) { display: none; }
-        mf-sidenote {
+
+        // `<ViewTagNames.Sidenote>` is a surrogate element - it contains a
+        // copy of the original figure or note element. The surrogate is usually
+        // inserted to a different location than the original element, which is
+        // why it's needed.
+        // On a large screen, the original element is hidden via
+        // `.hide-sidenote` and the surrogate is displayed instead.
+        //
+        // `<ViewTagNames.Block>` doesn't change its location depending on
+        // how it's displayed, so it doesn't require a surrogate element.
+        mf-sidenote,
+        mf-block:global(.sidenote) {
             float: right;
             clear: right;
 
             // Do not allocate a space in the content box - it's displayed
             // outside of the content box.
             width: 0;
+            margin: 0;
 
             display: block;
             > * {

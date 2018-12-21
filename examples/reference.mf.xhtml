@@ -65,10 +65,60 @@ The association cannot be formed across the boundaries of `<mf-text>`.
 
 ## Images
 
-!!! TODO: Yet to be written about...
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+The pudding face looks like 
+![alt text (optional)](https://derpicdn.net/img/2018/11/8/1877696/medium.png) or
+![alt text (optional)][pudding].
 
-    - Full width images
-    - How is the text inside `![this text](...)` handled?
+[pudding]: https://derpicdn.net/img/2018/11/8/1877696/medium.png
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Inline images are directly rendered as HTML `<img>` elements.
+
+Read [Symbolic hyperlinks](#markfronttext/hyperlinks/symbolichyperlinks) for more about symbolic hyperlinks (`[pudding]` in the above example).
+
+Use the block syntax to insert an image block (`<mf-block>`). The block syntax is distinguished by the colon at the end:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+The pudding faces are shown below:
+
+![^][alttext](https://derpicdn.net/img/2018/11/8/1877696/medium.png):
+    Image block (manually positioned)
+
+![!Figure fig1][alttext](https://derpicdn.net/img/2018/11/8/1877696/medium.png):
+    Figure (possibly automatically positioned)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The first part (`[^]`, `[!Figure fig1]`) is based on [the floating contents block syntax](#markfronttext/floatingcontents). Sidenote labels (e.g., `[!basenameonly]`) may not be used.
+
+!!! Warning
+    `![^][][symbol]:` (A image block with a symbolic name) is not supported.
+
+An image tag optionally include XML attributes:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+![](https://derpicdn.net/img/2018/11/8/1877696/medium.png style="animation: 2000ms _2qw9KkueUdLlzZdwjgAKzl both infinite linear")
+
+![^][](https://derpicdn.net/img/2018/11/8/1877696/medium.png style="animation: 2000ms _2qw9KkueUdLlzZdwjgAKzl both infinite linear"):
+    Image caption
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Which are converted into:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML
+<img src="https://derpicdn.net/img/2018/11/8/1877696/medium.png"
+     style="animation: 2000ms _2qw9KkueUdLlzZdwjgAKzl both infinite linear" />
+
+<mf-block>
+    <p>
+        <img src="https://derpicdn.net/img/2018/11/8/1877696/medium.png"
+             style="animation: 2000ms _2qw9KkueUdLlzZdwjgAKzl both infinite linear" />
+    </p>
+    <p>
+        Image caption
+    </p>
+</mf-block>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Floating contents
 
@@ -126,14 +176,18 @@ The number prefix and the base name together forms a label identifier.
 !!! Tip
     The preceding `^` and `!` symbol does not participate in the label identifier. so it's technically possible to refer to a figure with a different symbol. However, it's considered a bad practice because it makes it harder to find a tag using a text editor's search functionality.
 
+!!! Tip
+    Although the figure syntax described here can be used for any kinds of contents, it's better to use the image block syntax if you just intend to display an image as a figure.
+
 !!! Note: Differences from Markdeep
-    - Figures are merged into sidenotes and use the same syntax.
+    - Figures and sidenotes use the unified system. Still, there is a dedicated syntax for figures.
     - Like Markdeep, sidenotes may contain multiple lines, but they must be indented to be included.
     - Sidenotes can contain multiple paragraphs.
 
 !!! TODO: Yet to be written about...
     - Citations (e.g., `[#Kajiya86]`).
     - Find a way to place table captions above tables but not figure captions.
+    - Full width figures (e.g., `[!!Figure fig1]`).
 
 The following table summarises all forms of labels:
 
@@ -252,6 +306,30 @@ One or more `<mf-code>` elements can be wrapped by **`<mf-codeblock>`**.
 
 *Relevant Markfront Text tags*: `$inline$` `$$display$$`
 
+## Media blocks - `<mf-block>`
+
+~~~~~~~~~~~~xml
+<mf-block>
+    <p>
+        <mf-diagram>
+            .---------.
+            |         |
+            '---------'
+        </mf-diagram>
+    </p>
+    <p>
+        le si'o kunti
+    </p>
+</mf-block>
+~~~~~~~~~~~~
+
+A block for displaying a media content. Depending on the options it may be displayed in the sidenote margin, but unlike sidenotes and figures, it is always displayed where it is defined.
+
+- **`size="large"`** prevents the element to be layouted in a confined space like the sidenote margin.
+- **`size="full"`** causes the element to occupy the maximum available width.
+
+*Relevant Markfront Text tag*: `![^][alt](url): caption` `![!][alt](url): caption` (generates `<img>` wrapped with `<mf-block>`)
+
 ## Floating elements
 
 Floating elements have the following common attributes:
@@ -280,7 +358,9 @@ If both of `counter` and `label` are omitted, they are implied from `id` provide
 - If `id.match(/(.+):[^ :]+/)`, then `counter` is `$1` and `label` is `$1{}`.
 - If `id.match(/(.+) [^ :]+/)`, then `counter` is `$1` and `label` is `$1 {}`.
 
-*Relevant Markfront Text tags*: `[^counter basename]: caption` `[!counter basename]: caption`
+*Relevant Markfront Text tags*: 
+- `[^counter basename]: caption` `[!counter basename]: caption`
+- `![^counter basename][alt](url): caption` `![!counter basename][alt](url): caption` (generates `<img>` wrapped with `<mf-figure>`)
 
 ### Sidenotes/Endnotes — `<mf-note>`
 
