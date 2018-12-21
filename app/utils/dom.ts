@@ -211,7 +211,7 @@ export function legalizeAttributes(xml: string, onwarning: (message: string) => 
         // This regex matches a XML attribute with rather forgiving syntax.
         // The union of all matches must cover entire the input except for
         // trailing whitespace characters (if any).
-        /(\s*)([^\s=]+)(?:(\s*=\s)*("[^"]*"?|'[^']*'?|[^"'\s]+)?)?/ig,
+        /(\s*)([^\s=]+)(?:(\s*=\s*)("[^"]*"?|'[^']*'?|[^"'\s]+)?)?/ig,
         //^^^  ^^^^^^^^             ^^^^^^^^ ^^^^^^^^ ^^^^^^^^
         // |    name                 "value"  'value'  value
         // +-- separating space
