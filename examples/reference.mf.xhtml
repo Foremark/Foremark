@@ -77,7 +77,7 @@ Inline images are directly rendered as HTML `<img>` elements.
 
 Read [Symbolic hyperlinks](#markfronttext/hyperlinks/symbolichyperlinks) for more about symbolic hyperlinks (`[pudding]` in the above example).
 
-Use the block syntax to insert an image block (`<mf-block>`). The block syntax is distinguished by the colon at the end:
+Use the block syntax to insert an image block using `<mf-figure>`. The block syntax is distinguished by the colon at the end and the addition of an optional figure label:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
 The pudding faces are shown below:
@@ -109,15 +109,15 @@ Which are converted into:
 <img src="https://derpicdn.net/img/2018/11/8/1877696/medium.png"
      style="animation: 2000ms _2qw9KkueUdLlzZdwjgAKzl both infinite linear" />
 
-<mf-block>
+<mf-figure>
+    <mf-figure-caption>
+        Image caption
+    </mf-figure-caption>
     <p>
         <img src="https://derpicdn.net/img/2018/11/8/1877696/medium.png"
              style="animation: 2000ms _2qw9KkueUdLlzZdwjgAKzl both infinite linear" />
     </p>
-    <p>
-        Image caption
-    </p>
-</mf-block>
+</mf-figure>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Floating contents
@@ -306,36 +306,16 @@ One or more `<mf-code>` elements can be wrapped by **`<mf-codeblock>`**.
 
 *Relevant Markfront Text tags*: `$inline$` `$$display$$`
 
-## Media blocks - `<mf-block>`
-
-~~~~~~~~~~~~xml
-<mf-block>
-    <p>
-        <mf-diagram>
-            .---------.
-            |         |
-            '---------'
-        </mf-diagram>
-    </p>
-    <p>
-        le si'o kunti
-    </p>
-</mf-block>
-~~~~~~~~~~~~
-
-A block for displaying a media content. Depending on the options it may be displayed in the sidenote margin, but unlike sidenotes and figures, it is always displayed where it is defined.
-
-- **`size="large"`** prevents the element to be layouted in a confined space like the sidenote margin.
-- **`size="full"`** causes the element to occupy the maximum available width.
-
-*Relevant Markfront Text tag*: `![^][alt](url): caption` `![!][alt](url): caption` (generates `<img>` wrapped with `<mf-block>`)
-
 ## Floating elements
 
 Floating elements have the following common attributes:
 
-- The **`id`** attribute is used to reference the element from `<mf-ref>`.
-- The optional attribute **`size="large"`** prevents the element to be layouted in a confined space like a margin for sidenotes.
+- The optional **`id`** attribute is used to reference the element from `<mf-ref>`.
+- **`size="large"`** prevents the element to be layouted in a confined space like the sidenote margin.
+- **`size="full"`** causes the element to occupy the maximum available width.
+
+!!! Tip
+    `size="full"` enables a special styling, which also enables the sidenote margin (even if there aren't actual sidenotes).
 
 ### Figures — `<mf-figure>`
 
@@ -353,7 +333,7 @@ Floating elements have the following common attributes:
 - **`counter`** identifies a counter used to generate a figure number.
 - **`label`** specifies the format of the displayed figure label. `{}` is substituted with a number.
 
-If both of `counter` and `label` are omitted, they are implied from `id` provided that `id` is in a particular form.
+If both of `counter` and `label` are omitted but `id` is specified, `counter` and `label` are implied from `id` provided that `id` is in a particular form.
 
 - If `id.match(/(.+):[^ :]+/)`, then `counter` is `$1` and `label` is `$1{}`.
 - If `id.match(/(.+) [^ :]+/)`, then `counter` is `$1` and `label` is `$1 {}`.

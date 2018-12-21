@@ -278,13 +278,10 @@ const imageBlockPattern = new RegExp(
 /**
  * `BlockInitiator`/`BlockState` for image blocks.
  */
-class ImageBlock implements BlockState {
-    static readonly markerPattern =
-        new RegExp(imageBlockPattern.source.replace(/([^\\]|^)\(/g, '$1(?:'));
+const ImageBlock = {
+    markerPattern: new RegExp(imageBlockPattern.source.replace(/([^\\]|^)\(/g, '$1(?:')),
 
-    private constructor(private terminator: string) {}
-
-    static start(marker: string, caption: string | null): [BlockState, string] {
+    start(marker: string, caption: string | null): [BlockState, string] {
         let [_, sizesym, idRaw = '', altRaw, urlRaw, attribsRaw = ''] = imageBlockPattern.exec(marker)!;
         const size = replaceFloatingSize(sizesym);
 
@@ -298,25 +295,21 @@ class ImageBlock implements BlockState {
 
         const img = `<p><img src="${escapeXmlText(url)}"${legalizeAttributes(attribs)} /></p>`;
 
-        if (id === '') {
-            return [
-                new ImageBlock(`</${TagNames.Block}>`),
-                `<${TagNames.Block}${size}>` +
-                img,
-            ];
-        } else {
-            return [
-                new ImageBlock(`</${TagNames.FigureCaption}></${TagNames.Figure}>`),
-                `<${TagNames.Figure} id="${escapeXmlText(id)}"${size}>` +
-                img +
-                `<${TagNames.FigureCaption}>`,
-            ];
+        if (id !== '') {
+            id = ` id="${escapeXmlText(id)}`;
         }
-    }
 
-    canContinue(marker: string): boolean { return false; }
-    continue(marker: string, caption: string | null): string { throw new Error(); }
-    close(): string { return this.terminator; }
+        return [
+            ImageBlock,
+            `<${TagNames.Figure}${id}${size}>` +
+            img +
+            `<${TagNames.FigureCaption}>`,
+        ];
+    },
+
+    canContinue(marker: string): boolean { return false; },
+    continue(marker: string, caption: string | null): string { throw new Error(); },
+    close(): string { return `</${TagNames.FigureCaption}></${TagNames.Figure}>`; },
 };
 
 const BLOCK_INITIATORS: ReadonlyArray<BlockInitiator> = [

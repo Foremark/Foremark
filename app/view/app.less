@@ -414,7 +414,7 @@ main {
     }
 
     // Floating contents and blocks
-    mf-figure, mf-note, mf-block {
+    mf-figure, mf-note {
         display: block;
         margin: 1em 1em;
         p {
@@ -424,15 +424,15 @@ main {
 
     // Automatically scale images in blocks if they are the only child of
     // the containing paragraph
-    mf-figure, mf-note, mf-block > div {
-        > p > img:first-child:last-child {
+    mf-figure, mf-note {
+        > div > p > img:first-child:last-child {
             max-width: 100%;
         }
     }
 
-    mf-figure, mf-block {
+    mf-figure {
         text-align: center;
-        > mf-figure-caption {
+        > div > mf-figure-caption {
             display: block;
             > mf-label {
                 font-weight: bold;
@@ -441,7 +441,7 @@ main {
     }
 
     mf-note {
-        > mf-label {
+        > div > mf-label {
             display: block;
             float: left;
             vertical-align: super;
@@ -472,11 +472,8 @@ main {
         // why it's needed.
         // On a large screen, the original element is hidden via
         // `.hide-sidenote` and the surrogate is displayed instead.
-        //
-        // `<ViewTagNames.Block>` doesn't change its location depending on
-        // how it's displayed, so it doesn't require a surrogate element.
         mf-sidenote,
-        mf-block:global(.sidenote) {
+        :global(.no-surrogate) {
             float: right;
             clear: right;
 
@@ -486,6 +483,12 @@ main {
             margin: 0;
 
             display: block;
+
+            // The following selector selects:
+            //  - `mf-sidenote > mf-figure`
+            //  - `mf-sidenote > mf-note`
+            //  - `mf-figure.no-surrogate > div`
+            //  - `mf-note.no-surrogate > div`
             > * {
                 position: relative;
                 width: @sidenote-width;

@@ -86,6 +86,9 @@ export function prepareMarkfrontForViewing(node: Element): void {
             let label = node.getAttribute('label');
 
             if (counter == null && label == null) {
+                if (!id) {
+                    return;
+                }
                 const match = id && FIGURE_STANDARD_ID_RE.exec(id);
                 if (!match) {
                     node.insertAdjacentHTML('beforebegin', figureUsageError);
@@ -129,6 +132,9 @@ export function prepareMarkfrontForViewing(node: Element): void {
             }
         } else if (node.tagName === TagNames.Note) {
             const id = node.getAttribute('id');
+            if (!id) {
+                return;
+            }
 
             // Assign a note number
             const number = nextEndnoteNumber++;
@@ -156,27 +162,72 @@ export function prepareMarkfrontForViewing(node: Element): void {
         }
     });
 
+    // Wrap the contents of `<TagNodes.Figure>` and `<TagNodes.Note>`.
+    //
+    //     <TagNames.Figure>
+    //         <div>
+    //             { children }
+    //         </div>
+    //     </TagNames.Figure>
+    //
+    // If a floating element doesn't have `id`, it may be directly layouted in
+    // the side margin without being wrapped by `Sidenote`. However, the
+    // sidenote layouting requires that a sidenote content is wrapped by
+    // at least two wrappers. So, in such cases, an extra wrapper is necessary
+    // for proper styling.
+    forEachNodePreorder(node, node => {
+        if (!(node instanceof Element) ||
+            (node.tagName !== TagNames.Figure && node.tagName !== TagNames.Note)) {
+            return;
+        }
+
+        // Wrap the contents
+        const div = node.ownerDocument!.createElement('div');
+        while (node.firstChild != null) {
+            div.appendChild(node.firstChild);
+        }
+        node.appendChild(div);
+    });
+
     const sidenotesDisabled = node.classList.contains('no-sidenotes');
 
     let hasSidenote = false;
     if (!sidenotesDisabled) {
-        // Scan for `<TagNames.Block>` that can be displayed in the side margin.
+        // On a large screen, we want to display figures and sidenotes in the
+        // side margin, and also want them to be located right next to the
+        // places where they are referenced.
         //
-        // Unlike others, `<TagNames.Block>` do not use a surrogate element for
-        // display a sidenote in a desired position. However, the original
-        // contents must be wrapped by an additional container for the styling
-        // to work like:
+        // Conditionally changing an element's position in this way is
+        // impossible to accomplish using a purely CSS-based solution. So,
+        // we basically create a copy of figures and sidenotes to be inserted
+        // to a different position, which we call "surrogates".
         //
-        //     <TagNames.Block>
-        //         <div>
-        //             { children }
-        //         </div>
-        //     </TagNames.Block>
+        // If a floating element has `id` and sidenoting is enabled for it, then
+        // clone the element and wrap it with `<ViewTagNames.Sidenote>`,
+        // and then insert it to the first place where it's referenced.
+        // On a large screen, the original floating content is hidden and
+        // this surrogate is displayed instead.
+        //
+        //     <p>
+        //         <!-- The surrogate: -->
+        //         <Sidenote>
+        //             <Figure>...</Figure>
+        //         </Sidenote>
+        //         <Ref /> depicts the muscular system of the horse.
+        //     </p>
+        //     <!-- The original definition: -->
+        //     <Figure>...</Figure>
+        //
+        // FIXME: This won't work as intended if `<TagNames.Ref>` is in a table
+        //
+        // If `id` is empty, it cannot be referenced by a body text, so we just
+        // put it in the same place whatever the screen size is. Therefore,
+        // a surrogate is not necessary.
         forEachNodePreorder(node, node => {
             if (!(node instanceof Element)) {
                 return;
             }
-            if (node.tagName !== TagNames.Block) {
+            if (node.tagName !== TagNames.Figure && node.tagName !== TagNames.Note) {
                 return;
             }
             const size = node.getAttribute('size');
@@ -185,33 +236,11 @@ export function prepareMarkfrontForViewing(node: Element): void {
                 return;
             }
 
-            // Wrap the contents
-            const div = node.ownerDocument!.createElement('div');
-            while (node.firstChild != null) {
-                div.appendChild(node.firstChild);
-            }
-            node.appendChild(div);
-
-            // Enable the sidenote styling.
-            node.classList.add('sidenote');
-
             hasSidenote = true;
-        });
 
-        // Copy each floating content and wrap it with `<ViewTagNames.Sidenote>`,
-        // and then insert it to the first place where it's referenced.
-        // On a large screen, the original floating content is hidden and
-        // the sidenote is displayed instead.
-        // FIXME: This won't work as intended if `<TagNames.Ref>` is in a table
-        forEachNodePreorder(node, node => {
-            if (!(node instanceof Element)) {
-                return;
-            }
-            if (node.tagName !== TagNames.Figure && node.tagName !== TagNames.Note) {
-                return;
-            }
-            if (node.getAttribute('size') === 'large') {
-                // Sidenote creation is disabled for this elemnet.
+            if (!node.id) {
+                // Surrogate is not needed
+                node.classList.add('no-surrogate');
                 return;
             }
 
@@ -234,8 +263,6 @@ export function prepareMarkfrontForViewing(node: Element): void {
             node.classList.add('hide-sidenote');
 
             refLabelMap.get(node.id)![1] = true;
-
-            hasSidenote = true;
         });
     }
 
