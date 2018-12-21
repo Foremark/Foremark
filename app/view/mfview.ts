@@ -231,6 +231,11 @@ export function prepareMarkfrontForViewing(node: Element): void {
                 return;
             }
             const size = node.getAttribute('size');
+            if (size === 'full') {
+                // The "full" style needs the side margin to make sense.
+                hasSidenote = true;
+            }
+
             if (size === 'large' || size === 'full') {
                 // Sidenote creation is disabled for this elemnet.
                 return;

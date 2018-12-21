@@ -459,8 +459,34 @@ main {
     :global(.only-sidenote) { display: none; }
 
     @media (min-width: @screen-large-min) {
+        @sidenote: {
+            position: relative;
+            width: @sidenote-width;
+            top: -@sidenote-vertical-adjustment;
+            font-size: 80%;
+            line-height: 1.4;
+            text-align: left;
+        };
+
         mf:global(.has-sidenotes) {
             margin-right: @sidenote-width;
+
+            // "full" styling of figures
+            mf-figure[size="full"] {
+                margin: 1em 0;
+                clear: both;
+                width: calc(100% + @sidenote-width); // ignore side margin
+
+                // Display the caption like a sidenote
+                > div > mf-figure-caption {
+                    float: right;
+                    @sidenote();
+
+                    padding-top: @sidenote-vertical-adjustment;
+
+                    margin: 0.8em 1em 1em 1em;
+                }
+            }
         }
 
         :global(.only-sidenote) { display: inline; }
@@ -490,12 +516,7 @@ main {
             //  - `mf-figure.no-surrogate > div`
             //  - `mf-note.no-surrogate > div`
             > * {
-                position: relative;
-                width: @sidenote-width;
-                top: -@sidenote-vertical-adjustment;
-                font-size: 80%;
-                line-height: 1.4;
-                text-align: left;
+                @sidenote();
             }
         }
     }
