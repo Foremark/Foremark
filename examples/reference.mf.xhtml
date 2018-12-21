@@ -187,6 +187,8 @@ The following HTML elements are supported and styled appropriately.
 
 `<mf-title>` inserts a document title. `<mf-lead>` inserts a subtitle and if it exists it must follow `<mf-title>`.
 
+*Relevant Markfront Text tags*: `**title**`
+
 ## Lists
 
 ~~~~~~~~~~~~xml
@@ -209,6 +211,8 @@ HTML lists `<ul>` (unordered list), `<ol>` (ordered list), and `<dl>` (definitio
 - `checked` indicates that a checked checkbox should be displayed next the item.
 - `unchecked` indicates that an unchecked checkbox should be displayed next the item.
 
+*Relevant Markfront Text tags*: `-` `+` `*` `[ ]` `[x]` and more
+
 ## Code blocks — `<mf-code>`
 
 ~~~~~~~~~~~~xml
@@ -230,6 +234,8 @@ One or more `<mf-code>` elements can be wrapped by **`<mf-codeblock>`**.
 !!! TODO: Yet to be written about...
     The semantics of the rest of `type` attribute value.
 
+*Relevant Markfront Text tags*: `~~~~`–`~~~~`
+
 ## LaTeX equations — `<mf-eq>`
 
 ~~~~~~~~~~~~xml
@@ -243,6 +249,8 @@ One or more `<mf-code>` elements can be wrapped by **`<mf-codeblock>`**.
 ~~~~~~~~~~~~
 
 `<mf-eq>` inserts an inline LaTeX equation. Similarly, `<mf-eq-display>` inserts a display LaTeX equation.
+
+*Relevant Markfront Text tags*: `$inline$` `$$display$$`
 
 ## Floating elements
 
@@ -272,6 +280,8 @@ If both of `counter` and `label` are omitted, they are implied from `id` provide
 - If `id.match(/(.+):[^ :]+/)`, then `counter` is `$1` and `label` is `$1{}`.
 - If `id.match(/(.+) [^ :]+/)`, then `counter` is `$1` and `label` is `$1 {}`.
 
+*Relevant Markfront Text tags*: `[^counter basename]: caption` `[!counter basename]: caption`
+
 ### Sidenotes/Endnotes — `<mf-note>`
 
 ~~~~~~~~~~~~xml
@@ -282,6 +292,8 @@ If both of `counter` and `label` are omitted, they are implied from `id` provide
 </mf-note>
 ~~~~~~~~~~~~
 
+*Relevant Markfront Text tags*: `[^noteId]: contents` `[!noteId]: contents`
+
 ### Figure/note references — `<mf-ref>`
 
 ~~~~~~~~~~~~xml
@@ -290,6 +302,8 @@ If both of `counter` and `label` are omitted, they are implied from `id` provide
     <mf-ref to="noteId" />
 </p>
 ~~~~~~~~~~~~
+
+*Relevant Markfront Text tags*: `[^noteId]` `[!noteId]`
 
 ## Admonitions — `<mf-admonition>`
 
@@ -303,6 +317,8 @@ If both of `counter` and `label` are omitted, they are implied from `id` provide
     </p>
 </mf-admonition>
 ~~~~~~~~~~~~
+
+*Relevant Markfront Text tag*: `!!!`
 
 ## Diagrams — `<mf-diagram>`
 
@@ -323,11 +339,11 @@ If both of `counter` and `label` are omitted, they are implied from `id` provide
 </mf-codeblock>
 <![CDATA[
 
+*Relevant Markfront Text tags*: TODO
+
 ## Miscellaneous elements
 
 - `<mf-error>` indicates an error encountered while processing `<mf-text>`.
-
-- `<mf-ref>`
 
 <!-- Markfront footer -->
 ]]></mf-text><script src="browser/markfront.js" data-rel="markfront" />
