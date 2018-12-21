@@ -200,16 +200,24 @@ The number prefix and the base name together forms a label identifier.
     - Find a way to place table captions above tables but not figure captions.
     - Full width figures (e.g., `[!!Figure fig1]`).
 
-The following table summarises all forms of labels:
+The following table summarizes all forms of labels:
 
-|      Label      | Reference |   Definition  |   `size`  |     `id`     |
-|-----------------|-----------|---------------|-----------|--------------|
-| `[!endnote]`    | ¹         | `<mf-note>`   | `"large"` | `endnote`    |
-| `[^sidenote]`   | ²         | `<mf-note>`   |           | `sidenote`   |
-| `[!Figure fig]` | Figure 1  | `<mf-figure>` | `"large"` | `Figure fig` |
-| `[^Figure fig]` | Figure 2  | `<mf-figure>` |           | `Figure fig` |
-| `[!図:fig]`     | 図1       | `<mf-figure>` | `"large"` | `図:fig`     |
-| `[^図:fig]`     | 図2       | `<mf-figure>` |           | `図:fig`     |
+|       Label       | Reference |   Definition  |         `size`        |      `id`     |
+|-------------------|-----------|---------------|-----------------------|---------------|
+| `[!!]`            | N/A       | `<mf-note>`   | `"full"` [!full-note] | note          |
+| `[!]`             | N/A       | `<mf-note>`   | `"large"`             | note          |
+| `[^]`             | N/A       | `<mf-note>`   |                       | note          |
+| `[!!endnote]`     | ¹         | `<mf-note>`   | `"full"` [!full-note] | `endnote`     |
+| `[!endnote]`      | ²         | `<mf-note>`   | `"large"`             | `endnote`     |
+| `[^sidenote]`     | ³         | `<mf-note>`   |                       | `sidenote`    |
+| `[!!Figure fig1]` | Figure 1  | `<mf-figure>` | `"full"`              | `Figure fig1` |
+| `[!Figure fig2]`  | Figure 2  | `<mf-figure>` | `"large"`             | `Figure fig2` |
+| `[^Figure fig3]`  | Figure 3  | `<mf-figure>` |                       | `Figure fig3` |
+| `[!!図:fig2]`     | 図1       | `<mf-figure>` | `"full"`              | `図:fig2`     |
+| `[!図:fig2]`      | 図2       | `<mf-figure>` | `"large"`             | `図:fig2`     |
+| `[^図:fig3]`      | 図3       | `<mf-figure>` |                       | `図:fig3`     |
+
+[!full-note]: Does not have an effect. Treated as `"large"`.
 
 - The **Label** column shows the raw source code.
 - All reference tags are translated into `<mf-ref>` elements. The **Reference** column shows how a `<mf-ref>` is displayed.
