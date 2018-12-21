@@ -229,12 +229,12 @@ const Endnote = {
     captionStyle: CaptionStyle.None,
 
     start(marker: string, caption: string | null): [BlockState, string] {
-        let [_, sizeRaw, id] = endnotePattern.exec(marker)!;
+        const [_, sizeRaw, idRaw] = endnotePattern.exec(marker)!;
 
         let size: string | null = parseFloatingSize(marker.substr(1, 1));
         size = size ? ` size="${size}"` : '';
 
-        id = decodeHTML(id);
+        const id = decodeHTML(idRaw);
 
         return [
             Endnote,
@@ -257,12 +257,12 @@ const Figure = {
     captionStyle: CaptionStyle.SameLine,
 
     start(marker: string, caption: string | null): [BlockState, string] {
-        let [_, sizeRaw, id] = figurePattern.exec(marker)!;
+        const [_, sizeRaw, idRaw] = figurePattern.exec(marker)!;
 
         let size: string | null = parseFloatingSize(marker.substr(1, 1));
         size = size ? ` size="${size}"` : '';
 
-        id = decodeHTML(id);
+        const id = decodeHTML(idRaw);
 
         return [
             Figure,
@@ -300,7 +300,7 @@ const ImageBlock = {
             urlRaw = urlRaw.substring(1, urlRaw.length - 1);
         }
 
-        let id = decodeHTML(idRaw || '');
+        let id = decodeHTML(idRaw);
         const alt = decodeHTML(altRaw);
         const url = decodeHTML(urlRaw), attribs = decodeHTML(attribsRaw);
 
