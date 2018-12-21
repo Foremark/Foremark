@@ -3,6 +3,7 @@ import {decodeHTML} from 'entities';
 import {TagNames} from '../markfront';
 import {
     TextInternalTagNames, ENDNOTE_ID_RE, FIGURE_ID_RE, MEDIA_PARAM_RE,
+    FLOATING_SIZE_RE, parseFloatingSize,
 } from './common';
 import {removePrefix, analyzeIndent, IndentCommand} from '../utils/string';
 import {escapeXmlText, legalizeAttributes} from '../utils/dom';
@@ -218,25 +219,22 @@ const LinkTargetDefinition = {
     close(): string { return `</${TextInternalTagNames.LinkTarget}>`; },
 };
 
-const FLOATING_SIZE_RE = /(?:\^|!!?)/;
-const replaceFloatingSize = (s: string) => {
-    switch (s) {
-        case '^': return '';
-        case '!': return ' size="large"';
-        case '!!': return ' size="full"';
-    }
-}
+const endnotePattern = new RegExp(`\\[(${FLOATING_SIZE_RE.source})(${ENDNOTE_ID_RE.source})\\]:`);
 
 /**
  * `BlockInitiator`/`BlockState` for endnotes like `[^notename]: ...`.
  */
 const Endnote = {
-    markerPattern: new RegExp(`\\[${FLOATING_SIZE_RE.source}${ENDNOTE_ID_RE.source}\\]:`),
+    markerPattern: new RegExp(endnotePattern.source.replace(/([^\\]|^)\(/g, '$1(?:')),
     captionStyle: CaptionStyle.None,
 
     start(marker: string, caption: string | null): [BlockState, string] {
-        const size = replaceFloatingSize(marker.substr(1, 1));
-        const id = decodeHTML(marker.substring(2, marker.length - 2));
+        let [_, sizeRaw, id] = endnotePattern.exec(marker)!;
+
+        let size: string | null = parseFloatingSize(marker.substr(1, 1));
+        size = size ? ` size="${size}"` : '';
+
+        id = decodeHTML(id);
 
         return [
             Endnote,
@@ -249,16 +247,22 @@ const Endnote = {
     close(): string { return `</${TagNames.Note}>`; },
 };
 
+const figurePattern = new RegExp(`\\[(${FLOATING_SIZE_RE.source})(${FIGURE_ID_RE.source})\\]:`);
+
 /**
  * `BlockInitiator`/`BlockState` for endnotes like `[^Figure figid]: capture`.
  */
 const Figure = {
-    markerPattern: new RegExp(`\\[${FLOATING_SIZE_RE.source}${FIGURE_ID_RE.source}\\]:`),
+    markerPattern: new RegExp(figurePattern.source.replace(/([^\\]|^)\(/g, '$1(?:')),
     captionStyle: CaptionStyle.SameLine,
 
     start(marker: string, caption: string | null): [BlockState, string] {
-        const size = replaceFloatingSize(marker.substr(1, 1));
-        const id = decodeHTML(marker.substring(2, marker.length - 2));
+        let [_, sizeRaw, id] = figurePattern.exec(marker)!;
+
+        let size: string | null = parseFloatingSize(marker.substr(1, 1));
+        size = size ? ` size="${size}"` : '';
+
+        id = decodeHTML(id);
 
         return [
             Figure,
@@ -289,7 +293,8 @@ const ImageBlock = {
 
     start(marker: string, caption: string | null): [BlockState, string] {
         let [_, sizesym, idRaw = '', altRaw, urlRaw, attribsRaw = ''] = imageBlockPattern.exec(marker)!;
-        const size = replaceFloatingSize(sizesym);
+        let size: string | null = parseFloatingSize(sizesym);
+        size = size ? ` size="${size}"` : '';
 
         if (urlRaw.startsWith('"')) {
             urlRaw = urlRaw.substring(1, urlRaw.length - 1);

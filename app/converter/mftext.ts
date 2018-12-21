@@ -8,7 +8,9 @@ import {
 import {removePrefix} from '../utils/string';
 import {replaceTables} from './table';
 import {replaceBlocks} from './blocks';
-import {FIGURE_ID_RE, ENDNOTE_ID_RE, TextInternalTagNames} from './common';
+import {
+    FIGURE_ID_RE, ENDNOTE_ID_RE, TextInternalTagNames, FLOATING_SIZE_RE,
+} from './common';
 
 const ARROWS: [string, string][] = [
     ['&lt;==', '⇐'],
@@ -311,7 +313,7 @@ export function expandMfText(node: Element): void {
 
     // Reference to a figure or endnote: `[^link]`
     transformHtmlWith(node, html => html.replace(
-        new RegExp(`\\[(?:\\^|!!?)(${ENDNOTE_ID_RE.source}|${FIGURE_ID_RE.source})\\]`, 'g'),
+        new RegExp(`\\[${FLOATING_SIZE_RE.source}(${ENDNOTE_ID_RE.source}|${FIGURE_ID_RE.source})\\]`, 'g'),
         (_, id) => {
             id = decodeHTML(id);
             return `<${TagNames.Ref} to="${escapeXmlText(id)}" />`;

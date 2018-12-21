@@ -21,6 +21,17 @@ export const enum TextInternalTagNames {
 export const ENDNOTE_ID_RE = /[^[\]<> :\t]+/;
 export const FIGURE_ID_RE = /[^[\]<>\t]+[ :][^[\]<> :\t]+/;
 
+export const FLOATING_SIZE_RE = /(?:\^|!!?)/;
+
+export function parseFloatingSize(s: string): null | 'large' | 'full' {
+    switch (s) {
+        case '^': return null;
+        case '!': return 'large';
+        case '!!': return 'full';
+        default: throw new Error();
+    }
+}
+
 /** The URL and attributes part of the media tag. */
 export const MEDIA_PARAM_RE = /("[^"<>]*"|[^"\s<>]+)(\s+[^\)]*?)?/;
 //                              ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^
