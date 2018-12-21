@@ -85,6 +85,9 @@ The pudding faces are shown below:
 ![^][alttext](https://derpicdn.net/img/2018/11/8/1877696/medium.png):
     Image block (manually positioned)
 
+![!!][alttext](https://derpicdn.net/img/2018/11/8/1877696/medium.png):
+    Image block (manually positioned) but takes entire a row
+
 ![!Figure fig1][alttext](https://derpicdn.net/img/2018/11/8/1877696/medium.png):
     Figure (possibly automatically positioned)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -126,14 +129,14 @@ Figures and sidenotes use a (somewhat) unified syntax:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
 Let there be some paragraph text[^sidenote].
-See [^Figure fig1] as well as [!Table table]. [!図:fig2]も併せてご覧下さい。
+See [!!Figure fig1] as well as [!Table table]. [!図:fig2]も併せてご覧下さい。
 .i ko zgana [!le pixra pe li mupli-pixra]
 
 [^sidenote]: Here comes the sidenote.
     Sidenotes are different from figures in the point that
     the first line is not treated specially as a caption.
 
-[^Figure fig1]: Twily for dummies.
+[!!Figure fig1]: Twily for dummies.
     ![](https://derpicdn.net/img/2013/8/4/391426/large.png)
 
 [!Table table]:
@@ -156,7 +159,10 @@ See [^Figure fig1] as well as [!Table table]. [!図:fig2]も併せてご覧下�
 
 The part surrounded by brackets is called a *label*. A label consists of the following components:
 
-- A preceding `^` (caret) or `!` (exclamation mark) symbol specifies whether the contents should be displayed as a sidenote or not.
+- A preceding `^` (caret), `!` (exclamation mark), or `!!` (two exclamation marks) specify how the content should be layouted.
+    - `^` — The default mode. On a large screen, the content is moved to the side margin.
+    - `!` — Translated to `size="large"`. The content is not moved to the side margin and always occupies a row.
+    - `!!` — Translated to `size="full"`. The content occupies the maximum available width (including the side margin).
 
 - An optional number prefix. This serves the purpose of identifying an independent counter for each figure type (e.g., figure/table), and as a text to be displayed before a number. There are two forms:
 
@@ -174,7 +180,7 @@ A label not including a preceding symbol like `[this is a mere link or not]` is 
 The number prefix and the base name together forms a label identifier.
 
 !!! Tip
-    The preceding `^` and `!` symbol does not participate in the label identifier. so it's technically possible to refer to a figure with a different symbol. However, it's considered a bad practice because it makes it harder to find a tag using a text editor's search functionality.
+    The preceding `^` and `!` symbols do not constitute the label identifier. so it's technically possible to refer to a figure with a different symbol. However, it's considered a bad practice because it makes it harder to find a tag using a text editor's search functionality.
 
 !!! Tip
     Although the figure syntax described here can be used for any kinds of contents, it's better to use the image block syntax if you just intend to display an image as a figure.
@@ -308,11 +314,11 @@ One or more `<mf-code>` elements can be wrapped by **`<mf-codeblock>`**.
 
 ## Floating elements
 
-Floating elements have the following common attributes:
+Figures and sidenotes have the following common attributes:
 
 - The optional **`id`** attribute is used to reference the element from `<mf-ref>`.
 - **`size="large"`** prevents the element to be layouted in a confined space like the sidenote margin.
-- **`size="full"`** causes the element to occupy the maximum available width.
+- **`size="full"`** causes the element to occupy the maximum available width. Not supported by sidenotes (because it doesn't make sense!).
 
 !!! Tip
     `size="full"` enables a special styling, which also enables the sidenote margin (even if there aren't actual sidenotes).

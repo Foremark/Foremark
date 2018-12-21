@@ -218,8 +218,14 @@ const LinkTargetDefinition = {
     close(): string { return `</${TextInternalTagNames.LinkTarget}>`; },
 };
 
-const FLOATING_SIZE_RE = /[\^!]/;
-const replaceFloatingSize = (s: string) => s === '!' ? ' size="large"' : '';
+const FLOATING_SIZE_RE = /(?:\^|!!?)/;
+const replaceFloatingSize = (s: string) => {
+    switch (s) {
+        case '^': return '';
+        case '!': return ' size="large"';
+        case '!!': return ' size="full"';
+    }
+}
 
 /**
  * `BlockInitiator`/`BlockState` for endnotes like `[^notename]: ...`.
