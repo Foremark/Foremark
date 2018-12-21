@@ -469,13 +469,13 @@ main {
         };
 
         mf:global(.has-sidenotes) {
-            margin-right: @sidenote-width;
+            margin-right: (@sidenote-width + @sidenote-body-separation);
 
             // "full" styling of figures
             mf-figure[size="full"] {
                 margin: 1em 0;
                 clear: both;
-                width: calc(100% + @sidenote-width); // ignore side margin
+                width: calc(100% + @sidenote-width + @sidenote-body-separation); // ignore side margin
 
                 // Display the caption like a sidenote
                 > div > mf-figure-caption {
@@ -484,7 +484,7 @@ main {
 
                     padding-top: @sidenote-vertical-adjustment;
 
-                    margin: 0.8em 1em 1em 1em;
+                    margin: 0.8em 0 @sidenote-margin;
                 }
             }
         }
@@ -517,6 +517,8 @@ main {
             //  - `mf-note.no-surrogate > div`
             > * {
                 @sidenote();
+                margin: 0 0 @sidenote-margin;
+                left: @sidenote-body-separation;
             }
         }
     }
