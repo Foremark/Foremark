@@ -197,8 +197,13 @@ export function expandMfText(node: Element): void {
     //  - `<mf-admonition>`
     transformHtmlWith(node, replaceBlocks);
 
-    const isBlock = (e: Element) =>
-        e.tagName.match(/^(?:ul|ol|dl|li|dt|dd|mf-admonition|mf-figure|mf-note)$/i) != null;
+    const isBlock = (e: Element) => {
+        const {tagName} = e;
+        return tagName === TagNames.Admonition ||
+            tagName === TagNames.Figure ||
+            tagName === TagNames.Note ||
+            tagName.match(/^(?:ul|ol|dl|li|dt|dd)$/i) != null;
+    };
 
     // Paragraphs
     transformHtmlWith(node, html => {
