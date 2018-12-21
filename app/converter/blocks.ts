@@ -307,7 +307,7 @@ const ImageBlock = {
         const img = `<p><img src="${escapeXmlText(url)}"${legalizeAttributes(attribs)} /></p>`;
 
         if (id !== '') {
-            id = ` id="${escapeXmlText(id)}`;
+            id = ` id="${escapeXmlText(id)}"`;
         }
 
         return [
