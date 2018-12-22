@@ -202,7 +202,7 @@ const Admonition = {
  */
 const LinkTargetDefinition = {
     // TODO: The content is verbatim (shouldn't be processed)
-    markerPattern: new RegExp(/\[[^!^][^\][\s<>]*?\]:/),
+    markerPattern: new RegExp(/\[[^!^][^\][<>]*?\]:/),
     captionStyle: CaptionStyle.None,
 
     start(marker: string, caption: string | null): [BlockState, string] {
