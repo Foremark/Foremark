@@ -7,6 +7,55 @@ This document describes the features supported by Markfront.
 
 # Markfront Text
 
+## HTML tags
+
+Markfront Text interprets well-formed HTML tags embedded in a text node as HTML tags. The criterions are chosen to be very strict in order to minimize the chance of misdetections. A HTML tag will not be interpreted as a HTML tag unless all of the following criterias are met:
+
+- It's not inside a code block or an inline code markup. (HTML tags are processed after code blocks and inline code markups.)
+- It must use a strictly valid XML syntax, which means:
+    - No self-closing tags. `<br/>` (empty-element tag) should be used in place of `<br>`.
+    - `<`, `>`, and `"` inside an attribute must be escaped.
+    - Every attribute must have a value.
+- Only the following XML entities are permitted inside: `&amp;` `&lt;` `&gt;` `&quot;`
+- It must not include a XML namespace in the tag name.
+- It must not contain any redundant whitespaces in the following places:
+    - Between `<` or `</` and the tag name.
+    - Between the tag name and `>` of a closing tag.
+    - Between `<`, `>`, and `/`.
+- If it doesn't use an empty-element tag, then there must exist a matching closing tag.
+- The tag name and all attribute names match `/^[a-z][-a-z0-9]*$/` [^tag-name].
+
+[^tag-name]:
+    This is a subset of [XML NCName][]. It's quite restricted but still covers all standard HTML and Markfront XML elements.
+
+[XML NCName]: https://www.w3.org/TR/1999/REC-xml-names-19990114/#NT-NCName
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+Valid tag: <br />
+Extra whitespaces: < br / > (displayed as `<br />`)
+Self-closing: <br> (displayed as `<br>` unless there's `</br>`)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+!!! Note
+
+    The conversion described in this section only applies to HTML tags *embedded as a textual content* (like most of the Markfront Text constructs).
+    If HTML tags are not wrapped by `<![CDATA[...]​]>`, they will be parsed by the XHTML parser and converted to XHTML elements before the Markfront text processing takes place.
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML
+    <mf-text>
+        <!-- The web browser interprets this as a bold element -->
+        <b>Bold text</b>
+
+        <!-- Converted to a bold element as a part of the Markfront
+             text processing. -->
+        &lt;b&gt;Bold text&lt;/b&gt;
+
+        <!-- Equivalent to the previous example. -->
+        <![CDATA[ <b>Bold text</b> ]]]><![CDATA[]>
+    </mf-text>
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 ## Hyperlinks
 
 ### Normal hyperlinks
@@ -66,7 +115,7 @@ The association cannot be formed across the boundaries of `<mf-text>`.
 ## Images
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
-The pudding face looks like 
+The pudding face looks like
 ![alt text (optional)](https://derpicdn.net/img/2018/11/8/1877696/medium.png) or
 ![alt text (optional)][pudding].
 
@@ -237,9 +286,13 @@ Unreferenced labels are omitted from the output.
 
 The following HTML elements are supported and styled appropriately.
 
+- `<h1>` ... `<h9>`
+- `<p>`
+- `<i>`, `<b>`, `<a>`
 - `<code>`
 - `<ul>`, `<ol>`, `<ll>`
 - `<dl>`, `<dt>`, `<dd>`
+- `<br>`
 
 ## Document — `<mf>`
 
@@ -357,7 +410,7 @@ If both of `counter` and `label` are omitted but `id` is specified, `counter` an
 - If `id.match(/(.+):[^ :]+/)`, then `counter` is `$1` and `label` is `$1{}`.
 - If `id.match(/(.+) [^ :]+/)`, then `counter` is `$1` and `label` is `$1 {}`.
 
-*Relevant Markfront Text tags*: 
+*Relevant Markfront Text tags*:
 - `[^counter basename]: caption` `[!counter basename]: caption`
 - `![^counter basename][alt](url): caption` `![!counter basename][alt](url): caption` (generates `<img>` wrapped with `<mf-figure>`)
 

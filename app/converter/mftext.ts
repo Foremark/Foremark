@@ -146,15 +146,83 @@ export function expandMfText(node: Element): void {
         (_, inner) => `<${inner}>`,
     ));
 
-    // TODO: Replace well-formed HTML tags
+    // Replace well-formed HTML tags
+    // The regex performs all validation of individual tags. The code checks
+    // if opening tags are matched by closing tags.
+    const ident = '[a-z][-a-z0-9]*';
+    const permittedEntities = 'amp|quot|lt|gt';
+    const tagRE = new RegExp(
+        `(&lt;` +
+        `(?:(${ident})(?:\\s+${ident}="(?:[^"<>&]|&amp;${permittedEntities};)*")*` +
+        //   ^^^^^^^^
+        //   $2 opening tag name
+        `\\s*/?|` +
+        //  ^^
+        // self-closing
+        `/(${ident}))&gt;)`,
+        // ^^^^^^^^
+        // $3 closing tag name
+        'g',
+     );
+    transformHtmlWith(node, html => {
+        const output: string[] = [];
+
+        /// A stack tracking unvalidated opening tags.
+        const stack: [string, number][] = [];
+
+        const parts = html.split(tagRE);
+        output.push(parts[0]);
+
+        for (let i = 1; i < parts.length; i += 4) {
+            const tag = parts[i];
+            const openingTagName = parts[i + 1];
+            const closingTagName = parts[i + 2];
+            const post = parts[i + 3];
+
+            if (closingTagName) {
+                // `</a>`
+                let i = stack.length;
+                while (i > 0 && stack[i - 1][0] !== closingTagName) {
+                    i--;
+                }
+
+                if (i > 0) {
+                    // Found a matching opening tag. Materialize the opening tag,
+                    // and forget about potential opening tags (`stack[i..]`)
+                    // which turned out to have no closing tags.
+                    while (stack.length > i) {
+                        stack.pop();
+                    }
+                    const e = stack.pop()!; // `stack[i - 1]`
+
+                    output[e[1]] = decodeHTML(output[e[1]]);
+                    output.push(decodeHTML(tag));
+                } else {
+                    // A matching opening tag wasn't found.
+                    output.push(tag);
+                }
+            } else if (tag.endsWith('/&gt;')) {
+                // `<a />`
+                output.push(decodeHTML(tag));
+            } else {
+                // `<a>`
+                stack.push([openingTagName, output.length]);
+                output.push(tag);
+            }
+
+            output.push(post);
+        }
+
+        return output.join('');
+    });
 
     // LaTeX display equations
     transformHtmlWith(node, html => html.replace(
-        /\$\$(.*?)\$\$/g,
+        /\$\$([^<>]*?)\$\$/g,
         `<${TagNames.DisplayEquation}>$1</${TagNames.DisplayEquation}>`,
     ));
     transformHtmlWith(node, html => html.replace(
-        /\\begin{(equation\*?|eqnarray)}.*?\\end{\1}/g,
+        /\\begin{(equation\*?|eqnarray)}[^<>]*?\\end{\1}/g,
         `<${TagNames.DisplayEquation}>$&</${TagNames.DisplayEquation}>`,
     ));
 
