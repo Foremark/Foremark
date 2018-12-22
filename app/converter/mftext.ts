@@ -3,7 +3,7 @@ import {decodeHTML} from 'entities';
 import {TagNames} from '../markfront';
 import {
     transformHtmlWith, escapeXmlText, legalizeAttributes, InternalTagNames,
-    transformTextNodeWith,
+    transformTextNodeWith, forEachNodePreorder,
 } from '../utils/dom';
 import {removePrefix} from '../utils/string';
 import {replaceTables} from './table';
@@ -68,6 +68,39 @@ export function expandMfText(node: Element): void {
         }
         return;
     }
+
+    // Merge consecutive text nodes
+    //
+    // Without this step, constructs spanning across multiple text nodes are
+    // not recognized properly. For example, "`]]><![CDATA[]>][`" inside CDATA
+    // (which is intended to display a code fragment "]]>") splits the current
+    // CDATA section into two: one ending with "`]" and one starting with
+    // "]>`". `transformTextNodeWith` calls a supplied function in
+    // per text node basis, so this example won't be recognized as a hyperlink
+    // without this step.
+    forEachNodePreorder(node, node => {
+        if (!(node instanceof Text) || node.nextSibling instanceof Text) {
+            return;
+        }
+        // This is the last one of one or more consecutive text nodes.
+        if (!(node.previousSibling instanceof Text)) {
+            // One consecutive text node.
+            return;
+        }
+
+        // Merge all and remove all but the last one.
+        const parts: string[] = [node.textContent!];
+        const parent = node.parentElement!;
+
+        for (let n: Node | null = node.previousSibling; n instanceof Text; ) {
+            const next: Node | null = n.previousSibling;
+            parts.unshift(n.textContent!);
+            parent.removeChild(n);
+            n = next;
+        }
+
+        node.textContent = parts.join('');
+    });
 
     // TODO: Replace diagrams
 
@@ -136,15 +169,15 @@ export function expandMfText(node: Element): void {
     });
 
     // Inline code
-    transformHtmlWith(node, html => html.replace(
+    transformTextNodeWith(node, html => html.replace(
         /`(.+?(?:\n.+?)?)`(?!\d)/g, '<code>$1</code>',
-    ));
+    ), e => e === node, false);
 
     // Parse HTML comments
-    transformHtmlWith(node, html => html.replace(
+    transformTextNodeWith(node, html => html.replace(
         /&lt;(!--\s[\s\S]*?--)&gt;/g,
         (_, inner) => `<${inner}>`,
-    ));
+    ), e => e === node, false);
 
     // Replace well-formed HTML tags
     // The regex performs all validation of individual tags. The code checks
@@ -217,24 +250,24 @@ export function expandMfText(node: Element): void {
     });
 
     // LaTeX display equations
-    transformHtmlWith(node, html => html.replace(
+    transformTextNodeWith(node, html => html.replace(
         /\$\$([^<>]*?)\$\$/g,
         `<${TagNames.DisplayEquation}>$1</${TagNames.DisplayEquation}>`,
-    ));
-    transformHtmlWith(node, html => html.replace(
+    ), e => e === node, false);
+    transformTextNodeWith(node, html => html.replace(
         /\\begin{(equation\*?|eqnarray)}[^<>]*?\\end{\1}/g,
         `<${TagNames.DisplayEquation}>$&</${TagNames.DisplayEquation}>`,
-    ));
+    ), e => e === node, false);
 
     // LaTeX inline equations
-    transformHtmlWith(node, html => html.replace(
+    transformTextNodeWith(node, html => html.replace(
         /((?:[^\w\d]))\$(\S(?:[^\$]*?\S(?!US|Can))??)\$(?![\w\d])/g,
         `$1<${TagNames.Equation}>$2</${TagNames.Equation}>`,
-    ));
-    transformHtmlWith(node, html => html.replace(
+    ), e => e === node, false);
+    transformTextNodeWith(node, html => html.replace(
         /((?:[^\w\d]))\$([ \t][^\$]+?[ \t])\$(?![\w\d])/g,
         `$1<${TagNames.Equation}>$2</${TagNames.Equation}>`,
-    ));
+    ), e => e === node, false);
 
     // Headings
     transformHtmlWith(node, html => html.replace(
@@ -465,7 +498,7 @@ export function expandMfText(node: Element): void {
 
     // TODO: Replace footnotes/endnotes
 
-    transformHtmlWith(node, html => {
+    transformTextNodeWith(node, html => {
         // Arrows
         html = html.replace(
             ARROWS_REGEX,
@@ -482,7 +515,7 @@ export function expandMfText(node: Element): void {
         html = html.replace(/\b(\d+\s?)x(\s?\d+)\b/g, '$1×$2');
 
         return html;
-    }, isNonVerbatimElement);
+    }, isNonVerbatimElement, false);
 
     // Strikethrough
     transformHtmlWith(node, html => html.replace(

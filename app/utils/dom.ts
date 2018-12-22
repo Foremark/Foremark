@@ -126,6 +126,15 @@ export function transformHtmlWith(
  * If `recursionFilter` is specified, the contents of a child element is
  * transformed as well if the element matches the predicate specified by
  * `recursionFilter`.
+ *
+ * This function is theoretically faster than `transformHtmlWith`. This function
+ * can be used in place of `transformHtmlWith` if:
+ *
+ *  - Replaced substrings never include a XML element.
+ *  - Replaced substrings are not insensitive to context such as line breaks and
+ *    the start and end of an input string.
+ *  - In addition, there are no sequences of two or more consecutive text nodes.
+ *
  */
 export function transformTextNodeWith(
     node: Node,
