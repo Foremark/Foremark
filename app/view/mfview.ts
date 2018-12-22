@@ -383,8 +383,8 @@ const HANDLERS: { [tagName: string]: (node: Element) => void } & Object = {
     },
     [TagNames.Diagram]: async (node) => {
         const diagram = await lazyModules.diagram();
-        const svg = diagram.to_svg(node.textContent!);
-        node.innerHTML = svg;
+        const svgCode = diagram.to_svg(node.textContent!);
+        node.outerHTML = `<img src="data:image/svg+xml;base64,${btoa(svgCode)}" />`;
     },
     'table': (node) => {
         // Wrap `<table>` with a `<div>` to display a horizontal scrollbar
