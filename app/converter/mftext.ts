@@ -287,9 +287,6 @@ export function expandMfText(node: Element): void {
         ));
     }
 
-    // Tables
-    transformHtmlWith(node, replaceTables);
-
     // Horizontal rule: `* * *`, `- - -`, `_ _ _`
     transformHtmlWith(node, html => html.replace(
         /^[ \t]*((\*|-|_)[ \t]*){3,}[ \t]*$/gm,
@@ -309,6 +306,9 @@ export function expandMfText(node: Element): void {
             tagName === TagNames.Block ||
             tagName.match(/^(?:ul|ol|dl|li|dt|dd)$/i) != null;
     };
+
+    // Tables
+    transformHtmlWith(node, replaceTables, isBlock);
 
     // Paragraphs
     transformHtmlWith(node, html => {
