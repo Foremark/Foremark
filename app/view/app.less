@@ -351,6 +351,13 @@ main {
         line-height: 1.0;
     }
 
+    mf-diagram-inner {
+        display: inline-block;
+        > svg {
+            width: 100%;
+        }
+    }
+
     mf-diagram svg {
         text {
             font-family: @font-family;
@@ -425,8 +432,10 @@ main {
     // Automatically scale images in blocks if they are the only child of
     // the containing paragraph
     mf-figure, mf-note {
-        > div > p > img:first-child:last-child {
-            max-width: 100%;
+        > div > p {
+            > img, > mf-diagram {
+                &:first-child:last-child { max-width: 100%; }
+            }
         }
     }
 

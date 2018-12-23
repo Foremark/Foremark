@@ -6,6 +6,7 @@ import {TagNames, AttributeNames, FIGURE_STANDARD_ID_RE} from '../markfront';
 const enum ViewTagNames {
     FloatingElementLabel = 'mf-label',
     Sidenote = 'mf-sidenote',
+    DiagramInner = 'mf-diagram-inner',
 }
 
 /**
@@ -383,8 +384,23 @@ const HANDLERS: { [tagName: string]: (node: Element) => void } & Object = {
     },
     [TagNames.Diagram]: async (node) => {
         const diagram = await lazyModules.diagram();
-        const svg = diagram.to_svg(node.textContent!);
-        node.innerHTML = svg;
+        const svgCode = diagram.to_svg(node.textContent!);
+        node.innerHTML = svgCode;
+
+        // Make the SVG image responsive
+        const svg = node.firstElementChild as SVGSVGElement;
+        const width = parseFloat(svg.getAttribute('width')!);
+        const height = parseFloat(svg.getAttribute('height')!);
+
+        svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+        svg.removeAttribute('width');
+        svg.removeAttribute('height');
+
+        const inner = node.ownerDocument!.createElement(ViewTagNames.DiagramInner);
+        inner.appendChild(svg);
+        node.appendChild(inner);
+
+        inner.style.maxWidth = `${width}px`;
     },
     'table': (node) => {
         // Wrap `<table>` with a `<div>` to display a horizontal scrollbar
