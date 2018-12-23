@@ -34,7 +34,6 @@ const PHRASING_ELEMENTS = [
     InternalTagNames.Placeholder, // default placeholder for non-element nodes
     TagNames.Ref,
     TagNames.Equation,
-    TagNames.Diagram, // like `img`
     'addr', 'audio', 'b', 'bdo', 'br', 'button', 'canvas', 'cite', 'code',
     'command', 'data', 'datalist', 'dfn', 'em', 'embed', 'i', 'iframe', 'img',
     'input', 'kbd', 'keygen', 'label', 'mark', 'math', 'meter', 'noscript',
