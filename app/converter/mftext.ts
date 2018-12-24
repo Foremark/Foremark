@@ -612,23 +612,23 @@ export function expandMfText(node: Element): void {
 
     // Strikethrough
     transformHtmlWith(node, html => html.replace(
-        /~~(.*?)~~/g, '<del>$1</del>',
+        /~~([^]+?)~~/g, '<del>$1</del>',
     ), isNonVerbatimElement);
 
     // Boldfaces
     transformHtmlWith(node, html => html.replace(
-        /\*\*(.*?)\*\*/g, '<b>$1</b>',
+        /\*\*([^]+?)\*\*/g, '<b>$1</b>',
     ), isNonVerbatimElement);
     transformHtmlWith(node, html => html.replace(
-        /__(.*?)__/g, '<b>$1</b>',
+        /__([^]+?)__/g, '<b>$1</b>',
     ), isNonVerbatimElement);
 
     // Italics
     transformHtmlWith(node, html => html.replace(
-        /\*(.*?)\*/g, '<i>$1</i>',
+        /\*([^]+?)\*/g, '<i>$1</i>',
     ), isNonVerbatimElement);
     transformHtmlWith(node, html => html.replace(
-        /_(.*?)_/g, '<i>$1</i>',
+        /_([^]+?)_/g, '<i>$1</i>',
     ), isNonVerbatimElement);
 
     // The first paragraph starting with `<b>...</b>` is treated as title
