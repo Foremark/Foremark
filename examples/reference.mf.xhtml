@@ -7,6 +7,41 @@ This document describes the features supported by Markfront.
 
 # Markfront Text
 
+## Block quotations
+
+Email-style indenting creates a block quotation:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+> tempor incididunt ut labore et dolore magna aliqua.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Only an empty line closes a block quotation. This requirement prevents a text editor's hard wrapping functionality from messing up blockquotes:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+Here comes a famous passage:
+> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua.
+Still in a block quotation...
+
+No longer in a block quotation.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Block quotes are processed before most kinds of Markfront constructs (even HTML tags!). However, code blocks are processed earlier so that quotation marks inside a code fence are handled as intended:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+> <b>This `<b>` element does not
+> have the `>` sign in it.</b>
+>
+> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+>
+> >
+> >
+>
+> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 ## HTML tags
 
 Markfront Text interprets well-formed HTML tags embedded in a text node as HTML tags. The criterions are chosen to be very strict in order to minimize the chance of misdetections. A HTML tag will not be interpreted as a HTML tag unless all of the following criterias are met:

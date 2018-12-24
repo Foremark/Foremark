@@ -28,7 +28,7 @@ const ARROWS_REGEX = new RegExp(
     'g',
 );
 
-const FENCE_REGEX = /([ \t]*)(~{3,}|`{3,})\s*([-_0-9a-zA-Z\s]*)$/;
+const FENCE_REGEX = /((?:[ \t]|&gt;)*)(~{3,}|`{3,})\s*([-_0-9a-zA-Z\s]*)$/;
 
 const PHRASING_ELEMENTS = [
     InternalTagNames.Placeholder, // default placeholder for non-element nodes
@@ -105,6 +105,17 @@ export function expandMfText(node: Element): void {
     // TODO: Replace diagrams
 
     // Fenced code blocks
+    //
+    // This step preserves the indentation of code blocks. For example:
+    //
+    //     >  ~~~~~~~~~~~~~~~~
+    //     >  code...
+    //     >  ~~~~~~~~~~~~~~~~
+    //
+    // will be:
+    //
+    //     >  <mf-code-block><mf-code>code...</mf-code></mf-code-block>
+    //
     transformHtmlWith(node, html => {
         const lines = html.split('\n');
         const output: string[] = [];
@@ -122,7 +133,10 @@ export function expandMfText(node: Element): void {
             }
 
             if (inCodeBlock) {
-                if (matches && matches[2] === currentCodeBlockFence) {
+                if (matches &&
+                    matches[2] === currentCodeBlockFence &&
+                    matches[1] === currentCodeBlockIndentation
+                ) {
                     if (output[output.length - 1] === '\n') {
                         output.pop(); // Remove trailing newline
                     }
@@ -168,16 +182,34 @@ export function expandMfText(node: Element): void {
         return output.join('');
     });
 
+    // Block quotations
+    const BLOCKQUOTE_LINE_RE = /&gt;.*(?:\n(?!&gt;).*\S+.*$)*/.source;
+    const BLOCKQUOTE_RE = new RegExp(
+        `^${BLOCKQUOTE_LINE_RE}(\n${BLOCKQUOTE_LINE_RE})*`,
+        'gm',
+    );
+    const replaceSingleLevelBlockquote = (html: string): string => ('\n' + html)
+        // Replace the top-level blockquotes in this level
+        .replace(
+            BLOCKQUOTE_RE,
+            bq => '<blockquote>' + replaceSingleLevelBlockquote(
+                bq.replace(/^[ \t]*&gt;[ \t]*/gm, '')
+            ) + '</blockquote>',
+        ).substr(1);
+    transformHtmlWith(node, replaceSingleLevelBlockquote);
+
+    const isBlockquote = (e: Element) => e.tagName === 'blockquote';
+
     // Inline code
     transformTextNodeWith(node, html => html.replace(
         /`(.+?(?:\n.+?)?)`(?!\d)/g, '<code>$1</code>',
-    ), e => e === node, false);
+    ), e => e === node || isBlockquote(e), false);
 
     // Parse HTML comments
     transformTextNodeWith(node, html => html.replace(
         /&lt;(!--\s[\s\S]*?--)&gt;/g,
         (_, inner) => `<${inner}>`,
-    ), e => e === node, false);
+    ), e => e === node || isBlockquote(e), false);
 
     // Replace well-formed HTML tags
     // The regex performs all validation of individual tags. The code checks
@@ -247,55 +279,55 @@ export function expandMfText(node: Element): void {
         }
 
         return output.join('');
-    });
+    }, isBlockquote);
 
     // LaTeX display equations
     transformTextNodeWith(node, html => html.replace(
         /\$\$([^<>]*?)\$\$/g,
         `<${TagNames.DisplayEquation}>$1</${TagNames.DisplayEquation}>`,
-    ), e => e === node, false);
+    ), e => e === node || isBlockquote(e), false);
     transformTextNodeWith(node, html => html.replace(
         /\\begin{(equation\*?|eqnarray)}[^<>]*?\\end{\1}/g,
         `<${TagNames.DisplayEquation}>$&</${TagNames.DisplayEquation}>`,
-    ), e => e === node, false);
+    ), e => e === node || isBlockquote(e), false);
 
     // LaTeX inline equations
     transformTextNodeWith(node, html => html.replace(
         /((?:[^\w\d]))\$(\S(?:[^\$]*?\S(?!US|Can))??)\$(?![\w\d])/g,
         `$1<${TagNames.Equation}>$2</${TagNames.Equation}>`,
-    ), e => e === node, false);
+    ), e => e === node || isBlockquote(e), false);
     transformTextNodeWith(node, html => html.replace(
         /((?:[^\w\d]))\$([ \t][^\$]+?[ \t])\$(?![\w\d])/g,
         `$1<${TagNames.Equation}>$2</${TagNames.Equation}>`,
-    ), e => e === node, false);
+    ), e => e === node || isBlockquote(e), false);
 
     // Headings
     transformHtmlWith(node, html => html.replace(
         /^(.+?)\n[ \t]*={3,}[ \t]*$/gm,
         (_, inner) => `<h1>${inner}</h1>`,
-    ));
+    ), isBlockquote);
     transformHtmlWith(node, html => html.replace(
         /^(.+?)\n[ \t]*-{3,}[ \t]*$/gm,
         (_, inner) => `<h2>${inner}</h2>`,
-    ));
+    ), isBlockquote);
     for (let i = 6; i >= 1; --i) {
         // ATX-style header (`## h2`)
         transformHtmlWith(node, html => html.replace(
             new RegExp(`^\s*#{${i},${i}}(?:[ \t])([^\n#]+)#*[ \t]*\n`, 'gm'),
             (_, inner) => `<h${i}>${inner}</h${i}>`,
-        ));
+        ), isBlockquote);
     }
 
     // Horizontal rule: `* * *`, `- - -`, `_ _ _`
     transformHtmlWith(node, html => html.replace(
         /^[ \t]*((\*|-|_)[ \t]*){3,}[ \t]*$/gm,
         '<hr />',
-    ));
+    ), isBlockquote);
 
     // Nestable block elements
     //  - `<ul>`, `<ol>`, `<dl>`
     //  - `<mf-admonition>`
-    transformHtmlWith(node, replaceBlocks);
+    transformHtmlWith(node, replaceBlocks, isBlockquote);
 
     const isBlock = (e: Element) => {
         const {tagName} = e;
@@ -303,7 +335,7 @@ export function expandMfText(node: Element): void {
             tagName === TagNames.Figure ||
             tagName === TagNames.Note ||
             tagName === TagNames.Block ||
-            tagName.match(/^(?:ul|ol|dl|li|dt|dd)$/i) != null;
+            tagName.match(/^(?:ul|ol|dl|li|dt|dd|blockquote)$/i) != null;
     };
 
     // Tables
