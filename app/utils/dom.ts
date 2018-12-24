@@ -288,10 +288,11 @@ function isValidXmlNameSlow(name: string): boolean {
     try {
         testElement.setAttribute(name, "1");
         return true;
+    } catch (_) {
+        return false;
     } finally {
         testElement.removeAttribute(name);
     }
-    return false;
 }
 
 export function escapeXmlText(text: string): string {
