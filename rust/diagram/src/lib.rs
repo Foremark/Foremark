@@ -8,7 +8,9 @@ use svgbob;
 
 #[wasm_bindgen]
 pub fn to_svg(s: &str) -> String {
-    let settings = svgbob::Settings::default();
+    let mut settings = svgbob::Settings::default();
+    settings.stroke_width = 1.0;
+
     let g = svgbob::Grid::from_str(&s, &settings);
     format!("{}", g.get_svg())
 }

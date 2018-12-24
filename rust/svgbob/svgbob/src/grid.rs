@@ -398,15 +398,15 @@ tspan.head{{
 fn arrow_marker() -> Marker {
     let mut marker = Marker::new()
         .set("id", "triangle")
-        .set("viewBox", "0 0 8 4")
+        .set("viewBox", "0 0 8 6")
         .set("refX", 4)
-        .set("refY", 2)
+        .set("refY", 3)
         .set("orient", "auto")
         .set("markerWidth", 8)
         .set("markerHeight", 8);
 
     let path = SvgPolygon::new()
-        .set("points", "0,0 0,4 8,2 0,0")
+        .set("points", "0,0 0,6 8,3 0,0")
         .set("class", "fg_fill");
 
     marker.append(path);
