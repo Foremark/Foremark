@@ -1,0 +1,12 @@
+target
+*.sw*
+*.bk
+
+.DS_Store
+public/
+parts/
+prime/
+snap/
+stage/
+*.snap*
+*.tar*
