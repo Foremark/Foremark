@@ -275,7 +275,7 @@ export function legalizeAttributes(xml: string, onwarning: (message: string) => 
 function isValidXmlName(name: string): boolean {
     // Fast path - This also prevents collision with the attributes that have
     // a meaning predefined by the HTML specification.
-    if (name.match(/[a-zA-Z][-\w]*/)) {
+    if (name.match(/^[a-zA-Z][-\w]*$/)) {
         return true;
     }
 
