@@ -315,6 +315,24 @@ Unreferenced labels are omitted from the output.
 
 [Lojban]: https://en.wikipedia.org/wiki/Lojban
 
+## Diagrams
+
+`:::` (three colons) start a diagram:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markfront
+The railroad diagram of Markfront figure label:
+:::                                           .---.
+:::                                        .->|   |-.
+:::      .---------.      .---------.     /   '---'  \    .-----------.      .------------.
+::: o--> |"^][><\t"| ---> |"^][><\t"| -*-+            +-> |"^][><\t :"| ---- |"^][><\t :" | -+->o
+:::      '---------'   ^  '---------' /   \   .---.  /    '-----------'   ^  '------------' /
+:::                     \            /     '->| : |-'                      \               /
+:::                      '----------'         '---'                         '-------------'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+!!! Warning
+    Markdeep-style diagrams are not supported.
+
 # Markfront XML
 
 ## HTML elements
@@ -506,7 +524,7 @@ If both of `counter` and `label` are omitted but `id` is specified, `counter` an
 </mf-codeblock>
 <![CDATA[
 
-*Relevant Markfront Text tags*: TODO
+*Relevant Markfront Text tags*: `:::`
 
 ## Miscellaneous elements
 

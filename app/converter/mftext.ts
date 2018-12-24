@@ -30,6 +30,8 @@ const ARROWS_REGEX = new RegExp(
 
 const FENCE_REGEX = /^((?:[ \t]|&gt;)*)(~{3,}|`{3,})\s*([-_0-9a-zA-Z\s]*)$/;
 
+const DIAGRAM_REGEX = /^((?:[ \t]|&gt;)*):::(.*)$/;
+
 const PHRASING_ELEMENTS = [
     InternalTagNames.Placeholder, // default placeholder for non-element nodes
     TagNames.Ref,
@@ -50,7 +52,7 @@ const PHRASING_ELEMENTS_MAP = new Map(PHRASING_ELEMENTS.map(
 
 const VERBATIM_ELEMENTS = [
     'code', TagNames.Code, 'svg', TagNames.Equation, TagNames.DisplayEquation,
-    TextInternalTagNames.LinkTarget,
+    TextInternalTagNames.LinkTarget, TagNames.Diagram,
 ];
 const VERBATIM_ELEMENTS_MAP = new Map(VERBATIM_ELEMENTS.map(
     (n): [string, boolean] => [n, true]
@@ -101,8 +103,6 @@ export function expandMfText(node: Element): void {
 
         node.textContent = parts.join('');
     });
-
-    // TODO: Replace diagrams
 
     // Fenced code blocks
     //
@@ -175,6 +175,67 @@ export function expandMfText(node: Element): void {
             }
             output.push(`</${TagNames.Code}></${TagNames.CodeBlock}>`);
             output.push(`<${TagNames.Error}>Unclosed fenced code block</${TagNames.Error}>`);
+        } else {
+            output.pop(); // Remove trailing newline
+        }
+
+        return output.join('');
+    });
+
+    // Diagrams
+    //
+    // This step preserves the indentation of code blocks. For example:
+    //
+    //     >  ::: code...
+    //     >  ::: code...
+    //
+    // will be:
+    //
+    //     >  <mf-diagram>...</mf-diagram>
+    //
+    transformHtmlWith(node, html => {
+        const lines = html.split('\n');
+        const output: string[] = [];
+
+        let inDiagram = false;
+        let currentDiagramIndentation = '';
+
+        for (const line of lines) {
+            const matches = line.match(DIAGRAM_REGEX);
+
+            if (inDiagram) {
+                if (!matches || matches[1] !== currentDiagramIndentation) {
+                    if (output[output.length - 1] === '\n') {
+                        output.pop(); // Remove trailing newline
+                    }
+                    output.push(`</${TagNames.Diagram}>\n`);
+                    inDiagram = false;
+                } else {
+                    output.push(matches[2]);
+                    output.push('\n');
+                }
+            }
+
+            if (!inDiagram) {
+                if (matches) {
+                    output.push(matches[1]); // Preserve indentation
+                    output.push(`<${TagNames.Diagram}>`);
+                    output.push(matches[2]);
+                    output.push('\n');
+                    inDiagram = true;
+                    currentDiagramIndentation = matches[1];
+                } else {
+                    output.push(line);
+                    output.push('\n');
+                }
+            }
+        }
+
+        if (inDiagram) {
+            if (output[output.length - 1] === '\n') {
+                output.pop(); // Remove trailing newline
+            }
+            output.push(`</${TagNames.Diagram}>`);
         } else {
             output.pop(); // Remove trailing newline
         }
