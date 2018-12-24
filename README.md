@@ -49,6 +49,9 @@ The final HTML is displayed by a web-based viewer application embedded in `markf
     - `markfront.ts` — Common definitions of the Markfront format.
     - `utils/` — Utilities.
 - `lib/` — Helper code for using external libraries.
+- `rust/` — Rust crates.
+    - `diagram/` — An interface to Svgbob from the main application.
+    - `svgbob/` — Git subtree of <https://github.com/ivanceras/svgbob.git>.
 - `examples/` — Example Markfront files.
     - `browser` → `../browser` (symlink)
     - `*.mf.xhtml`
