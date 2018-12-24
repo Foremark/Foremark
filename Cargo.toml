@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "rust/diagram",
+    "rust/svgbob/svgbob",
 ]
 
 [profile.release]
