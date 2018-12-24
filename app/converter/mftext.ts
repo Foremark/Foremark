@@ -10,6 +10,7 @@ import {replaceTables} from './table';
 import {replaceBlocks} from './blocks';
 import {
     FIGURE_ID_RE, ENDNOTE_ID_RE, TextInternalTagNames, FLOATING_SIZE_RE,
+    MEDIA_PARAM_RE,
 } from './common';
 
 const ARROWS: [string, string][] = [
@@ -517,8 +518,24 @@ export function expandMfText(node: Element): void {
         /(^|[^!])\[([^\[\]]+?)\]\(("?)([^<>\s"]+?)\3(\s+[^\)]*?)?\)/g,
         (match, pre, text, maybeQuote, url: string, attribs = '') => {
             url = escapeXmlText(url);
-            attribs = legalizeAttributes(attribs, e => console.warn(e));
+            attribs = legalizeAttributes(attribs, ['href'], e => console.warn(e));
             return pre + `<a href="${url}"${attribs}>${text}</a>`;
+        }
+    ), isNonVerbatimElement);
+
+    // Inline media: `![text](url)`
+    transformHtmlWith(node, html => html.replace(
+        new RegExp(`!\\[([^\\[\\]]*)\]\\s*\\(${MEDIA_PARAM_RE.source}\\)`, 'g'),
+        (_, altRaw, urlRaw, attribsRaw = '') => {
+            if (urlRaw.startsWith('"')) {
+                urlRaw = urlRaw.substring(1, urlRaw.length - 1);
+            }
+
+            const alt = decodeHTML(altRaw);
+            const url = decodeHTML(urlRaw), attribs = decodeHTML(attribsRaw);
+
+            return `<img src="${escapeXmlText(url)}" alt="${escapeXmlText(alt)}"` +
+                `${legalizeAttributes(attribs, m => console.warn(m))} />`;
         }
     ), isNonVerbatimElement);
 
