@@ -522,7 +522,7 @@ export function expandMfText(node: Element): void {
         }
     ), isNonVerbatimElement);
 
-    // Symbolic hyperlink: `[text][linkname]`
+    // Symbolic hyperlink: `[text][linkname]` `![alt][linkname]`
     const linkSymbolTable = new Map<string, string>();
     transformTextNodeWith(
         node,
@@ -533,18 +533,19 @@ export function expandMfText(node: Element): void {
 
             // Can't use `String#replace` here because it only scans a string in
             // the forward direction.
-            const parts = html.split(/(\[([^\]]+)\]\[([^\^#!<>[\]][^<>[\]]*)?\])/g);
-            //                            ^^^^^^      ^^^^^^^^^^^^^^^^^^^^
-            //                             text        symbol name
+            const parts = html.split(/((!)?\[([^\]]+)\]\[([^\^#!<>[\]][^<>[\]]*)?\])/g);
+            //                          ^     ^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+            //                        image?   text        symbol name
             if (parts.length === 1) {
                 return html;
             }
 
             const output: string[] = [];
             output.unshift(parts.pop()!);
-            for (let i = parts.length; i > 0; i -= 4) {
-                const pre = parts[i - 4];
-                const source = parts[i - 3];
+            for (let i = parts.length; i > 0; i -= 5) {
+                const pre = parts[i - 5];
+                const source = parts[i - 4];
+                const isImage = parts[i - 3];
                 const text = parts[i - 2];
                 let symbolName = parts[i - 1];
 
@@ -552,11 +553,25 @@ export function expandMfText(node: Element): void {
                     symbolName = text;
                 }
 
-                const linkTarget = linkSymbolTable.get(symbolName);
+                let linkTarget = linkSymbolTable.get(symbolName);
                 if (linkTarget != null) {
                     linkSymbolTable.delete(symbolName);
 
-                    output.unshift(`<a href="${escapeXmlText(linkTarget)}">${text}</a>`);
+                    linkTarget = linkTarget.trim();
+                    if (isImage) {
+                        const match = linkTarget.match(/^(?:(")?([^"]*)\1)( .*)?$/);
+                        if (match) {
+                            let [_1, _2, url, attribs] = match;
+                            attribs = legalizeAttributes(attribs || '');
+                            output.unshift(`<img src="${escapeXmlText(url)}" alt="${escapeXmlText(text)}"${attribs} />`);
+                        } else {
+                            output.unshift(`<${TagNames.Error}>Failed to parse the link target: <code>` +
+                                escapeXmlText(linkTarget) +
+                                `</code></${TagNames.Error}>`);
+                        }
+                    } else {
+                        output.unshift(`<a href="${escapeXmlText(linkTarget)}">${text}</a>`);
+                    }
                 } else {
                     // Link target wasn't found; treat the fragment as a normal text
                     output.unshift(source);
@@ -585,7 +600,7 @@ export function expandMfText(node: Element): void {
 
     // TODO: Replace other types of hyperlinks
     //       `<url>`, `http://example.com`, `USER@example.com`,
-    //       `[#citeref]`, `![](url)`, `![][sym]`
+    //       `[#citeref]`, `![](url)`
 
     transformTextNodeWith(node, html => {
         // Arrows
