@@ -1,0 +1,1498 @@
+<svg font-family="arial" font-size="14" height="6976" width="600" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<marker id="triangle" markerHeight="10" markerUnits="strokeWidth" markerWidth="10" orient="auto" refX="0" refY="5" viewBox="0 0 40 40">
+<path d="M 0 0 L 10 5 L 0 10 z"/>
+</marker>
+</defs>
+<style>
+
+    line, path {
+      stroke: black;
+      stroke-width: 2;
+      stroke-opacity: 1;
+      fill-opacity: 1;
+      stroke-linecap: round;
+      stroke-linejoin: miter;
+    }
+    circle {
+      stroke: black;
+      stroke-width: 1;
+      stroke-opacity: 1;
+      fill-opacity: 1;
+      stroke-linecap: round;
+      stroke-linejoin: miter;
+      fill:white;
+    }
+    
+</style>
+<circle cx="28" cy="40" r="24"/>
+<circle cx="28" cy="88" r="24"/>
+<circle cx="60" cy="136" r="24"/>
+<circle cx="44" cy="184" r="24"/>
+<circle cx="68" cy="232" r="24"/>
+<circle cx="20" cy="280" r="16"/>
+<circle cx="20" cy="328" r="16"/>
+<circle cx="24" cy="376" r="20"/>
+<circle cx="40" cy="424" r="20"/>
+<circle cx="40" cy="520" r="28"/>
+<circle cx="32" cy="568" r="28"/>
+<circle cx="24" cy="616" r="12"/>
+<circle cx="36" cy="664" r="8"/>
+<circle cx="44" cy="712" r="8"/>
+<circle cx="132" cy="712" r="16"/>
+<circle cx="224" cy="712" r="20"/>
+<circle cx="28" cy="856" r="16"/>
+<circle cx="40" cy="904" r="36"/>
+<circle cx="32" cy="952" r="28"/>
+<circle cx="144" cy="952" r="28"/>
+<circle cx="28" cy="1048" r="16"/>
+<circle cx="108" cy="1048" r="16"/>
+<circle cx="28" cy="1096" r="16"/>
+<circle cx="108" cy="1096" r="16"/>
+<circle cx="80" cy="1192" r="20"/>
+<circle cx="16" cy="1288" r="12"/>
+<circle cx="96" cy="1288" r="12"/>
+<circle cx="224" cy="1336" r="20"/>
+<circle cx="60" cy="1480" r="56"/>
+<circle cx="228" cy="1480" r="56"/>
+<circle cx="36" cy="1528" r="24"/>
+<circle cx="300" cy="1528" r="24"/>
+<circle cx="24" cy="1576" r="20"/>
+<circle cx="32" cy="1624" r="20"/>
+<circle cx="296" cy="1624" r="20"/>
+<circle cx="32" cy="1672" r="20"/>
+<circle cx="336" cy="1672" r="20"/>
+<circle cx="32" cy="1720" r="28"/>
+<circle cx="160" cy="1720" r="28"/>
+<circle cx="240" cy="1720" r="20"/>
+<circle cx="344" cy="1720" r="20"/>
+<circle cx="36" cy="1768" r="32"/>
+<circle cx="160" cy="1768" r="28"/>
+<circle cx="240" cy="1768" r="20"/>
+<circle cx="352" cy="1768" r="20"/>
+<circle cx="36" cy="1816" r="32"/>
+<circle cx="160" cy="1816" r="28"/>
+<circle cx="240" cy="1816" r="20"/>
+<circle cx="352" cy="1816" r="20"/>
+<circle cx="28" cy="1864" r="24"/>
+<circle cx="276" cy="1864" r="24"/>
+<circle cx="24" cy="1912" r="20"/>
+<circle cx="144" cy="1912" r="20"/>
+<circle cx="92" cy="1960" r="24"/>
+<circle cx="260" cy="1960" r="24"/>
+<circle cx="32" cy="2056" r="28"/>
+<circle cx="32" cy="2152" r="28"/>
+<circle cx="28" cy="2200" r="24"/>
+<circle cx="156" cy="2200" r="24"/>
+<circle cx="48" cy="2296" r="12"/>
+<circle cx="40" cy="2344" r="12"/>
+<circle cx="40" cy="2488" r="12"/>
+<circle cx="76" cy="2536" r="16"/>
+<circle cx="40" cy="2584" r="12"/>
+<circle cx="60" cy="2632" r="16"/>
+<circle cx="44" cy="2680" r="32"/>
+<circle cx="80" cy="2776" r="12"/>
+<circle cx="80" cy="2824" r="12"/>
+<circle cx="20" cy="2872" r="16"/>
+<circle cx="164" cy="2872" r="16"/>
+<circle cx="104" cy="2968" r="12"/>
+<circle cx="40" cy="3016" r="12"/>
+<circle cx="140" cy="3064" r="32"/>
+<circle cx="60" cy="3160" r="16"/>
+<circle cx="32" cy="3208" r="12"/>
+<circle cx="40" cy="3256" r="20"/>
+<circle cx="60" cy="3304" r="24"/>
+<circle cx="40" cy="3352" r="20"/>
+<circle cx="28" cy="3544" r="16"/>
+<circle cx="84" cy="3544" r="16"/>
+<circle cx="180" cy="3544" r="16"/>
+<circle cx="28" cy="3592" r="8"/>
+<circle cx="20" cy="3688" r="8"/>
+<circle cx="48" cy="3736" r="20"/>
+<circle cx="32" cy="3784" r="12"/>
+<circle cx="28" cy="3880" r="16"/>
+<circle cx="28" cy="3928" r="16"/>
+<circle cx="48" cy="4264" r="12"/>
+<circle cx="64" cy="4312" r="12"/>
+<circle cx="48" cy="4408" r="36"/>
+<circle cx="40" cy="4504" r="12"/>
+<circle cx="64" cy="4552" r="12"/>
+<circle cx="64" cy="4600" r="28"/>
+<circle cx="168" cy="4600" r="28"/>
+<circle cx="48" cy="4648" r="12"/>
+<circle cx="64" cy="4840" r="44"/>
+<circle cx="64" cy="5560" r="20"/>
+<circle cx="48" cy="5608" r="44"/>
+<circle cx="24" cy="5656" r="12"/>
+<circle cx="24" cy="5704" r="20"/>
+<circle cx="16" cy="5752" r="12"/>
+<circle cx="32" cy="5800" r="28"/>
+<circle cx="28" cy="5848" r="24"/>
+<circle cx="36" cy="5992" r="24"/>
+<circle cx="56" cy="6040" r="44"/>
+<circle cx="40" cy="6088" r="28"/>
+<circle cx="12" cy="6520" r="8"/>
+<circle cx="4" cy="6568" r="0"/>
+<circle cx="20" cy="6616" r="8"/>
+<circle cx="20" cy="6664" r="8"/>
+<circle cx="24" cy="6712" r="12"/>
+<circle cx="24" cy="6760" r="12"/>
+<path d=" M 24 288 L 32 288 M 24 336 L 32 336 M 32 384 L 40 384 M 32 576 L 40 576 M 24 624 L 32 624 M 8 656 L 16 672 L 24 672 M 56 672 L 64 672 L 72 656 M 16 704 L 24 720 L 32 720 M 64 720 L 72 720 L 80 704 M 136 720 L 144 720 M 72 856 L 80 856 M 104 904 L 112 904 M 0 1520 L 8 1520 M 0 1808 L 8 1808 M 48 2304 L 56 2304 M 104 2448 L 112 2448 M 40 2488 L 48 2488 M 40 2584 L 48 2584 M 84 2768 L 84 2784 M 24 2880 L 32 2880 M 160 2880 L 168 2880 M 80 2960 L 88 2976 M 128 2976 L 136 2960 M 136 3064 L 144 3064 M 136 3120 L 144 3104 M 176 3120 L 184 3104 M 32 3216 L 40 3216 M 0 3344 L 8 3344 M 8 3400 L 16 3400 M 16 3408 L 24 3408 M 24 3400 L 32 3400 M 32 3496 L 40 3496 M 40 3504 L 48 3504 M 48 3496 L 56 3496 M 88 3496 L 96 3496 M 96 3504 L 104 3504 M 104 3496 L 112 3496 M 152 3496 L 160 3496 M 160 3504 L 168 3504 M 168 3496 L 176 3496 M 208 3496 L 216 3496 M 216 3504 L 224 3504 M 224 3496 L 232 3496 M 32 3552 L 40 3552 M 88 3552 L 96 3552 M 136 3544 L 144 3544 M 184 3552 L 192 3552 M 24 3640 L 32 3640 M 40 3640 L 48 3640 M 16 3728 L 24 3744 M 80 3744 L 88 3728 M 40 3784 L 48 3784 M 16 3832 L 24 3832 M 32 3832 L 40 3832 M 76 4016 L 76 4032 M 16 4072 L 24 4072 M 48 4072 L 56 4072 M 0 4160 L 8 4176 L 16 4160 M 0 4208 L 8 4224 L 16 4208 M 56 4208 L 64 4224 L 72 4208 M 48 4272 L 56 4272 M 20 4400 L 20 4416 M 48 4416 L 56 4416 M 84 4400 L 84 4416 M 36 4448 L 36 4464 M 48 4464 L 36 4464 M 84 4448 L 84 4464 M 16 4496 L 24 4512 M 64 4512 L 72 4496 M 24 4600 L 32 4600 M 128 4600 L 136 4600 M 208 4600 L 216 4600 M 16 4704 L 24 4704 M 16 4984 L 24 4984 M 40 4992 L 48 4992 M 16 5080 L 24 5080 M 32 5088 L 40 5088 M 48 5088 L 56 5088 M 0 5520 L 8 5504 M 16 5520 L 24 5504 L 32 5520 M 72 5520 L 80 5520 M 120 5520 L 128 5504 L 136 5520 M 0 5568 L 8 5552 M 16 5568 L 24 5552 L 32 5568 M 104 5568 L 112 5552 L 120 5568 M 16 5760 L 24 5760 M 0 5904 L 8 5888 M 8 5936 L 16 5952 L 24 5952 M 104 5952 L 112 5952 L 120 5936 M 8 6144 L 16 6144 M 24 6384 L 32 6384 M 8 6432 L 16 6432 M 8 6480 L 16 6480" fill="none"/>
+<path d="" fill="none" stroke-dasharray="3 3"/>
+<line fill="none" marker-end="url(#triangle)" stroke-dasharray="3 3" x1="120" x2="148" y1="904" y2="904"/>
+<line marker-end="url(#triangle)" x1="104" x2="116" y1="4600" y2="4600"/>
+<line marker-end="url(#triangle)" x1="128" x2="124" y1="4600" y2="4600"/>
+<text x="2" y="44">
+( ͡° ͜ʖ ͡°)
+</text>
+<text x="2" y="92">
+( ͡↑ ͜ʖ ͡↑)
+</text>
+<text x="2" y="140">
+─=≡Σ( ͡° ͜ʖ ͡°)
+</text>
+<text x="2" y="188">
+█▄( ͡° ͜ʖ ͡°)▄█
+</text>
+<text x="2" y="236">
+･｡ﾟ[̅$̅(̅ ͡°
+</text>
+<text x="66" y="236">
+ ͜ʖ ͡°̅)̅$̅]
+</text>
+<text x="122" y="236">
+｡ﾟ.*
+</text>
+<text x="2" y="284">
+(⌐■
+</text>
+<text x="34" y="284">
+■)
+</text>
+<text x="2" y="332">
+(⌐■
+</text>
+<text x="34" y="332">
+■)
+</text>
+<text x="58" y="332">
+♪♬
+</text>
+<text x="2" y="380">
+(˚ㄥ
+</text>
+<text x="42" y="380">
+˚)
+</text>
+<text x="2" y="428">
+凸(
+</text>
+<text x="34" y="428">
+•̀_•́ )凸
+</text>
+<text x="2" y="476">
+┌[
+</text>
+<text x="26" y="476">
+• ͜ ʖ
+</text>
+<text x="66" y="476">
+•
+</text>
+<text x="82" y="476">
+]┐
+</text>
+<text x="2" y="524">
+໒(
+</text>
+<text x="26" y="524">
+• ͜ʖ
+</text>
+<text x="58" y="524">
+•
+</text>
+<text x="74" y="524">
+)७
+</text>
+<text x="2" y="572">
+(
+</text>
+<text x="18" y="572">
+✖
+</text>
+<text x="50" y="572">
+✖
+</text>
+<text x="66" y="572">
+)
+</text>
+<text x="2" y="620">
+⊂(◣
+</text>
+<text x="34" y="620">
+◢)つ
+</text>
+<text x="2" y="668">
+¯
+</text>
+<text x="26" y="668">
+(ツ)
+</text>
+<text x="74" y="668">
+¯
+</text>
+<text x="10" y="716">
+¯
+</text>
+<text x="34" y="716">
+(ツ)
+</text>
+<text x="82" y="716">
+¯
+</text>
+<text x="98" y="716">
+ヽ(。
+</text>
+<text x="146" y="716">
+°)ノ
+</text>
+<text x="186" y="716">
+ヾ(ｏ･ω･)ﾉ
+</text>
+<text x="2" y="764">
+ツ
+</text>
+<text x="2" y="812">
+【ツ】
+</text>
+<text x="2" y="860">
+╰(⇀︿⇀)つ
+</text>
+<text x="82" y="860">
+]═──
+</text>
+<text x="2" y="908">
+(∩ ͡ °
+</text>
+<text x="50" y="908">
+ʖ ͡ °)
+</text>
+<text x="98" y="908">
+⊃
+</text>
+<text x="114" y="908">
+(
+</text>
+<text x="2" y="956">
+( ͡°╭͜ʖ╮͡°
+</text>
+<text x="66" y="956">
+)
+</text>
+<text x="114" y="956">
+( ͡°╭͜ʖ╮͡°
+</text>
+<text x="178" y="956">
+)
+</text>
+<text x="2" y="1004">
+ಠ益ಠ
+</text>
+<text x="2" y="1052">
+୧(ಠ益ಠ)୨
+</text>
+<text x="82" y="1052">
+୧(ಠ益ಠ)୨
+</text>
+<text x="2" y="1100">
+୧(ಠ益ಠ)୨
+</text>
+<text x="82" y="1100">
+୧(ಠ益ಠ)୨
+</text>
+<text x="2" y="1148">
+(つಠ益ಠ)つ
+</text>
+<text x="90" y="1148">
+─=≡Σ))
+</text>
+<text x="26" y="1196">
+!?
+</text>
+<text x="50" y="1196">
+ლ(ಠ益ಠლ)
+</text>
+<text x="2" y="1244">
+(º_لº(º_لº(º_لº(º_لº)º_لº)º_لº)
+</text>
+<text x="282" y="1244">
+!
+</text>
+<text x="298" y="1244">
+(º_لº(º_لº(º_لº(º_لº)º_لº)º_لº)
+</text>
+<text x="2" y="1292">
+(ʘ̚ل͜ʘ̚)
+</text>
+<text x="82" y="1292">
+(ʘ̚ل͜ʘ̚)
+</text>
+<text x="2" y="1340">
+ง╭ರ_•́)ง
+</text>
+<text x="202" y="1340">
+(ง╭ರ_•́)ง
+</text>
+<text x="2" y="1388">
+(º_لº(º_لº(º_لº(º_لº)º_لº)º_لº)
+</text>
+<text x="282" y="1388">
+,
+</text>
+<text x="354" y="1388">
+(º_لº(º_لº(º_لº(º_لº)º_لº)º_لº)
+</text>
+<text x="2" y="1436">
+&lt;
+</text>
+<text x="18" y="1436">
+&gt;
+</text>
+<text x="2" y="1484">
+(
+</text>
+<text x="18" y="1484">
+ººººº_لººººº
+</text>
+<text x="122" y="1484">
+)
+</text>
+<text x="170" y="1484">
+(
+</text>
+<text x="186" y="1484">
+ººººº_لººººº
+</text>
+<text x="290" y="1484">
+)
+</text>
+<text x="10" y="1532">
+( ͡° ͜◯ ͡°) ﻿Ｃ
+</text>
+<text x="98" y="1532">
+ＬＯＷＮ
+</text>
+<text x="170" y="1532">
+ＦＩＥＳＴＡ
+</text>
+<text x="274" y="1532">
+( ͡° ͜◯ ͡°)
+</text>
+<text x="2" y="1580">
+(
+</text>
+<text x="18" y="1580">
+•
+</text>
+<text x="34" y="1580">
+∀•)–Ψ
+</text>
+<text x="82" y="1580">
+&quot;
+</text>
+<text x="90" y="1580">
+&apos;
+</text>
+<text x="122" y="1580">
+&quot;
+</text>
+<text x="2" y="1628">
+└(
+</text>
+<text x="26" y="1628">
+° ͜ʖ͡°
+</text>
+<text x="58" y="1628">
+)┐
+</text>
+<text x="122" y="1628">
+,
+</text>
+<text x="186" y="1628">
+.
+</text>
+<text x="266" y="1628">
+└(
+</text>
+<text x="290" y="1628">
+° ͜ʖ͡°
+</text>
+<text x="322" y="1628">
+)┐
+</text>
+<text x="2" y="1676">
+└(
+</text>
+<text x="26" y="1676">
+° ͜ʖ͡°
+</text>
+<text x="58" y="1676">
+)┐
+</text>
+<text x="122" y="1676">
+,
+</text>
+<text x="186" y="1676">
+.
+</text>
+<text x="306" y="1676">
+└(
+</text>
+<text x="330" y="1676">
+° ͜ʖ͡°
+</text>
+<text x="362" y="1676">
+)┐
+</text>
+<text x="2" y="1724">
+(ง ͠° ͟ʖ ͡°)ง
+</text>
+<text x="130" y="1724">
+(ง ͠° ͟ʖ ͡°)ง
+</text>
+<text x="218" y="1724">
+(ง
+</text>
+<text x="242" y="1724">
+•̀_•́)ง
+</text>
+<text x="306" y="1724">
+!
+</text>
+<text x="322" y="1724">
+(ง
+</text>
+<text x="346" y="1724">
+•̀_•́)ง
+</text>
+<text x="2" y="1772">
+(
+</text>
+<text x="18" y="1772">
+ง ͠° ͟ʖ ͡°)ง
+</text>
+<text x="98" y="1772">
+,
+</text>
+<text x="130" y="1772">
+(ง ͠° ͟ʖ ͡°)ง
+</text>
+<text x="218" y="1772">
+(
+</text>
+<text x="234" y="1772">
+° ͜ʖ͡°
+</text>
+<text x="266" y="1772">
+)╭∩╮
+</text>
+<text x="306" y="1772">
+,
+</text>
+<text x="330" y="1772">
+(
+</text>
+<text x="346" y="1772">
+° ͜ʖ͡°
+</text>
+<text x="378" y="1772">
+)╭∩╮
+</text>
+<text x="2" y="1820">
+(
+</text>
+<text x="18" y="1820">
+ง ͠° ͟ʖ ͡°)ง
+</text>
+<text x="98" y="1820">
+,
+</text>
+<text x="130" y="1820">
+(ง ͠° ͟ʖ ͡°)ง
+</text>
+<text x="218" y="1820">
+(
+</text>
+<text x="234" y="1820">
+° ͜ʖ͡°
+</text>
+<text x="266" y="1820">
+)╭∩╮
+</text>
+<text x="306" y="1820">
+,
+</text>
+<text x="330" y="1820">
+(
+</text>
+<text x="346" y="1820">
+° ͜ʖ͡°
+</text>
+<text x="378" y="1820">
+)╭∩╮
+</text>
+<text x="2" y="1868">
+( ͡° ͜ʖ ͡°)
+</text>
+<text x="122" y="1868">
+,
+</text>
+<text x="154" y="1868">
+.
+</text>
+<text x="202" y="1868">
+.
+</text>
+<text x="250" y="1868">
+( ͡° ͜ʖ ͡°)
+</text>
+<text x="2" y="1916">
+(ง
+</text>
+<text x="26" y="1916">
+•̀_•́)ง
+</text>
+<text x="122" y="1916">
+(ง
+</text>
+<text x="146" y="1916">
+•̀_•́)ง
+</text>
+<text x="34" y="1964">
+,
+</text>
+<text x="66" y="1964">
+( ͡° ͜ʖ ͡°)ﾉ
+</text>
+<text x="146" y="1964">
+~~~~~
+</text>
+<text x="202" y="1964">
+é
+</text>
+<text x="234" y="1964">
+( ͡° ͜ʖ ͡°)⊃━
+</text>
+<text x="322" y="1964">
+(
+</text>
+<text x="346" y="1964">
+)
+</text>
+<text x="2" y="2012">
+ʕ ͡•ᴥ ͡•
+</text>
+<text x="58" y="2012">
+ʔ(_̅_̅_̅_̅_̅_̅_̅_̅(
+</text>
+<text x="146" y="2012">
+)
+</text>
+<text x="2" y="2060">
+(∩ ͡° ͜ʖ ͡°)⊃━☆ﾟ.
+</text>
+<text x="122" y="2060">
+*
+</text>
+<text x="138" y="2060">
+･
+</text>
+<text x="154" y="2060">
+｡ﾟ.
+</text>
+<text x="186" y="2060">
+*
+</text>
+<text x="202" y="2060">
+322
+</text>
+<text x="234" y="2060">
+☆ﾟ.
+</text>
+<text x="266" y="2060">
+*
+</text>
+<text x="282" y="2060">
+･
+</text>
+<text x="298" y="2060">
+｡ﾟ.
+</text>
+<text x="330" y="2060">
+*
+</text>
+<text x="2" y="2108">
+◥█̆◤
+</text>
+<text x="50" y="2108">
+◥█̆◤
+</text>
+<text x="2" y="2156">
+(∩ ͡° ͜ʖ ͡°)⊃━☆ﾟ.
+</text>
+<text x="122" y="2156">
+･
+</text>
+<text x="138" y="2156">
+｡ﾟ
+</text>
+<text x="178" y="2156">
+,
+</text>
+<text x="218" y="2156">
+,
+</text>
+<text x="258" y="2156">
+,
+</text>
+<text x="2" y="2204">
+( ͡° ͜ʖ ͡°)
+</text>
+<text x="114" y="2204">
+!
+</text>
+<text x="130" y="2204">
+( ͡° ͜ʖ ͡°)
+</text>
+<text x="2" y="2252">
+╭∩╮（︶︿︶）╭∩╮
+</text>
+<text x="154" y="2252">
+&apos;
+</text>
+<text x="170" y="2252">
+?
+</text>
+<text x="10" y="2300">
+┌∩┐(◣
+</text>
+<text x="58" y="2300">
+◢)┌∩┐
+</text>
+<text x="2" y="2348">
+,
+</text>
+<text x="26" y="2348">
+(ಠ_ಠ)┌∩┐
+</text>
+<text x="10" y="2396">
+’
+</text>
+<text x="34" y="2396">
+╭∩╮（︶︿︶）╭∩╮
+</text>
+<text x="2" y="2444">
+ヘ(
+</text>
+<text x="34" y="2444">
+^^)ノ＼(^
+</text>
+<text x="114" y="2444">
+^
+</text>
+<text x="130" y="2444">
+)
+</text>
+<text x="2" y="2492">
+!
+</text>
+<text x="18" y="2492">
+=(‘
+</text>
+<text x="50" y="2492">
+‘)
+</text>
+<text x="2" y="2540">
+,
+</text>
+<text x="18" y="2540">
+’
+</text>
+<text x="42" y="2540">
+ヽ(⇀‸↼‶)ノ
+</text>
+<text x="10" y="2588">
+!
+</text>
+<text x="26" y="2588">
+(‾
+</text>
+<text x="50" y="2588">
+‾)☮
+</text>
+<text x="26" y="2636">
+!
+</text>
+<text x="42" y="2636">
+(☞ﾟ∀ﾟ)☞
+</text>
+<text x="10" y="2684">
+(
+</text>
+<text x="26" y="2684">
+つ
+</text>
+<text x="50" y="2684">
+º_º
+</text>
+<text x="82" y="2684">
+)つ
+</text>
+<text x="18" y="2732">
+（ﾉ´д｀）
+</text>
+<text x="42" y="2780">
+┌∩┐(‿
+</text>
+<text x="90" y="2780">
+‿)┌∩┐
+</text>
+<text x="10" y="2828">
+?
+</text>
+<text x="34" y="2828">
+╭∩╮
+</text>
+<text x="66" y="2828">
+(òÓ,)
+</text>
+<text x="114" y="2828">
+╭∩╮
+</text>
+<text x="2" y="2876">
+(
+</text>
+<text x="18" y="2876">
+•
+</text>
+<text x="34" y="2876">
+•)*¯`·.¸.·´¯`°(•
+</text>
+<text x="170" y="2876">
+•
+</text>
+<text x="186" y="2876">
+)
+</text>
+<text x="18" y="2924">
+(╯°□°）╯︵
+</text>
+<text x="106" y="2924">
+┻━┻
+</text>
+<text x="34" y="2972">
+┻━┻︵
+</text>
+<text x="90" y="2972">
+(°□°)
+</text>
+<text x="146" y="2972">
+︵
+</text>
+<text x="170" y="2972">
+┻━┻
+</text>
+<text x="26" y="3020">
+(˚Õ˚)ر
+</text>
+<text x="82" y="3020">
+~~~~╚╩╩╝
+</text>
+<text x="2" y="3068">
+.
+</text>
+<text x="50" y="3068">
+┬──┬
+</text>
+<text x="90" y="3068">
+ノ(
+</text>
+<text x="122" y="3068">
+゜
+</text>
+<text x="146" y="3068">
+゜ノ)
+</text>
+<text x="34" y="3116">
+┏━┓┏━┓┏━┓
+</text>
+<text x="114" y="3116">
+︵
+</text>
+<text x="146" y="3116">
+(^.^
+</text>
+<text x="186" y="3116">
+)
+</text>
+<text x="2" y="3164">
+?
+</text>
+<text x="18" y="3164">
+’
+</text>
+<text x="42" y="3164">
+(
+</text>
+<text x="58" y="3164">
+•᷄ὤ•᷅)？
+</text>
+<text x="18" y="3212">
+(⊙
+</text>
+<text x="42" y="3212">
+◎)
+</text>
+<text x="18" y="3260">
+(⊙﹏⊙✿)
+</text>
+<text x="10" y="3308">
+’
+</text>
+<text x="34" y="3308">
+(｡☉౪
+</text>
+<text x="74" y="3308">
+⊙｡)
+</text>
+<text x="18" y="3356">
+(
+</text>
+<text x="34" y="3356">
+° ͜ʖ͡°
+</text>
+<text x="66" y="3356">
+)╭∩╮
+</text>
+<text x="2" y="3404">
+[
+</text>
+<text x="34" y="3404">
+]
+</text>
+<text x="18" y="3452">
+♫♪.ııı|̅●̅|̅=̅|̅●̅|
+</text>
+<text x="122" y="3452">
+ııı.♫♪
+</text>
+<text x="18" y="3500">
+┏(
+</text>
+<text x="58" y="3500">
+)┛┗(
+</text>
+<text x="122" y="3500">
+)┓┗(
+</text>
+<text x="178" y="3500">
+)┛┏(
+</text>
+<text x="234" y="3500">
+)┓
+</text>
+<text x="10" y="3548">
+(
+</text>
+<text x="26" y="3548">
+•
+</text>
+<text x="42" y="3548">
+•)
+</text>
+<text x="66" y="3548">
+(
+</text>
+<text x="82" y="3548">
+•
+</text>
+<text x="98" y="3548">
+•)&gt;
+</text>
+<text x="122" y="3548">
+⌐■
+</text>
+<text x="146" y="3548">
+■
+</text>
+<text x="162" y="3548">
+(⌐■
+</text>
+<text x="194" y="3548">
+■)
+</text>
+<text x="10" y="3596">
+٩(͡๏͡๏
+</text>
+<text x="42" y="3596">
+)۶
+</text>
+<text x="18" y="3644">
+(
+</text>
+<text x="34" y="3644">
+.
+</text>
+<text x="50" y="3644">
+)
+</text>
+<text x="10" y="3692">
+(&gt;
+</text>
+<text x="26" y="3692">
+ლ)
+</text>
+<text x="2" y="3740">
+ ۜ 
+</text>
+<text x="26" y="3740">
+(סּںסּَ`
+</text>
+<text x="74" y="3740">
+)
+</text>
+<text x="10" y="3788">
+✌(◕‿
+</text>
+<text x="50" y="3788">
+)✌
+</text>
+<text x="10" y="3836">
+(
+</text>
+<text x="26" y="3836">
+.
+</text>
+<text x="42" y="3836">
+)…
+</text>
+<text x="10" y="3884">
+(╥﹏╥)
+</text>
+<text x="10" y="3932">
+(ಠ益ಠ)
+</text>
+<text x="18" y="3980">
+☁☼
+</text>
+<text x="42" y="3980">
+▅▒░✿͜ ✿░▒▅
+</text>
+<text x="122" y="3980">
+☼☁
+</text>
+<text x="18" y="4028">
+•|龴◡龴
+</text>
+<text x="82" y="4028">
+•
+</text>
+<text x="26" y="4076">
+`ღ´
+</text>
+<text x="18" y="4124">
+웃❤유
+</text>
+<text x="18" y="4220">
+(&gt;
+</text>
+<text x="34" y="4220">
+.&lt;
+</text>
+<text x="50" y="4220">
+)
+</text>
+<text x="34" y="4268">
+(♥
+</text>
+<text x="58" y="4268">
+♥)
+</text>
+<text x="34" y="4316">
+✌⊂(✰‿✰)つ✌
+</text>
+<text x="26" y="4364">
+ಥ_ಥ
+</text>
+<text x="10" y="4412">
+(
+</text>
+<text x="34" y="4412">
+–
+</text>
+<text x="66" y="4412">
+–
+</text>
+<text x="90" y="4412">
+)
+</text>
+<text x="2" y="4460">
+,
+</text>
+<text x="18" y="4460">
+!
+</text>
+<text x="50" y="4460">
+・)
+</text>
+<text x="90" y="4460">
+･ω･｀)
+</text>
+<text x="2" y="4508">
+!
+</text>
+<text x="26" y="4508">
+(ˆ˚ˆ)
+</text>
+<text x="2" y="4556">
+!
+</text>
+<text x="34" y="4556">
+Ｏ(≧▽≦)Ｏ
+</text>
+<text x="18" y="4604">
+»
+</text>
+<text x="34" y="4604">
+(¯`·.·´¯)
+</text>
+<text x="138" y="4604">
+(¯`·.·´¯)
+</text>
+<text x="218" y="4604">
+«
+</text>
+<text x="234" y="4604">
+,
+</text>
+<text x="2" y="4652">
+!
+</text>
+<text x="18" y="4652">
+.
+</text>
+<text x="34" y="4652">
+(•̀ᴗ•́)و
+</text>
+<text x="10" y="4700">
+[
+</text>
+<text x="26" y="4700">
+]
+</text>
+<text x="10" y="4748">
+✈
+</text>
+<text x="10" y="4796">
+☼
+</text>
+<text x="26" y="4796">
+☀
+</text>
+<text x="42" y="4796">
+☁
+</text>
+<text x="58" y="4796">
+☂
+</text>
+<text x="74" y="4796">
+☃
+</text>
+<text x="90" y="4796">
+☄
+</text>
+<text x="106" y="4796">
+☾
+</text>
+<text x="122" y="4796">
+☽
+</text>
+<text x="138" y="4796">
+❄
+</text>
+<text x="154" y="4796">
+☇
+</text>
+<text x="170" y="4796">
+☈
+</text>
+<text x="186" y="4796">
+⊙
+</text>
+<text x="202" y="4796">
+☉
+</text>
+<text x="218" y="4796">
+℃
+</text>
+<text x="234" y="4796">
+℉
+</text>
+<text x="250" y="4796">
+°
+</text>
+<text x="266" y="4796">
+❅
+</text>
+<text x="282" y="4796">
+✺
+</text>
+<text x="298" y="4796">
+ϟ
+</text>
+<text x="18" y="4844">
+( ̅:̅:̅:̅[̅ ̅]̅:̅:̅:̅ 
+</text>
+<text x="114" y="4844">
+)
+</text>
+<text x="18" y="4892">
+¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸&gt;
+</text>
+<text x="210" y="4892">
+&lt;
+</text>
+<text x="218" y="4892">
+(((º&gt;
+</text>
+<text x="18" y="4940">
+ˁ˚ᴥ˚ˀ
+</text>
+<text x="10" y="4988">
+—
+</text>
+<text x="26" y="4988">
+{,
+</text>
+<text x="50" y="4988">
+,”&gt;
+</text>
+<text x="10" y="5036">
+^˚ᴥ˚^
+</text>
+<text x="10" y="5084">
+‘
+</text>
+<text x="26" y="5084">
+‘
+</text>
+<text x="42" y="5084">
+@
+</text>
+<text x="10" y="5132">
+¸¸♬·¯·♩¸¸♪·¯·♫¸
+</text>
+<text x="26" y="5180">
+¸¸♬·¯·♩¸¸♪·¯·♫¸
+</text>
+<text x="2" y="5228">
+▂▃▅▇█▓▒░۩۞۩
+</text>
+<text x="98" y="5228">
+۩۞۩░▒▓█▇▅▃▂
+</text>
+<text x="18" y="5276">
+[♥]]]
+</text>
+<text x="66" y="5276">
+[♦]]]
+</text>
+<text x="114" y="5276">
+[♣]]]
+</text>
+<text x="162" y="5276">
+[♠]]]
+</text>
+<text x="18" y="5324">
+♚
+</text>
+<text x="34" y="5324">
+♛
+</text>
+<text x="50" y="5324">
+♜
+</text>
+<text x="66" y="5324">
+♝
+</text>
+<text x="82" y="5324">
+♞
+</text>
+<text x="98" y="5324">
+♟
+</text>
+<text x="114" y="5324">
+♔
+</text>
+<text x="130" y="5324">
+♕
+</text>
+<text x="146" y="5324">
+♖
+</text>
+<text x="162" y="5324">
+♗
+</text>
+<text x="178" y="5324">
+♘
+</text>
+<text x="194" y="5324">
+♙
+</text>
+<text x="2" y="5372">
+웃웃웃웃웃웃
+</text>
+<text x="2" y="5420">
+♋
+</text>
+<text x="18" y="5420">
+♂
+</text>
+<text x="34" y="5420">
+♀
+</text>
+<text x="50" y="5420">
+☿
+</text>
+<text x="66" y="5420">
+웃
+</text>
+<text x="90" y="5420">
+유
+</text>
+<text x="2" y="5468">
+♪
+</text>
+<text x="18" y="5468">
+♫
+</text>
+<text x="34" y="5468">
+♩
+</text>
+<text x="50" y="5468">
+♬
+</text>
+<text x="66" y="5468">
+♭
+</text>
+<text x="82" y="5468">
+♮
+</text>
+<text x="10" y="5516">
+╲
+</text>
+<text x="34" y="5516">
+╭[
+</text>
+<text x="58" y="5516">
+•
+</text>
+<text x="90" y="5516">
+•
+</text>
+<text x="106" y="5516">
+]╮
+</text>
+<text x="138" y="5516">
+╱﻿\
+</text>
+<text x="10" y="5564">
+╲
+</text>
+<text x="34" y="5564">
+╭(.☉ʖ̫☉.)╮
+</text>
+<text x="122" y="5564">
+╱﻿\
+</text>
+<text x="2" y="5612">
+(
+</text>
+<text x="26" y="5612">
+ ͡°╭╮ʖ
+</text>
+<text x="82" y="5612">
+ ͡°)
+</text>
+<text x="2" y="5660">
+ԅ(☉Д☉)╮
+</text>
+<text x="2" y="5708">
+(つ•̀ᴥ•́)つ*:･ﾟ✧
+</text>
+<text x="2" y="5756">
+(⊙
+</text>
+<text x="26" y="5756">
+⊙)
+</text>
+<text x="2" y="5804">
+(=ಠ
+</text>
+<text x="34" y="5804">
+ل͟ ಠ=)
+</text>
+<text x="2" y="5852">
+(つ°ヮ°)つ
+</text>
+<text x="98" y="5852">
+└⋃┘
+</text>
+<text x="18" y="5900">
+•́ ﹏
+</text>
+<text x="58" y="5900">
+•̀\
+</text>
+<text x="2" y="5948">
+¯
+</text>
+<text x="26" y="5948">
+╏
+</text>
+<text x="42" y="5948">
+՞
+</text>
+<text x="58" y="5948">
+︿
+</text>
+<text x="82" y="5948">
+՞
+</text>
+<text x="98" y="5948">
+╏
+</text>
+<text x="122" y="5948">
+¯
+</text>
+<text x="2" y="5996">
+╮(
+</text>
+<text x="26" y="5996">
+ʘ̆ ۝ 
+</text>
+<text x="50" y="5996">
+ʘ̆ )╭
+</text>
+<text x="2" y="6044">
+७(
+</text>
+<text x="26" y="6044">
+,
+</text>
+<text x="42" y="6044">
+⊙
+</text>
+<text x="58" y="6044">
+–
+</text>
+<text x="74" y="6044">
+⊙
+</text>
+<text x="90" y="6044">
+,
+</text>
+<text x="106" y="6044">
+)७
+</text>
+<text x="2" y="6092">
+╮(
+</text>
+<text x="26" y="6092">
+•
+</text>
+<text x="42" y="6092">
+ʖ̯ •
+</text>
+<text x="74" y="6092">
+)╭
+</text>
+<text x="2" y="6140">
+⇎
+</text>
+<text x="18" y="6140">
+⇎
+</text>
+<text x="2" y="6188">
+句_句
+</text>
+<text x="2" y="6236">
+१|˚–˚|५
+</text>
+<text x="2" y="6284">
+ộ_ộ
+</text>
+<text x="2" y="6332">
+δﺡό
+</text>
+<text x="2" y="6380">
+⊂•⊃
+</text>
+<text x="34" y="6380">
+⊂•⊃
+</text>
+<text x="2" y="6428">
+❂
+</text>
+<text x="18" y="6428">
+❂
+</text>
+<text x="2" y="6476">
+❐
+</text>
+<text x="18" y="6476">
+❑
+</text>
+<text x="2" y="6524">
+(•̪●)
+</text>
+<text x="2" y="6572">
+(॔)
+</text>
+<text x="2" y="6620">
+٩(͡๏͡๏
+</text>
+<text x="34" y="6620">
+)۶
+</text>
+<text x="2" y="6668">
+٩(-̃•̃)
+</text>
+<text x="50" y="6668">
+۶
+</text>
+<text x="2" y="6716">
+٩(̾●̃ ̾•̾)
+</text>
+<text x="50" y="6716">
+۶
+</text>
+<text x="2" y="6764">
+٩(-̃- ̃)۶
+</text>
+<text x="2" y="6812">
+๏͡๏
+</text>
+<text x="26" y="6812">
+  ̃๏̃๏
+</text>
+<text x="2" y="6860">
+๏̃๏
+</text>
+<text x="2" y="6908">
+[.]
+</text>
+<text x="2" y="6956">
+[¬º-°]¬
+</text>
+</svg>

@@ -1,0 +1,28 @@
+[[package]]
+name = "pom"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "svg"
+version = "0.5.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "svgbob"
+version = "0.4.1"
+dependencies = [
+ "pom 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "svg 0.5.11 (registry+https://github.com/rust-lang/crates.io-index)",
+ "unicode-width 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "unicode-width"
+version = "0.1.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[metadata]
+"checksum pom 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "60f6ce597ecdcc9a098e7fddacb1065093a3d66446fa16c675e7e71d1b5c28e6"
+"checksum svg 0.5.11 (registry+https://github.com/rust-lang/crates.io-index)" = "7518a18ac78da03c41ca0611128c6d8adf1efae0773c337d6c19793dce860c9b"
+"checksum unicode-width 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)" = "882386231c45df4700b275c7ff55b6f3698780a650026380e72dabe76fa46526"
