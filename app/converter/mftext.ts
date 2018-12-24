@@ -503,8 +503,6 @@ export function expandMfText(node: Element): void {
     const isNonVerbatimElementAndNotLink = (e: Element) =>
         isNonVerbatimElement(e) && e.tagName !== 'a';
 
-    // TODO: Replace media
-
     // Reference to a figure or endnote: `[^link]`
     transformHtmlWith(node, html => html.replace(
         new RegExp(`\\[${FLOATING_SIZE_RE.source}(${ENDNOTE_ID_RE.source}|${FIGURE_ID_RE.source})\\]`, 'g'),
@@ -587,9 +585,7 @@ export function expandMfText(node: Element): void {
 
     // TODO: Replace other types of hyperlinks
     //       `<url>`, `http://example.com`, `USER@example.com`,
-    //       `[#citeref]`
-
-    // TODO: Replace footnotes/endnotes
+    //       `[#citeref]`, `![](url)`, `![][sym]`
 
     transformTextNodeWith(node, html => {
         // Arrows
