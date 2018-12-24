@@ -1,0 +1,7 @@
+
+-----------------------------------------------------------
+
+svgbob (custom build, based on 0.4.1)
+Apache-2.0
+by "Jovansonlee Cesar <ivanceras@gmail.com>"
+

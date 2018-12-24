@@ -10,7 +10,9 @@
 - name: build
   tasks:
     # `build:wasm` generates ES modules, so run it before other tasks
-    - taskfile build:wasm
+    - - taskfile build:wasm
+      # `cargo-license` might take long on first run
+      - taskfile build:cargo-license
     - - taskfile build:browser
       - taskfile build:dist
 
@@ -41,10 +43,17 @@
     - - ls -l wasm/diagram.wasm && echo "wasm-bindgen..."
     - - wasm-bindgen wasm/diagram.wasm --out-dir wasm
 
+- name: build:cargo-license
+  tasks:
+    - - mkdir -p wasm
+    - - cargo-license -a -d | node tools/fix-cargo-license.js > wasm/cargo-license.txt
+
 - name: build:browser
   tasks:
     - - webpack --config webpack.prod.js
       - webpack --config webpack.bundle.js
+    - - cat tools/cargo-license-header.txt >> browser/licenses.txt
+    - - cat wasm/cargo-license.txt >> browser/licenses.txt
 
 - name: build:dist
   task: tsc -d

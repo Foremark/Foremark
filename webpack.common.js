@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const GitRevisionPlugin = require('git-revision-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const gitRevision = new GitRevisionPlugin();
+const LicenseWebpackPlugin = require('license-webpack-plugin').LicenseWebpackPlugin;
 
 module.exports = (debug, selfContained) => ({
   entry: {
@@ -92,6 +93,10 @@ module.exports = (debug, selfContained) => ({
     path: path.resolve(__dirname, 'browser'),
   },
   plugins: [
+    new LicenseWebpackPlugin({
+      perChunkOutput: false,
+      addBanner: true,
+    }),
     new webpack.DefinePlugin({
       'process.env': {
         'VERSION': JSON.stringify(gitRevision.version()),

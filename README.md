@@ -66,6 +66,8 @@ The final HTML is displayed by a web-based viewer application embedded in `markf
     - `markfront.js` — The main file of the viewer.
     - `markfront-*.js`, `*.css`, `assets/` — Asset files that are loaded on demand.
     - `markfront.bundle.js` — Includes all of the above files in a single large package. (Self-contained bundle)
+    - `*.wasm`
+    - `licenses.txt` — License information of all software packages included in this directory.
 - `dist/` — Provides a Markfront processor library.
     - `index.js` — The entry point of the library.
 
@@ -79,6 +81,7 @@ Prerequisite:
 - `cargo install` [`wasm-bindgen-cli`](https://rustwasm.github.io/wasm-bindgen/whirlwind-tour/basic-usage.html)
 - `cargo install` [`wasm-snip`](https://github.com/rustwasm/wasm-snip)
 - [Binaryen](https://github.com/WebAssembly/binaryen) (`brew install binaryen` on Homebrew) including: `wasm-opt`
+- `cargo install` [`cargo-license`](https://github.com/onur/cargo-license)
     
 ```shell
 $ yarn install
