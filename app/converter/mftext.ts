@@ -535,7 +535,7 @@ export function expandMfText(node: Element): void {
             const url = decodeHTML(urlRaw), attribs = decodeHTML(attribsRaw);
 
             return `<img src="${escapeXmlText(url)}" alt="${escapeXmlText(alt)}"` +
-                `${legalizeAttributes(attribs, m => console.warn(m))} />`;
+                `${legalizeAttributes(attribs, ['src', 'alt'], m => console.warn(m))} />`;
         }
     ), isNonVerbatimElement);
 
@@ -579,7 +579,7 @@ export function expandMfText(node: Element): void {
                         const match = linkTarget.match(/^(?:(")?([^"]*)\1)( .*)?$/);
                         if (match) {
                             let [_1, _2, url, attribs] = match;
-                            attribs = legalizeAttributes(attribs || '');
+                            attribs = legalizeAttributes(attribs || '', ['src', 'alt'], e => console.warn(e));
                             output.unshift(`<img src="${escapeXmlText(url)}" alt="${escapeXmlText(text)}"${attribs} />`);
                         } else {
                             output.unshift(`<${TagNames.Error}>Failed to parse the link target: <code>` +
@@ -616,8 +616,7 @@ export function expandMfText(node: Element): void {
     );
 
     // TODO: Replace other types of hyperlinks
-    //       `<url>`, `http://example.com`, `USER@example.com`,
-    //       `[#citeref]`, `![](url)`
+    //       `<url>`, `http://example.com`, `USER@example.com`, `[#citeref]`
 
     transformTextNodeWith(node, html => {
         // Arrows

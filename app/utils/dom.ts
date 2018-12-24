@@ -211,9 +211,16 @@ export function forEachNodeReversePreorder(node: Node, f: (node: Node) => boolea
 /**
  * Attempts to fix malformed XML attributes.
  *
+ * `attributeNames` specifies the list of other attributes used to reject
+ * duplicate attributes. Found attributes are added to `attributeNames`.
+ *
  * Example: `legalizeAttributes(' a b="<>"')` returns `' a="a" b="&lt;&gt;"'`.
  */
-export function legalizeAttributes(xml: string, onwarning: (message: string) => void = () => {}): string {
+export function legalizeAttributes(
+    xml: string,
+    attributeNames: string[],
+    onwarning: (message: string) => void = () => {},
+): string {
     const [_, spaces, inner] = xml.match(/^(\s*)(.*)$/)!;
 
     return spaces + (' ' + inner).replace(
@@ -233,6 +240,12 @@ export function legalizeAttributes(xml: string, onwarning: (message: string) => 
                 onwarning(`Invalid attribute name: '${name}'`);
                 return '';
             }
+
+            if (attributeNames.indexOf(name) >= 0) {
+                onwarning(`Duplicate attribute: '${name}'`);
+                return '';
+            }
+            attributeNames.push(name);
 
             if (equal == null) {
                 // Value elision - valid in HTML, so do not issue a warning

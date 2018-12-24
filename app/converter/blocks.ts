@@ -309,7 +309,8 @@ const ImageBlock = {
         const alt = decodeHTML(altRaw);
         const url = decodeHTML(urlRaw), attribs = decodeHTML(attribsRaw);
 
-        const img = `<p><img src="${escapeXmlText(url)}"${legalizeAttributes(attribs)} /></p>`;
+        const img = `<p><img src="${escapeXmlText(url)}" alt="${escapeXmlText(alt)}"` +
+            `${legalizeAttributes(attribs, ['src', 'alt'], e => console.warn(e))} /></p>`;
 
         if (id !== '') {
             id = ` id="${escapeXmlText(id)}"`;
