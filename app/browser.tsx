@@ -38,9 +38,12 @@ if (inputNode.tagName.toLowerCase() === TagNames.Text) {
 import {expandMfText} from './converter/mftext';
 expandMfText(inputNode);
 
-// Apply view transformation
-import {prepareForemarkForViewing} from './view/mfview';
-prepareForemarkForViewing(inputNode);
+// Create `<head>` if it doesn't exist yet
+let head = document.getElementsByTagName('head')[0];
+if (!head) {
+    document.getElementsByTagName('html')[0].appendChild(
+        head = document.createElement('head'));
+}
 
 // Create `<body>` if it doesn't exist yet
 let body = document.getElementsByTagName('body')[0];
@@ -49,6 +52,10 @@ if (!body) {
         body = document.createElement('body'));
 }
 
+// Apply view transformation
+import {prepareForemarkForViewing} from './view/mfview';
+prepareForemarkForViewing(inputNode);
+
 // Set the page title
 const title = inputNode.getElementsByTagName(TagNames.Title)[0];
 if (title != null) {
@@ -56,7 +63,7 @@ if (title != null) {
 }
 
 // Add viewport size hint
-document.head.insertAdjacentHTML(
+head.insertAdjacentHTML(
     'beforeend',
     '<meta name="viewport" content="width=device-width, initial-scale=1.0" />'
 );

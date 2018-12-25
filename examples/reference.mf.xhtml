@@ -1,5 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head><mf-text><![CDATA[
-<!-- Foremark header -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><body><mf-text><![CDATA[
 
                   **Foremark Reference Manual**
 
@@ -730,8 +729,7 @@ If both of `counter` and `label` are omitted but `id` is specified, `counter` an
 A Foremark document is an XHTML file that consolidates Foremark Text/XML markups and a script tag for loading the viewer application.
 
 ~~~~~~~~~~~~ XML
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head><mf-text><![CDATA[
-<!-- Foremark header -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><body><mf-text><![CDATA[
 
                              **Document title**
 
@@ -740,9 +738,9 @@ tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 consequat.
 
-<!-- Foremark footer -->
-]]]><![CDATA[]></mf-text><script src="path/to/foremark.js" data-rel="foremark" />
-</head></html>
+]]]><![CDATA[]></mf-text> <!-- Foremark footer -->
+<script src="browser/foremark.js" data-rel="foremark" />
+<style>mf-text{white-space:pre-wrap;font-family:monospace}</style></body></html>
 ~~~~~~~~~~~~
 
 - `html > head > mf` or `html > head > mf-text` represent the content root.
@@ -769,8 +767,9 @@ A table of contents is constructed by looking for heading elements (`h1`, `h2`, 
 !!! TODO: Yet to be added...
     Global TOC
 
-<!-- Foremark footer -->
-]]></mf-text><script src="browser/foremark.js" data-rel="foremark" />
+]]></mf-text> <!-- Foremark footer -->
+<script src="browser/foremark.js" data-rel="foremark" />
+
 <style>
 mf-code[type="XML converted"] {
     position: relative;
@@ -791,4 +790,5 @@ mf-code[type="XML converted"]:after {
     background: rgba(128, 128, 128, 0.2);
 }
 </style>
-</head></html>
+
+<style>mf-text{white-space:pre-wrap;font-family:monospace}</style></body></html>
