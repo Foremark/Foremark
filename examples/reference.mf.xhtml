@@ -7,6 +7,15 @@ This document describes the features supported by Markfront.
 
 # Markfront Text
 
+## Header
+
+The first paragraph starting with a boldface text is treated as a header.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+                          **Document title**
+A subtitle or whatever deemed appropriate to be displayed near the title
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ## Block quotations
 
 Email-style indenting creates a block quotation:
@@ -188,11 +197,7 @@ An image tag optionally include XML attributes:
 
 ![^][](https://derpicdn.net/img/2018/11/8/1877696/medium.png style="animation: 2000ms _2qw9KkueUdLlzZdwjgAKzl both infinite linear"):
     Image caption
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Which are converted into:
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
 <img src="https://derpicdn.net/img/2018/11/8/1877696/medium.png"
      style="animation: 2000ms _2qw9KkueUdLlzZdwjgAKzl both infinite linear" />
 
@@ -264,8 +269,6 @@ The part surrounded by brackets is called a *label*. A label consists of the fol
 
       A base name may not include `:` or a whitespace character. Therefore, a label `[^le pixra pe li mupli-pixra]` is interpreted as `le pixra pe li` + `mupli-pixra`[^jbopixra].
 
-A label not including a preceding symbol like `[this is a mere link or not]` is not treated as a floating element label but rather as a potential normal link.
-
 The number prefix and the base name together forms a label identifier.
 
 !!! Tip
@@ -317,7 +320,7 @@ Unreferenced labels are omitted from the output.
 
 ## Diagrams
 
-`:::` (three colons) start a diagram:
+`:::` (three colons) start a diagram (`<mf-diagram>`):
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markfront
 The railroad diagram of Markfront figure label:
@@ -332,6 +335,196 @@ The railroad diagram of Markfront figure label:
 
 !!! Warning
     Markdeep-style diagrams are not supported.
+
+## Headings
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+First level
+===========
+
+Second level
+------------
+
+# First level
+
+## Second level
+
+### Third level
+
+#### Fourth level
+
+##### Fifth level
+
+...
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Horizontal rules
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markfront
+-----
+
+- - -
+
+_____
+
+_ _ _
+
+*****
+
+* * *
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Lists
+
+The following types of lists are supported:
+
+|      Marker     |           Type           |  CSS class  |
+|-----------------|--------------------------|-------------|
+| `-`             | Unordered list (`<ul>`)  | `minus`     |
+| `+`             | Unordered list (`<ul>`)  | `plus`      |
+| `*`             | Unordered list (`<ul>`)  | `asterisk`  |
+| `[*]` / `- [*]` | Unordered list (`<ul>`)  | `checked`   |
+| `[ ]` / `- [ ]` | Unordered list (`<ul>`)  | `unchecked` |
+| `42.`           | Ordered list (`<ol>`)    |             |
+| `:`             | Definition list (`<dl>`) |             |
+
+A line starting with one of the markers starts a list. The list goes on until a line with the original indentation is encountered:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+- Marker line
+  Non-marker lines
+    And goes on...
+We're out!
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<ul>
+    <li class="minus">Marker line
+Non-marker lines
+  And goes on...</li>
+</ul>
+<p>We're out!</p>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Consecutive items with the same list type are merged into one list:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+- Item1
+- Item2
+1. Item3
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<ul>
+    <li class="minus">Item1</li>
+    <li class="minus">Item2</li>
+</ul>
+<ol start="1">
+    <li>Item3</li>
+</ol>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A number in ordered lists *does* matter. A non-sequential number restarts a list to make numbers consistent:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+1. Item1
+3. Item2
+4. Item3
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<ol start="1">
+    <li>Item1</li>
+</ol>
+<ol start="3">
+    <li>Item2</li>
+    <li>Item3</li>
+</ol>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Definition lists takes the last line as the caption:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+Asymmetric cryptography
+:   An encryption system that uses pairs of keys: public keys
+    and private keys.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Admonitions
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markfront
+!!! Danger: Can I have your attention please?!
+    The message follows...
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<mf-admonition type="Danger">
+    <mf-admonition-title>
+        Can I have your attention please?!
+    </mf-admonition-title>
+    <p>
+        The message follows...
+    </p>
+</mf-admonition>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A caption line is in one of the following formats:
+
+|        Source       | Admonition type |  Caption  |
+|---------------------|-----------------|-----------|
+| `!!!`               | (empty)         | (none)    |
+| `!!! Type`          | `Type`          | (none)    |
+| `!!! Type: Caption` | `Type`          | `Caption` |
+
+## Equations
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+$$ \Lo(X, \wo) = \Le(X, \wo) + \int_\Omega \Li(X, \wi) ~ f_X(\wi, \wo) ~ | \n \cdot \wi | ~ d\wi $$
+
+Look at an inline equation: $e^{i \pi} + 1 = 0$
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+!!! TODO: Yet to be added...
+    - Referencing equations
+
+## Tables
+
+!!! TODO: Yet to be written about...
+    Tables
+
+## Paragraphs
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markfront
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat.
+
+Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. </p>
+<p>Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur.</p>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Text styles
+
+|           Source           |       Result      |
+|----------------------------|-------------------|
+| `**bold**`                 | **bold**          |
+| `__bold__`                 | __bold__          |
+| `*italic*`                 | *italic*          |
+| `_italic_`                 | _italic_          |
+| `~~strikethrough~~`        | ~~strikethrough~~ | ]]>
+| <code>`inline code`</code> | `inline code`     | <![CDATA[
+
+Formatted text may cross lines, but not paragraphs. Formatting can be applied to a part of words:
+
+|           Source           |                 Result                 |
+|----------------------------|----------------------------------------|
+| `B is for **B**ooze`       | B is for **B**ooze                     |
+| `お前は**もう**死んでいる` | お前は**もう**死んでいる [^no-worddiv] |
+
+[^no-worddiv]:
+    Chinese and Japanese are written without word dividers ([わかち書き][]), often causing a headache to writers with certain text formats that require formatting to be applied on per-word basis.
+
+[わかち書き]: https://ja.wikipedia.org/wiki/わかち書き
 
 # Markfront XML
 
@@ -530,6 +723,72 @@ If both of `counter` and `label` are omitted but `id` is specified, `counter` an
 
 - `<mf-error>` indicates an error encountered while processing `<mf-text>`.
 
+# Viewer application
+
+## Document
+
+A Markfront document is an XHTML file that consolidates Markfront Text/XML markups and a script tag for loading the viewer application.
+
+~~~~~~~~~~~~ XML
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head><mf-text><![CDATA[
+<!-- Markfront header -->
+
+                             **Document title**
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat.
+
+<!-- Markfront footer -->
+]]]><![CDATA[]></mf-text><script src="path/to/markfront.js" data-rel="markfront" />
+</head></html>
+~~~~~~~~~~~~
+
+- `html > head > mf` or `html > head > mf-text` represent the content root.
+  If `mf-text` is the content root, it will be wrapped by `<mf>` and all attributes are moved to the `<mf>`.
+- `html > head > script` with a `data-rel="markfront"` attribute instructs the web browser to load the viewer application. The viewer application locates this tag and uses its `src` attribute as a base path for loading other assets.
+
+!!! Warning
+
+    The viewer application does not support HTML files for various reasons:
+     - The web browser's DOM API behaves differently when displaying a HTML file. For example, XHTML preserves the original case for `HTMLElement#tagName` while HTML doesn't.
+     - The behavior of `CDATA` in HTML is inconsistent between browsers.
+
+## Media handlers
+
+!!! TODO: Yet to be added...
+    Media handlers
+
+## Table of contents
+
+The viewer displays a table of contents that allows quick navigation to various parts of a page.
+
+A table of contents is constructed by looking for heading elements (`h1`, `h2`, ...) in a document.
+
+!!! TODO: Yet to be added...
+    Global TOC
+
 <!-- Markfront footer -->
 ]]></mf-text><script src="browser/markfront.js" data-rel="markfront" />
+<style>
+mf-code[type="XML converted"] {
+    position: relative;
+    display: block;
+    padding-left: 16px;
+    margin-top: 0.5em;
+}
+mf-code[type="XML converted"]:before {
+    content: "XML output";
+    font-weight: bold;
+    font-size: 90%;
+    text-transform: uppercase;
+    color: rgba(128, 128, 128, 0.8);
+}
+mf-code[type="XML converted"]:after {
+    position: absolute; content: "";
+    left: 4px; top: 0.2em; width: 4px; bottom: 0;
+    background: rgba(128, 128, 128, 0.2);
+}
+</style>
 </head></html>
