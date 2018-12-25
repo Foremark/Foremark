@@ -1,11 +1,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head><mf-text><![CDATA[
-<!-- Markfront header -->
+<!-- Foremark header -->
 
-                  **Markfront Reference Manual**
+                  **Foremark Reference Manual**
 
-This document describes the features supported by Markfront.
+This document describes the features supported by Foremark.
 
-# Markfront Text
+# Foremark Text
 
 ## Header
 
@@ -36,7 +36,7 @@ Still in a block quotation...
 No longer in a block quotation.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Block quotes are processed before most kinds of Markfront constructs (even HTML tags!). However, code blocks are processed earlier so that quotation marks inside a code fence are handled as intended:
+Block quotes are processed before most kinds of Foremark constructs (even HTML tags!). However, code blocks are processed earlier so that quotation marks inside a code fence are handled as intended:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
 > <b>This `<b>` element does not
@@ -53,7 +53,7 @@ Block quotes are processed before most kinds of Markfront constructs (even HTML 
 
 ## HTML tags
 
-Markfront Text interprets well-formed HTML tags embedded in a text node as HTML tags. The criterions are chosen to be very strict in order to minimize the chance of misdetections. A HTML tag will not be interpreted as a HTML tag unless all of the following criterias are met:
+Foremark Text interprets well-formed HTML tags embedded in a text node as HTML tags. The criterions are chosen to be very strict in order to minimize the chance of misdetections. A HTML tag will not be interpreted as a HTML tag unless all of the following criterias are met:
 
 - It's not inside a code block or an inline code markup. (HTML tags are processed after code blocks and inline code markups.)
 - It must use a strictly valid XML syntax, which means:
@@ -70,7 +70,7 @@ Markfront Text interprets well-formed HTML tags embedded in a text node as HTML 
 - The tag name and all attribute names match `/^[a-z][-a-z0-9]*$/` [^tag-name].
 
 [^tag-name]:
-    This is a subset of [XML NCName][]. It's quite restricted but still covers all standard HTML and Markfront XML elements.
+    This is a subset of [XML NCName][]. It's quite restricted but still covers all standard HTML and Foremark XML elements.
 
 [XML NCName]: https://www.w3.org/TR/1999/REC-xml-names-19990114/#NT-NCName
 
@@ -82,15 +82,15 @@ Self-closing: <br> (displayed as "<br>" unless there's `</br>`)
 
 !!! Note
 
-    The conversion described in this section only applies to HTML tags *embedded as a textual content* (like most of the Markfront Text constructs).
-    If HTML tags are not wrapped by `<![CDATA[...]​]>`, they will be parsed by the XHTML parser and converted to XHTML elements before the Markfront text processing takes place.
+    The conversion described in this section only applies to HTML tags *embedded as a textual content* (like most of the Foremark Text constructs).
+    If HTML tags are not wrapped by `<![CDATA[...]​]>`, they will be parsed by the XHTML parser and converted to XHTML elements before the Foremark text processing takes place.
 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML
     <mf-text>
         <!-- The web browser interprets this as a bold element -->
         <b>Bold text</b>
 
-        <!-- Converted to a bold element as a part of the Markfront
+        <!-- Converted to a bold element as a part of the Foremark
              text processing. -->
         &lt;b&gt;Bold text&lt;/b&gt;
 
@@ -168,7 +168,7 @@ The pudding face looks like
 
 Inline images are directly rendered as HTML `<img>` elements.
 
-Read [Symbolic hyperlinks](#markfronttext/hyperlinks/symbolichyperlinks) for more about symbolic hyperlinks (`[pudding]` in the above example).
+Read [Symbolic hyperlinks](#foremarktext/hyperlinks/symbolichyperlinks) for more about symbolic hyperlinks (`[pudding]` in the above example).
 
 Use the block syntax to insert an image block using `<mf-figure>`. The block syntax is distinguished by the colon at the end and the addition of an optional figure label:
 
@@ -185,7 +185,7 @@ The pudding faces are shown below:
     Figure (possibly automatically positioned)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The first part (`[^]`, `[!Figure fig1]`) is based on [the floating contents block syntax](#markfronttext/floatingcontents). Sidenote labels (e.g., `[!basenameonly]`) may not be used.
+The first part (`[^]`, `[!Figure fig1]`) is based on [the floating contents block syntax](#foremarktext/floatingcontents). Sidenote labels (e.g., `[!basenameonly]`) may not be used.
 
 !!! Warning
     `![^][][symbol]:` (A image block with a symbolic name) is not supported.
@@ -314,7 +314,7 @@ Unreferenced labels are omitted from the output.
 
 [^jbopixra]:
     `«le pixra pe li □»` roughly means "the picture pertaining to number □" in [Lojban][].
-    It could be written more concisely as `«le li □ pixra»`, which isn't supported by Markfront at this point.
+    It could be written more concisely as `«le li □ pixra»`, which isn't supported by Foremark at this point.
 
 [Lojban]: https://en.wikipedia.org/wiki/Lojban
 
@@ -322,8 +322,8 @@ Unreferenced labels are omitted from the output.
 
 `:::` (three colons) start a diagram (`<mf-diagram>`):
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markfront
-The railroad diagram of Markfront figure label:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Foremark
+The railroad diagram of Foremark figure label:
 :::                                           .---.
 :::                                        .->|   |-.
 :::      .---------.      .---------.     /   '---'  \    .-----------.      .------------.
@@ -360,7 +360,7 @@ Second level
 
 ## Horizontal rules
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markfront
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Foremark
 -----
 
 - - -
@@ -446,7 +446,7 @@ Asymmetric cryptography
 
 ## Admonitions
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markfront
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Foremark
 !!! Danger: Can I have your attention please?!
     The message follows...
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
@@ -486,7 +486,7 @@ Look at an inline equation: $e^{i \pi} + 1 = 0$
 
 ## Paragraphs
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markfront
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Foremark
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
@@ -526,7 +526,7 @@ Formatted text may cross lines, but not paragraphs. Formatting can be applied to
 
 [わかち書き]: https://ja.wikipedia.org/wiki/わかち書き
 
-# Markfront XML
+# Foremark XML
 
 ## HTML elements
 
@@ -559,7 +559,7 @@ The following HTML elements are supported and styled appropriately.
 
 `<mf-title>` inserts a document title. `<mf-lead>` inserts a subtitle and if it exists it must follow `<mf-title>`.
 
-*Relevant Markfront Text tags*: `**title**`
+*Relevant Foremark Text tags*: `**title**`
 
 ## Lists
 
@@ -583,7 +583,7 @@ HTML lists `<ul>` (unordered list), `<ol>` (ordered list), and `<dl>` (definitio
 - `checked` indicates that a checked checkbox should be displayed next the item.
 - `unchecked` indicates that an unchecked checkbox should be displayed next the item.
 
-*Relevant Markfront Text tags*: `-` `+` `*` `[ ]` `[x]` and more
+*Relevant Foremark Text tags*: `-` `+` `*` `[ ]` `[x]` and more
 
 ## Code blocks — `<mf-code>`
 
@@ -606,7 +606,7 @@ One or more `<mf-code>` elements can be wrapped by **`<mf-codeblock>`**.
 !!! TODO: Yet to be written about...
     The semantics of the rest of `type` attribute value.
 
-*Relevant Markfront Text tags*: `~~~~`–`~~~~`
+*Relevant Foremark Text tags*: `~~~~`–`~~~~`
 
 ## LaTeX equations — `<mf-eq>`
 
@@ -622,7 +622,7 @@ One or more `<mf-code>` elements can be wrapped by **`<mf-codeblock>`**.
 
 `<mf-eq>` inserts an inline LaTeX equation. Similarly, `<mf-eq-display>` inserts a display LaTeX equation.
 
-*Relevant Markfront Text tags*: `$inline$` `$$display$$`
+*Relevant Foremark Text tags*: `$inline$` `$$display$$`
 
 ## Floating elements
 
@@ -656,7 +656,7 @@ If both of `counter` and `label` are omitted but `id` is specified, `counter` an
 - If `id.match(/(.+):[^ :]+/)`, then `counter` is `$1` and `label` is `$1{}`.
 - If `id.match(/(.+) [^ :]+/)`, then `counter` is `$1` and `label` is `$1 {}`.
 
-*Relevant Markfront Text tags*:
+*Relevant Foremark Text tags*:
 - `[^counter basename]: caption` `[!counter basename]: caption`
 - `![^counter basename][alt](url): caption` `![!counter basename][alt](url): caption` (generates `<img>` wrapped with `<mf-figure>`)
 
@@ -670,7 +670,7 @@ If both of `counter` and `label` are omitted but `id` is specified, `counter` an
 </mf-note>
 ~~~~~~~~~~~~
 
-*Relevant Markfront Text tags*: `[^noteId]: contents` `[!noteId]: contents`
+*Relevant Foremark Text tags*: `[^noteId]: contents` `[!noteId]: contents`
 
 ### Figure/note references — `<mf-ref>`
 
@@ -681,7 +681,7 @@ If both of `counter` and `label` are omitted but `id` is specified, `counter` an
 </p>
 ~~~~~~~~~~~~
 
-*Relevant Markfront Text tags*: `[^noteId]` `[!noteId]`
+*Relevant Foremark Text tags*: `[^noteId]` `[!noteId]`
 
 ## Admonitions — `<mf-admonition>`
 
@@ -696,7 +696,7 @@ If both of `counter` and `label` are omitted but `id` is specified, `counter` an
 </mf-admonition>
 ~~~~~~~~~~~~
 
-*Relevant Markfront Text tag*: `!!!`
+*Relevant Foremark Text tag*: `!!!`
 
 ## Diagrams — `<mf-diagram>`
 
@@ -717,7 +717,7 @@ If both of `counter` and `label` are omitted but `id` is specified, `counter` an
 </mf-codeblock>
 <![CDATA[
 
-*Relevant Markfront Text tags*: `:::`
+*Relevant Foremark Text tags*: `:::`
 
 ## Miscellaneous elements
 
@@ -727,11 +727,11 @@ If both of `counter` and `label` are omitted but `id` is specified, `counter` an
 
 ## Document
 
-A Markfront document is an XHTML file that consolidates Markfront Text/XML markups and a script tag for loading the viewer application.
+A Foremark document is an XHTML file that consolidates Foremark Text/XML markups and a script tag for loading the viewer application.
 
 ~~~~~~~~~~~~ XML
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head><mf-text><![CDATA[
-<!-- Markfront header -->
+<!-- Foremark header -->
 
                              **Document title**
 
@@ -740,14 +740,14 @@ tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 consequat.
 
-<!-- Markfront footer -->
-]]]><![CDATA[]></mf-text><script src="path/to/markfront.js" data-rel="markfront" />
+<!-- Foremark footer -->
+]]]><![CDATA[]></mf-text><script src="path/to/foremark.js" data-rel="foremark" />
 </head></html>
 ~~~~~~~~~~~~
 
 - `html > head > mf` or `html > head > mf-text` represent the content root.
   If `mf-text` is the content root, it will be wrapped by `<mf>` and all attributes are moved to the `<mf>`.
-- `html > head > script` with a `data-rel="markfront"` attribute instructs the web browser to load the viewer application. The viewer application locates this tag and uses its `src` attribute as a base path for loading other assets.
+- `html > head > script` with a `data-rel="foremark"` attribute instructs the web browser to load the viewer application. The viewer application locates this tag and uses its `src` attribute as a base path for loading other assets.
 
 !!! Warning
 
@@ -769,8 +769,8 @@ A table of contents is constructed by looking for heading elements (`h1`, `h2`, 
 !!! TODO: Yet to be added...
     Global TOC
 
-<!-- Markfront footer -->
-]]></mf-text><script src="browser/markfront.js" data-rel="markfront" />
+<!-- Foremark footer -->
+]]></mf-text><script src="browser/foremark.js" data-rel="foremark" />
 <style>
 mf-code[type="XML converted"] {
     position: relative;

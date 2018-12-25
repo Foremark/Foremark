@@ -1,6 +1,6 @@
 /*
  * This webpack configuration generates a large, self-contained bundle file
- * (`markfront.bundle.js`) that includes every asset.
+ * (`foremark.bundle.js`) that includes every asset.
  */
 const webpack = require('webpack');
 const merge = require('webpack-merge');

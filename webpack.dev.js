@@ -1,5 +1,5 @@
 /*
- * This webpack configuration generates a small bundle file (`markfront.js`)
+ * This webpack configuration generates a small bundle file (`foremark.js`)
  * along with several external asset files.
  */
 const merge = require('webpack-merge');

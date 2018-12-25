@@ -9,7 +9,7 @@ import {forEachNodePreorder} from '../utils/dom';
 const CN = require('./toc.less');
 
 export interface TableOfContentsProps {
-    markfrontDocument: HTMLElement;
+    foremarkDocument: HTMLElement;
 }
 
 interface TableOfContentsState {
@@ -38,7 +38,7 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
             activeNodePath: [],
         };
 
-        this.allNodes = enumerateNodes(props.markfrontDocument);
+        this.allNodes = enumerateNodes(props.foremarkDocument);
         this.root = buildNodeTree(this.allNodes);
     }
 

@@ -3,7 +3,7 @@ import * as React from 'preact';
 const CN = require('./search.less');
 
 export interface SearchPaneProps {
-    markfrontDocument: HTMLElement;
+    foremarkDocument: HTMLElement;
     query: string;
 }
 

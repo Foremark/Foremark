@@ -1,6 +1,6 @@
 import {decodeHTML} from 'entities';
 
-import {TagNames} from '../markfront';
+import {TagNames} from '../foremark';
 import {
     TextInternalTagNames, ENDNOTE_ID_RE, FIGURE_ID_RE, MEDIA_PARAM_RE,
     FLOATING_SIZE_RE, parseFloatingSize,

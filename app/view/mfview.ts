@@ -1,8 +1,8 @@
 import {lazyModules} from './loader';
 import {forEachNodePreorder} from '../utils/dom';
-import {TagNames, AttributeNames, FIGURE_STANDARD_ID_RE} from '../markfront';
+import {TagNames, AttributeNames, FIGURE_STANDARD_ID_RE} from '../foremark';
 
-/** Tags introduced by `prepareMarkfrontForViewing`. */
+/** Tags introduced by `prepareForemarkForViewing`. */
 const enum ViewTagNames {
     FloatingElementLabel = 'mf-label',
     Sidenote = 'mf-sidenote',
@@ -10,9 +10,9 @@ const enum ViewTagNames {
 }
 
 /**
- * Transforms Markfront XML for viewing.
+ * Transforms Foremark XML for viewing.
  */
-export function prepareMarkfrontForViewing(node: Element): void {
+export function prepareForemarkForViewing(node: Element): void {
     // Modify headings
     const counter = new Float64Array(10);
     const names: string[] = ['', '', '', '', '', '', '', '', '', ''];

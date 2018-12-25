@@ -9,14 +9,14 @@ declare var __webpack_public_path__: string;
 //
 // Without this, late loaded resources (webpack lazy loaded chunks
 // and stylesheets) will not load.
-const script = document.querySelector('script[data-rel=markfront]');
+const script = document.querySelector('script[data-rel=foremark]');
 const basePathMatch = script && (script as HTMLScriptElement).src.match(/^(.*?)[^\/]+$/);
 if (basePathMatch) {
     __webpack_public_path__ = basePathMatch[1] + '/';
 }
 
 // Load the input from the current document
-import {TagNames} from './markfront';
+import {TagNames} from './foremark';
 let inputNode = document.querySelector(`${TagNames.Document}, ${TagNames.Text}`);
 if (inputNode == null) {
     inputNode = document.createElement(TagNames.Document);
@@ -39,8 +39,8 @@ import {expandMfText} from './converter/mftext';
 expandMfText(inputNode);
 
 // Apply view transformation
-import {prepareMarkfrontForViewing} from './view/mfview';
-prepareMarkfrontForViewing(inputNode);
+import {prepareForemarkForViewing} from './view/mfview';
+prepareForemarkForViewing(inputNode);
 
 // Create `<body>` if it doesn't exist yet
 let body = document.getElementsByTagName('body')[0];
@@ -65,7 +65,7 @@ document.head.insertAdjacentHTML(
 if (process.env.INJECT_CSS) {
     const style = document.createElement('link');
     style.rel = 'stylesheet';
-    style.href = __webpack_public_path__ + '/markfront.css';
+    style.href = __webpack_public_path__ + '/foremark.css';
     body.appendChild(style);
 }
 
@@ -76,5 +76,5 @@ body.appendChild(reactRoot);
 import * as React from 'preact';
 import {App} from './view/app';
 
-React.render(<App markfrontDocument={inputNode as HTMLElement} />, reactRoot);
+React.render(<App foremarkDocument={inputNode as HTMLElement} />, reactRoot);
 

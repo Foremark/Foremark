@@ -8,7 +8,7 @@ const LicenseWebpackPlugin = require('license-webpack-plugin').LicenseWebpackPlu
 
 module.exports = (debug, selfContained) => ({
   entry: {
-    markfront: './app/browser.tsx',
+    foremark: './app/browser.tsx',
   },
   module: {
     rules: [
@@ -88,8 +88,8 @@ module.exports = (debug, selfContained) => ({
     },
   },
   output: {
-    filename: selfContained ? 'markfront.bundle.js' : 'markfront.js',
-    chunkFilename: 'markfront-[name].js',
+    filename: selfContained ? 'foremark.bundle.js' : 'foremark.js',
+    chunkFilename: 'foremark-[name].js',
     path: path.resolve(__dirname, 'browser'),
   },
   plugins: [
@@ -108,7 +108,7 @@ module.exports = (debug, selfContained) => ({
       },
     }),
     new MiniCssExtractPlugin({
-      chunkFilename: 'markfront-[name].css',
+      chunkFilename: 'foremark-[name].css',
     }),
   ],
   optimization: {

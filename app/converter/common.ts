@@ -12,7 +12,7 @@ export const enum TextInternalTagNames {
      *
      * This tag is generated when `[xxx]: ...` is discovered by `blocks.ts`.
      * Later, the text content of `<mf-link-target>` is used as `href` of `<a>`.
-     * Unlike figures and endnotes, references are resolved during Markfront
+     * Unlike figures and endnotes, references are resolved during Foremark
      * text processing.
      */
     LinkTarget = 'mf-link-target',

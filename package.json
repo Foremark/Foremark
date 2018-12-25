@@ -1,5 +1,5 @@
 {
-  "name": "markfront",
+  "name": "foremark",
   "version": "0.0.1",
   "description": "A technology for writing semi-plain text documents that extends upon the concept of Markdeep.",
   "main": "dist/index.js",

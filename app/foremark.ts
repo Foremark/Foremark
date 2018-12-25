@@ -1,4 +1,4 @@
-// This source file defines constant strings for the Markfront XML format.
+// This source file defines constant strings for the Foremark XML format.
 export const enum TagNames {
     Document = 'mf',
     Text = 'mf-text',

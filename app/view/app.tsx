@@ -17,7 +17,7 @@ function shouldShowTocByDefault(document: HTMLElement): boolean {
 }
 
 export interface AppProps {
-    markfrontDocument: HTMLElement;
+    foremarkDocument: HTMLElement;
 }
 
 interface AppState {
@@ -43,7 +43,7 @@ export class App extends React.Component<AppProps, AppState> {
         super(props);
 
         this.state = {
-            tocVisible: shouldShowTocByDefault(props.markfrontDocument),
+            tocVisible: shouldShowTocByDefault(props.foremarkDocument),
             sidebarModalVisible: false,
             loaderActivity: isLoaderActive(),
             searchQuery: '',
@@ -169,13 +169,13 @@ export class App extends React.Component<AppProps, AppState> {
                     <nav className={classnames({
                         [CN.show]: !isSearchPaneVisible,
                     })}>
-                        <TableOfContents markfrontDocument={this.props.markfrontDocument} />
+                        <TableOfContents foremarkDocument={this.props.foremarkDocument} />
                     </nav>
                     <nav className={classnames({
                         [CN.show]: isSearchPaneVisible,
                     })}>
                         <SearchPane
-                            markfrontDocument={this.props.markfrontDocument}
+                            foremarkDocument={this.props.foremarkDocument}
                             query={state.searchQuery} />
                     </nav>
                 </div>
@@ -183,7 +183,7 @@ export class App extends React.Component<AppProps, AppState> {
 
             <Port
                 tagName='main'
-                element={this.props.markfrontDocument} />
+                element={this.props.foremarkDocument} />
         </div>;
     }
 }

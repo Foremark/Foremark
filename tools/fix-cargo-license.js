@@ -2,7 +2,7 @@
 const getStdin = require('get-stdin');
 
 const exclude = [
-    // Very small shim that I wrote for Markfront, no license notice is required
+    // Very small shim that I wrote for Foremark, no license notice is required
     'diagram',
     // `cargo-license` doesn't output license info for crates in the
     // current workspace

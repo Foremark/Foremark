@@ -1,6 +1,6 @@
 import {decodeHTML} from 'entities';
 
-import {TagNames} from '../markfront';
+import {TagNames} from '../foremark';
 import {
     transformHtmlWith, escapeXmlText, legalizeAttributes, InternalTagNames,
     transformTextNodeWith, forEachNodePreorder,
