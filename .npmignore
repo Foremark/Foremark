@@ -17,6 +17,7 @@
 /yarn.lock
 /wasm
 /target
+*.map
 
 # TypeScript source maps (which are useless without source code)
 /dist/**/*.map
