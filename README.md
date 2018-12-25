@@ -16,6 +16,7 @@ Foremark is a technology for writing semi-plain text documents that extends upon
 - Supports flexible input formats ranging from Markdeep-like annotated plain text to explicit markups to meet various needs. In other words, you can write as explicitly as you want to!
 - Less unreliable tricks mean less corner cases.
 - The recommended file format uses the `.xhtml` extension. Most source tree browsing softwares display XHTML files in the raw code. This is more preferrable to the situation with Markdeep's HTML, which is likely to be inadequately "parsed" and mangled by less-functional viewers such as GitHub and GitLab.
+- The true offline experience — the self-contained bundle *really* includes every dependent library like KaTeX for LaTeX typesetting.
 
 ## How does it work?
 
@@ -32,12 +33,12 @@ This step processes custom elements of Foremark XML. The result looks pretty whe
 This step may involve:
 
 - LaTeX equation processing
-- Markdeep diagrams to SVG conversion
+- Diagrams to SVG conversion
 - Footnote/sidenote layouting
 
 ### Step 3 - Add user interface (`view.tsx`)
 
-The final HTML is displayed by a web-based viewer application embedded in `foremark.js`, which provides rich functionalities such as table of contents.
+The final HTML is displayed by a web-based viewer application embedded in `foremark.js`, which provides rich functionalities such as a table of contents.
 
 ## Directory structure
 
@@ -95,4 +96,4 @@ $ npm start -- --open
 
 ## Meta
 
-- "Front" was chosen as another adjective indicating a direction. It also refers to the front end of the layered transformation architecture.
+- Foremark was originally named Markfront and changed later because the name was taken in many source code hosting services. "Front" was chosen as another adjective indicating a direction. It also refers to the front end of the layered transformation architecture.
