@@ -219,8 +219,6 @@ export function prepareMarkfrontForViewing(node: Element): void {
         //     <!-- The original definition: -->
         //     <Figure>...</Figure>
         //
-        // FIXME: This won't work as intended if `<TagNames.Ref>` is in a table
-        //
         // If `id` is empty, it cannot be referenced by a body text, so we just
         // put it in the same place whatever the screen size is. Therefore,
         // a surrogate is not necessary.
@@ -262,7 +260,14 @@ export function prepareMarkfrontForViewing(node: Element): void {
             cloned.id = 'sidenote.' + node.id;
             sidenote.appendChild(cloned);
 
-            const at = refs[0];
+            // Decide where to insert the sidenote
+            let at = refs[0];
+            for (let n: Element | null = at; n = n.parentElement; n) {
+                if (n.tagName === 'table' || n.tagName === 'mf-sidenote') {
+                    // We can't insert a `Sidenote` inside these elements.
+                    at = n;
+                }
+            }
             at.parentElement!.insertBefore(sidenote, at);
 
             // Hide the original element on a large screen
