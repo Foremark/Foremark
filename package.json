@@ -43,6 +43,7 @@
   "scripts": {
     "test": "taskfile test",
     "start": "taskfile start",
+    "prepublishOnly": "npm run build",
     "build": "taskfile build",
     "build:wasm": "taskfile build:wasm",
     "build:browser": "taskfile build:browser",
