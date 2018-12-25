@@ -49,6 +49,6 @@
     "build:cargo-license": "taskfile build:cargo-license",
     "build:dist": "taskfile build:dist"
   },
-  "author": "",
+  "author": "yvt <i@yvt.jp>",
   "license": "BSD-2-Clause"
 }
