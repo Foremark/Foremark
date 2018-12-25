@@ -14,34 +14,41 @@ html, body {
     padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
     html, body {
         background: #222;
         color: #eee;
     }
 }
 
-.root {
-    padding: 0;
-    &.sidebarVisible {
-        padding-left: @sidebar-width;
+@media screen {
+    .root {
+        padding: 0;
+        &.sidebarVisible { padding-left: @sidebar-width; }
+        @media (max-width: @screen-medium-max) { padding-left: 0 !important; }
     }
-    @media (max-width: @screen-medium-max) { padding-left: 0 !important; }
+
+    main {
+        // Animate the left position when the sidebar visibility is toggled
+        position: relative;
+        left: 0;
+        .sidebarVisible & { left: -@sidebar-width; }
+
+        transition: 200ms transform;
+        .sidebarVisible & { transform: translateX(@sidebar-width); }
+
+        // But not in screen sizes where the sidebar is displayed in a modal window.
+        @media (max-width: @screen-medium-max) {
+            transform: none !important;
+            left: 0 !important;
+        }
+    }
 }
 
-main {
-    // Animate the left position when the sidebar visibility is toggled
-    position: relative;
-    left: 0;
-    .sidebarVisible & { left: -@sidebar-width; }
-
-    transition: 200ms transform;
-    .sidebarVisible & { transform: translateX(@sidebar-width); }
-
-    // But not in screen sizes where the sidebar is displayed in a modal window.
-    @media (max-width: @screen-medium-max) {
-        transform: none !important;
-        left: 0 !important;
+@media print {
+    html, body {
+        font-size: 10px;
+        color: black;
     }
 }
 
@@ -73,6 +80,8 @@ main {
     white-space: nowrap;
     margin: 5px 4px;
 
+    @media not screen { display: none; }
+
     > * { vertical-align: bottom }
 
     > input.search {
@@ -93,7 +102,7 @@ main {
         .sidebarVisible & {
             opacity: 1;
             background: white;
-            @media (prefers-color-scheme: dark) {
+            @media screen and (prefers-color-scheme: dark) {
                 background: #222;
             }
         }
@@ -104,7 +113,7 @@ main {
         @media (max-width: @screen-medium-max) {
             opacity: 1;
             background: white;
-            @media (prefers-color-scheme: dark) {
+            @media screen and (prefers-color-scheme: dark) {
                 background: #222;
             }
         }
@@ -127,7 +136,7 @@ main {
         @media (max-width: @screen-medium-max) {
             opacity: 1;
             background: white;
-            @media (prefers-color-scheme: dark) {
+            @media screen and (prefers-color-scheme: dark) {
                 background: #222;
             }
         }
@@ -151,7 +160,7 @@ main {
                 position: absolute;
                 background: black;
                 height: 1px;
-                @media (prefers-color-scheme: dark) { background: #eee; }
+                @media screen and (prefers-color-scheme: dark) { background: #eee; }
             }
             &:before { top: 4px; }
             &:after { top: 8px; }
@@ -191,7 +200,7 @@ main {
             border-radius: 100%;
             animation: 600ms both infinite ease-in-out;
             animation-name: spin;
-            @media (prefers-color-scheme: dark) {
+            @media screen and (prefers-color-scheme: dark) {
                 border-left-color: #bbb;
             }
         }
@@ -206,10 +215,12 @@ main {
     left: 0; top: 0; bottom: 0; width: @sidebar-width;
     z-index: 100;
 
+    @media not screen { display: none; }
+
     @media (max-width: @screen-small-max) { width: 90%; }
 
     background: #fafafa;
-    @media (prefers-color-scheme: dark) {
+    @media screen and (prefers-color-scheme: dark) {
         background: #444;
     }
 
@@ -237,10 +248,10 @@ main {
 
 main {
     margin: 3em 2em;
-    @media (max-width: @screen-medium-max) {
+    @media screen and (max-width: @screen-medium-max) {
         margin: 3em 1em;
     }
-    @media (max-width: @screen-small-max) {
+    @media screen and (max-width: @screen-small-max) {
         margin: 3em 0.5em;
     }
 
@@ -328,7 +339,7 @@ main {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
 
-        @media (prefers-color-scheme: dark) {
+        @media screen and (prefers-color-scheme: dark) {
             border-color: #eee;
         }
     }
@@ -482,7 +493,7 @@ main {
 
     :global(.only-sidenote) { display: none; }
 
-    @media (min-width: @screen-large-min) {
+    @media (min-width: @screen-large-min), print {
         @sidenote: {
             position: relative;
             width: @sidenote-width;
@@ -556,7 +567,7 @@ main {
 }
 
 :global { @import (less) "~highlight.js/styles/tomorrow.css"; }
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
     :global { @import (less) "~highlight.js/styles/tomorrow-night.css"; }
 }
 
