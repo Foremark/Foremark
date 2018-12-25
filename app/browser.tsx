@@ -74,6 +74,11 @@ if (process.env.INJECT_CSS) {
     style.rel = 'stylesheet';
     style.href = __webpack_public_path__ + '/foremark.css';
     body.appendChild(style);
+
+    // Hide the page until the stylesheet is loaded
+    body.insertAdjacentHTML('beforeend', `<style>
+        body { display: none; }
+    </style>`);
 }
 
 // Create a React root
