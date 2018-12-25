@@ -1,6 +1,12 @@
 # Source code
 /app
 /lib
+/rust
+*.sublime-*
+/.taskfile.yml
+/Cargo.lock
+/Cargo.toml
+/tools
 
 # Build configurations
 /tsconfig.json
@@ -10,6 +16,7 @@
 /*.tgz
 /yarn.lock
 /wasm
+/target
 
 # TypeScript source maps (which are useless without source code)
 /dist/**/*.map
