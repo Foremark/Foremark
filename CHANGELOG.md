@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.0.4] - 2018-12-26
+
+- Added a stylesheet for printing.
+- Flickering on page load was somewhat alleviated by hiding the page until the stylesheet is loaded.
+
 ## [0.0.3] - 2018-12-25
 
 - Modifiied `prepublishOnly` to clean the output directory before building.
@@ -21,6 +26,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial release.
 
-[Unreleased]: https://github.com/Foremark/Foremark/compare/HEAD...0.0.3
+[Unreleased]: https://github.com/Foremark/Foremark/compare/HEAD...0.0.4
+[0.0.4]: https://github.com/Foremark/Foremark/compare/0.0.4...0.0.3
 [0.0.3]: https://github.com/Foremark/Foremark/compare/0.0.3...0.0.2
 [0.0.2]: https://github.com/Foremark/Foremark/compare/0.0.2...0.0.1
