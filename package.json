@@ -4,6 +4,14 @@
   "description": "A technology for writing semi-plain text documents that extends upon the concept of Markdeep.",
   "main": "dist/index.js",
   "unpkg": "browser/",
+  "homepage": "https://foremark.github.io/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Foremark/Foremark.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Foremark/Foremark/issues"
+  },
   "dependencies": {
     "entities": "^1.1.2"
   },
