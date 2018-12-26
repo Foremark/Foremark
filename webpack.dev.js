@@ -9,10 +9,10 @@ module.exports = merge(common(true, false), {
   devtool: 'inline-source-map',
   mode: 'development',
   devServer: {
-    contentBase: './examples',
+    contentBase: '.',
     publicPath: '/browser/',
     historyApiFallback: true,
     inline: false,
-    openPage: 'basic.mf.xhtml',
+    openPage: 'examples/basic.mf.xhtml',
   }
 });
