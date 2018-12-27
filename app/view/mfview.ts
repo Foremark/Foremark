@@ -9,6 +9,11 @@ const enum ViewTagNames {
     DiagramInner = 'mf-diagram-inner',
 }
 
+let nextNonce = 1;
+function makeNonce(): string {
+    return 'e-' + (nextNonce++);
+}
+
 /**
  * Transforms Foremark XML for viewing.
  */
@@ -121,6 +126,8 @@ export function prepareForemarkForViewing(node: Element): void {
                 const labelElem = document.createElement(ViewTagNames.FloatingElementLabel);
                 labelElem.textContent = label;
                 caption.insertBefore(labelElem, caption.firstChild);
+
+                node.setAttribute('aria-labelledby', labelElem.id);
             }
 
             // Move the caption under a figure
@@ -321,6 +328,83 @@ export function prepareForemarkForViewing(node: Element): void {
 
         return false;
     });
+
+    // Add ARIA attributes
+    forEachNodePreorder(node, n => {
+        if (!(n instanceof Element)) {
+            return;
+        }
+        switch (n.tagName) {
+            case TagNames.Figure:
+                n.setAttribute('role', 'figure');
+                {
+                    let label = n.querySelector(ViewTagNames.FloatingElementLabel);
+                    if (label) {
+                        if (!label.id) {
+                            label.id = makeNonce();
+                        }
+                        n.setAttribute('aria-labelledby', label.id);
+                    }
+                }
+                {
+                    let caption = n.querySelector(TagNames.FigureCaption);
+                    if (caption) {
+                        if (!caption.id) {
+                            caption.id = makeNonce();
+                        }
+                        n.setAttribute('aria-describedby', caption.id);
+                    }
+                }
+                break;
+            case TagNames.Note:
+                n.setAttribute('role', 'note');
+                {
+                    let label = n.querySelector(ViewTagNames.FloatingElementLabel);
+                    if (label) {
+                        if (!label.id) {
+                            label.id = makeNonce();
+                        }
+                        n.setAttribute('aria-labelledby', label.id);
+                    }
+                }
+                break;
+            case TagNames.Error:
+                n.setAttribute('role', 'group');
+                break;
+            case TagNames.Diagram:
+                n.setAttribute('role', 'img');
+                break;
+            case TagNames.CodeBlock:
+            case TagNames.Code:
+                n.setAttribute('role', 'group');
+                break;
+            case TagNames.Admonition:
+                n.setAttribute('role', 'group');
+                {
+                    let label = n.querySelector(TagNames.AdmonitionTitle);
+                    if (label) {
+                        if (!label.id) {
+                            label.id = makeNonce();
+                        }
+                        n.setAttribute('aria-labelledby', label.id);
+                    }
+                }
+                break;
+            case TagNames.Title:
+                n.setAttribute('role', 'heading');
+                n.setAttribute('aria-level', '1');
+                if (!n.id) {
+                    n.id = makeNonce();
+                }
+                node.setAttribute('aria-labelledby', n.id);
+                break;
+            case 'h1':  case 'h2':  case 'h3':  case 'h4':  case 'h5':
+            case 'h6':  case 'h7':  case 'h8':  case 'h9':
+                n.setAttribute('aria-level', `${parseInt(n.tagName.substr(1), 10) + 1}`);
+                break;
+        }
+    });
+    node.setAttribute('role', 'document');
 
     // Render complex elements
     forEachNodePreorder(node, node => {

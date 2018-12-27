@@ -133,6 +133,8 @@ export class App extends React.Component<AppProps, AppState> {
                         onFocus={this.handleSearchEnter}
                         onBlur={this.handleSearchLeave}
                         value={state.searchQuery}
+                        type='search'
+                        aria-label='Search'
                         placeholder="Search" />
                     {/* TODO: "clear" button */}
                     {/* TODO: hotkeys: ESC, '/' */}
@@ -145,7 +147,7 @@ export class App extends React.Component<AppProps, AppState> {
                         checked={isModelessSidebarVisible} />
                     <label for='sidebarToggle' className={CN.sidebarToggle}>
                         <span />
-                        {isModelessSidebarVisible ? 'Hide sidebar' : 'Show hidebar'}
+                        {isModelessSidebarVisible ? 'Hide sidebar' : 'Show sidebar'}
                     </label>
 
                     {/*
@@ -159,11 +161,11 @@ export class App extends React.Component<AppProps, AppState> {
                         checked={state.sidebarModalVisible} />
                     <label for='sidebarToggleModal' className={CN.sidebarToggleModal}>
                         <span />
-                        {state.sidebarModalVisible ? 'Hide sidebar' : 'Show hidebar'}
+                        {state.sidebarModalVisible ? 'Hide sidebar' : 'Show sidebar'}
                     </label>
 
                     {/* Activity indicator */}
-                    { state.loaderActivity && <span className={CN.spinner} /> }
+                    { state.loaderActivity && <span className={CN.spinner} role='progressbar' /> }
                 </div>
                 <div className={CN.sidebar}>
                     <nav className={classnames({

@@ -107,7 +107,7 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
     }
 
     render() {
-        return <ul className={CN.root}>
+        return <ul className={CN.root} role='tree'>
             <EventHook target={document} scroll={this.handleScroll} />
             <EventHook target={window} resize={this.handleResize} />
 
@@ -273,10 +273,15 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
 
         const expandable = node.children.length > 0;
 
-        return <li class={classnames({
-                [CN.active]: isActive,
-                [CN['L' + node.level]]: true,
-            })}>
+        return <li
+                class={classnames({
+                    [CN.active]: isActive,
+                    [CN['L' + node.level]]: true,
+                })}
+                role='treeitem'
+                aria-selected={`${isActive}`}
+                aria-expanded={node.children.length > 0 && `${isExpanded}`}
+            >
             <Port
                 tagName='a'
                 element={this.label}
@@ -295,7 +300,7 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
             </Port>
             {
                 isExpanded && node.children.length > 0 ?
-                    <ul>
+                    <ul role='group'>
                         {node.children.map((child, i) =>
                             <NodeView
                                 key={i}
