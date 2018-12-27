@@ -1,0 +1,107 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><body><mf-text><![CDATA[
+
+                  **Tools for writing Foremark**
+
+Text editor
+===============================================================================
+
+While any text editor can be used to create a Foremark document, editing
+experience can be improved by using a specially designed software.
+
+- **[Sublime Text][]**
+    - [A work-in-progress plugin for Foremark][] is available.
+    - Markdown plugins for Sublime Text aren't very useful as they mostly refuse
+      to highlight code inside a CDATA section.
+
+[A work-in-progress plugin for Foremark]: https://github.com/Foremark/Sublime-Foremark
+[Sublime Text]: https://www.sublimetext.com
+
+- **[Visual Studio Code][]**
+    - The Markdown syntax can be used for syntax highlighting.
+
+[Visual Studio Code]: https://code.visualstudio.com
+
+- **[Atom][]**
+    - The GitHub Markdown syntax can be used for syntax highlighting.
+
+[Atom]: https://atom.io
+
+Diagrams
+===============================================================================
+
+- Any text editor with a block editing feature
+    - Have you ever used your favorite text editor's block editing feature
+      before? If not, now is a good time to try it out!
+
+- **[Svgbob Editor][]**
+    - Created by the author of [Svgbob][], which Foremark uses to render diagrams.
+
+[Svgbob Editor]: https://github.com/ivanceras/svgbob
+[Svgbob]: https://github.com/ivanceras/svgbob
+
+- **[Graph::Easy][]**
+    - It takes a [Graphviz DOT][] file and outputs an ASCII diagram.
+    - This Perl module can be installed from CPAN. See [this article][] for how
+      to install and use it.
+    - See [!Figure graph-easy-example] for an example output. `open door` and
+      `close door` were manually wrapped with double quotation marks to make
+      word spacing adequate. The input DOT code is shown in
+      [!Listing graph-easy-example].
+
+[!Figure graph-easy-example]: An example output of `Graph::Easy`, rendered.
+
+      :::      "close door"
+      :::  +-------------------+
+      :::  |                   |
+      :::  |                   |
+      :::  |    +--------------+---------------------------+
+      :::  |    |              v                           |
+      :::  |    |            +------------+                |
+      :::  |    |    +-----> |    Init    | -+             |
+      :::  |    |    |       +------------+  |             |
+      :::  |    |    |         |             |             | "close door"
+      :::  |    |    | reset   | start       |             |
+      :::  |    |    |         v             |             |
+      :::  |    |    |       +------------+  |             |
+      :::  |    |    +------ |  Heating   | <+-------------+
+      :::  |    |            +------------+  |
+      :::  |    |              |             |
+      :::  |    |              | "open door" |
+      :::  |    |              v             |
+      :::  |    |            +------------+  |
+      :::  |    +----------- |  Waiting   | <+-------------+
+      :::  |                 +------------+  |             |
+      :::  |                   |             |             |
+      :::  |                   | reset       | "open door" |
+      :::  |                   v             |             |
+      :::  |                 +------------+  |             | start
+      :::  +---------------- |    Open    | <+             |
+      :::                    +------------+                |
+      :::                      |                           |
+      :::                      +---------------------------+
+
+[!Listing graph-easy-example]: The input DOT code of [!Figure graph-easy-example].
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DOT
+    digraph G {
+        "Init" -> "Open" [ label = "open door" ];
+        "Init" -> "Heating" [ label = "start" ];
+
+        "Open" -> "Init" [ label = "close door" ];
+        "Open" -> "Waiting" [ label = "start" ];
+
+        "Waiting" -> "Heating" [ label = "close door" ];
+        "Waiting" -> "Open" [ label = "reset" ];
+
+        "Heating" -> "Init" [ label = "reset" ];
+        "Heating" -> "Waiting" [ label = "open door" ];
+    }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[Graph::Easy]: https://metacpan.org/release/Graph-Easy
+[Graphviz DOT]: https://en.wikipedia.org/wiki/DOT_(graph_description_language)
+[this article]: https://codeyarns.com/2017/10/21/how-to-convert-dot-graph-to-ascii/
+
+]]></mf-text> <!-- Foremark footer -->
+<script src="../browser/foremark.js" data-rel="foremark" async="async" />
+<style>mf-text{white-space:pre-wrap;font-family:monospace}</style></body></html>
