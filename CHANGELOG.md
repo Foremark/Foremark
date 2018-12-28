@@ -32,7 +32,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial release.
 
-[Unreleased]: https://github.com/Foremark/Foremark/compare/HEAD...0.0.4
-[0.0.4]: https://github.com/Foremark/Foremark/compare/0.0.4...0.0.3
-[0.0.3]: https://github.com/Foremark/Foremark/compare/0.0.3...0.0.2
-[0.0.2]: https://github.com/Foremark/Foremark/compare/0.0.2...0.0.1
+[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.4...HEAD
+[0.0.4]: https://github.com/Foremark/Foremark/compare/0.0.3...0.0.4
+[0.0.3]: https://github.com/Foremark/Foremark/compare/0.0.2...0.0.3
+[0.0.2]: https://github.com/Foremark/Foremark/compare/0.0.1...0.0.2
