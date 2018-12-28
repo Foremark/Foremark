@@ -541,9 +541,9 @@ export function expandMfText(node: Element): void {
 
     // Symbolic hyperlink: `[text][linkname]` `![alt][linkname]`
     const linkSymbolTable = new Map<string, string>();
-    transformTextNodeWith(
+    transformHtmlWith(
         node,
-        html => {
+        (html, ctx) => {
             if (linkSymbolTable.size === 0) {
                 return html;
             }
@@ -567,7 +567,7 @@ export function expandMfText(node: Element): void {
                 let symbolName = parts[i - 1];
 
                 if (symbolName == null) {
-                    symbolName = text;
+                    symbolName = ctx.expand(text);
                 }
 
                 let linkTarget = linkSymbolTable.get(symbolName);

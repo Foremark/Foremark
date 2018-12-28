@@ -6,7 +6,7 @@ import {
     FLOATING_SIZE_RE, parseFloatingSize,
 } from './common';
 import {removePrefix, analyzeIndent, IndentCommand} from '../utils/string';
-import {escapeXmlText, legalizeAttributes} from '../utils/dom';
+import {escapeXmlText, legalizeAttributes, TransformHtmlWithContext} from '../utils/dom';
 
 interface Level {
     /**
@@ -48,7 +48,7 @@ interface BlockInitiator extends BlockMarkerTraits {
      *
      * Returns the constructed `BlockState` and a HTML fragment.
      */
-    start(marker: string, caption: string | null): [BlockState, string];
+    start(marker: string, caption: string | null, ctx: TransformHtmlWithContext): [BlockState, string];
 }
 
 interface BlockState extends BlockMarkerTraits {
@@ -63,7 +63,7 @@ interface BlockState extends BlockMarkerTraits {
     /**
      * Emits a HTML fragment that generates another item of this block.
      */
-    continue(marker: string, caption: string | null): string;
+    continue(marker: string, caption: string | null, ctx: TransformHtmlWithContext): string;
 
     /**
      * Emits a HTML fragment that close this block.
@@ -202,11 +202,11 @@ const Admonition = {
  */
 const LinkTargetDefinition = {
     // TODO: The content is verbatim (shouldn't be processed)
-    markerPattern: new RegExp(/\[[^!^][^\][<>]*?\]:/),
+    markerPattern: new RegExp(/\[[^!^][^\][]*?\]:/),
     captionStyle: CaptionStyle.None,
 
-    start(marker: string, caption: string | null): [BlockState, string] {
-        const id = marker.substring(1, marker.length - 2);
+    start(marker: string, caption: string | null, ctx: TransformHtmlWithContext): [BlockState, string] {
+        const id = ctx.expand(marker.substring(1, marker.length - 2));
 
         return [
             LinkTargetDefinition,
@@ -359,7 +359,7 @@ const blockInitiatorFromString = (marker: string) =>
 /**
  * Replace nestable block elements.
  */
-export function replaceBlocks(html: string): string {
+export function replaceBlocks(html: string, ctx: TransformHtmlWithContext): string {
     const lines = html.split('\n');
     const output: string[] = [];
 
@@ -548,7 +548,7 @@ export function replaceBlocks(html: string): string {
                 levels[0].bodyIndentation = null;
             }
 
-            output.push(levels[0].state.continue(markerText, caption));
+            output.push(levels[0].state.continue(markerText, caption, ctx));
         } else {
             // Start a new list.
             if (definitionTermBuffer) {
@@ -574,7 +574,7 @@ export function replaceBlocks(html: string): string {
                 bodyIndentation = null;
             }
 
-            const [state, fragment] = initiator.start(markerText, caption);
+            const [state, fragment] = initiator.start(markerText, caption, ctx);
 
             output.push(fragment);
 

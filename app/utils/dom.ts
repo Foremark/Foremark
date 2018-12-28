@@ -30,6 +30,15 @@ const PLACEHOLDER_ATTR = 'ph-id';
 
 const testElement = document.createElement('i');
 
+export interface TransformHtmlWithContext {
+    /**
+     * Expands all placeholders in a given HTML markup.
+     *
+     * Note: Currently, only elements are expanded.
+     */
+    expand(html: string): string;
+}
+
 /**
  * Transforms the HTML markup of a given node's contents using a supplied
  * function.
@@ -46,7 +55,7 @@ const testElement = document.createElement('i');
  */
 export function transformHtmlWith(
     node: Element,
-    tx: (s: string) => string,
+    tx: (s: string, ctx: TransformHtmlWithContext) => string,
     recursionFilter?: (e: Element) => boolean,
     reverse?: boolean,
 ) {
@@ -92,8 +101,24 @@ export function transformHtmlWith(
         }
     }
 
+    const ctx: TransformHtmlWithContext = {
+        expand(html: string): string {
+            return html.replace(
+                PLACEHOLDER_REGEX,
+                (match, id) => {
+                    const original = placeholders.get(id);
+                    if (original instanceof HTMLElement) {
+                        return original.outerHTML;
+                    } else {
+                        return match;
+                    }
+                },
+            );
+        },
+    };
+
     const orig = html;
-    html = tx(html);
+    html = tx(html, ctx);
 
     if (orig === html) {
         return;

@@ -4,10 +4,10 @@ export const enum TextInternalTagNames {
      * Defines a target of a hyperlink.
      *
      * ```
-     * [DuckDuckGo &][]
+     * [`DuckDuckGo`][]
      *
-     * [DuckDuckGo &]: https://duckduckgo.com
-     * <!-- <mf-link-target link-id="DuckDuckGo &amp;amp;" /> -->
+     * [`DuckDuckGo`]: https://duckduckgo.com
+     * <!-- <mf-link-target link-id="&lt;code&gt;DuckDuckGo&lt;/code&gt;" /> -->
      * ```
      *
      * This tag is generated when `[xxx]: ...` is discovered by `blocks.ts`.
