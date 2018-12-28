@@ -14,7 +14,7 @@ export interface MediaHandler {
     /**
      * A function used to process a media element.
      */
-    handler: (e: HTMLElement) => void;
+    handler: (e: Element) => void;
 
     /**
      * If there are multiple matching media handlers, the one with the highest
