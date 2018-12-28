@@ -48,7 +48,26 @@ export function transformHtmlWith(
     node: Element,
     tx: (s: string) => string,
     recursionFilter?: (e: Element) => boolean,
+    reverse?: boolean,
 ) {
+    if (reverse) {
+        for (let n: Node | null = node.lastChild; n; ) {
+            const next = n.previousSibling;
+            if (n instanceof Element && recursionFilter && recursionFilter(n)) {
+                transformHtmlWith(n, tx, recursionFilter);
+            }
+            n = next;
+        }
+    } else {
+        for (let n: Node | null = node.firstChild; n; ) {
+            const next = n.nextSibling;
+            if (n instanceof Element && recursionFilter && recursionFilter(n)) {
+                transformHtmlWith(n, tx, recursionFilter);
+            }
+            n = next;
+        }
+    }
+
     // Get the inner HTML
     const placeholders = new Map<string, Node>();
     let html = '';
