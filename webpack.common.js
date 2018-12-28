@@ -2,13 +2,12 @@ const path = require('path');
 
 const webpack = require('webpack');
 const GitRevisionPlugin = require('git-revision-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const gitRevision = new GitRevisionPlugin();
 const LicenseWebpackPlugin = require('license-webpack-plugin').LicenseWebpackPlugin;
 
 module.exports = (debug, selfContained) => ({
   entry: {
-    foremark: './app/browser.tsx',
+    foremark: './app/browser-stage0.ts',
   },
   module: {
     rules: [
@@ -20,10 +19,11 @@ module.exports = (debug, selfContained) => ({
       {
         test: /\.less$/,
         use: [
-          selfContained ? {
-            loader: 'style-loader'
-          } : {
-            loader: MiniCssExtractPlugin.loader,
+          {
+            loader: 'style-loader',
+            options: {
+              transform: 'app/view/transform-css.js',
+            },
           },
           {
             loader: 'css-loader',
@@ -103,12 +103,8 @@ module.exports = (debug, selfContained) => ({
         'COMMITHASH': JSON.stringify(gitRevision.commithash()),
         'BRANCH': JSON.stringify(gitRevision.branch()),
         'IS_BROWSER': JSON.stringify(true),
-        'INJECT_CSS': JSON.stringify(!selfContained),
         'LAZY_LOADING': JSON.stringify(!selfContained),
       },
-    }),
-    new MiniCssExtractPlugin({
-      chunkFilename: 'foremark-[name].css',
     }),
   ],
   optimization: {
