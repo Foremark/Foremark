@@ -1,6 +1,8 @@
 import {lazyModules} from './loader';
 import {forEachNodePreorder} from '../utils/dom';
 import {TagNames, AttributeNames, FIGURE_STANDARD_ID_RE} from '../foremark';
+import {ViewerConfig} from './config';
+import {processMediaElement} from './media';
 
 /** Tags introduced by `prepareForemarkForViewing`. */
 const enum ViewTagNames {
@@ -17,7 +19,7 @@ function makeNonce(): string {
 /**
  * Transforms Foremark XML for viewing.
  */
-export function prepareForemarkForViewing(node: Element): void {
+export function prepareForemarkForViewing(node: Element, config: ViewerConfig): void {
     // Modify headings
     const counter = new Float64Array(10);
     const names: string[] = ['', '', '', '', '', '', '', '', '', ''];
@@ -411,7 +413,7 @@ export function prepareForemarkForViewing(node: Element): void {
         if (node instanceof Element) {
             const tagName = node.tagName.toLowerCase();
             if (HANDLERS.hasOwnProperty(tagName)) {
-                HANDLERS[tagName](node);
+                HANDLERS[tagName](node, config);
                 return false;
             }
         }
@@ -448,7 +450,7 @@ const katexDisplayOptions: katex.KatexOptions = {
     ... katexInlineOptions,
 };
 
-const HANDLERS: { [tagName: string]: (node: Element) => void } & Object = {
+const HANDLERS: { [tagName: string]: (node: Element, vc: ViewerConfig) => void } & Object = {
     [TagNames.Equation]: async (node) => {
         const katex = await lazyModules.katex();
         node.innerHTML = katex.renderToString(node.textContent || '', katexInlineOptions);
@@ -490,6 +492,9 @@ const HANDLERS: { [tagName: string]: (node: Element) => void } & Object = {
         node.appendChild(inner);
 
         inner.style.maxWidth = `${width}px`;
+    },
+    [TagNames.Media]: (node, config) => {
+        processMediaElement(node, config);
     },
     'table': (node) => {
         // Wrap `<table>` with a `<div>` to display a horizontal scrollbar

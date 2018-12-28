@@ -623,6 +623,19 @@ One or more `<mf-code>` elements can be wrapped by **`<mf-codeblock>`**.
 
 *Relevant Foremark Text tags*: `$inline$` `$$display$$`
 
+## Media — `<mf-media>`
+
+~~~~~~~~~~~~~~~ XML
+<p>
+    <!-- Simply translated to <img> -->
+    <mf-media src="https://derpicdn.net/img/2013/8/4/391426/large.png" />
+    <!-- DeviantArt oEmbed -->
+    <mf-media src="http://fav.me/d89ginp" />
+</p>
+~~~~~~~~~~~~~~~
+
+`<mf-media>` works almost identically as `<img>` except that it supports a variety of media types through media handlers.
+
 ## Floating elements
 
 Figures and sidenotes have the following common attributes:
@@ -753,10 +766,116 @@ consequat.
      - The web browser's DOM API behaves differently when displaying a HTML file. For example, XHTML preserves the original case for `HTMLElement#tagName` while HTML doesn't.
      - The behavior of `CDATA` in HTML is inconsistent between browsers.
 
+## Configuration
+
+The viewer loads a configuration object from `window.foremarkViewerConfig`. The configuration is typed as following:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TypeScript
+interface ViewerConfig {
+    mediaHandlers: { [key: string]: MediaHandler | null; };
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+There is a default configuration object. The user-provided configuration object is merged into the default configuration object using the **Merge** operation.
+
+The **Merge** operation iterates through the source object's properties. A property name specifies how the property is transferred to the destination object:
+
+- `key` or `key.replace` replaces or creates `destination[key]`.
+- `key.merge` applies the **Merge** operation on `destination[key]`. Both of `source[key]` and `destination[key]` must be objects.
+- `key.append` appends the elements from an array `source[key]` to `destionation[key]`. Both of `source[key]` and `destination[key]` must be arrays.
+- `key.prepend` prepends the elements from an array `source[key]` to `destionation[key]`. Both of `source[key]` and `destination[key]` must be arrays.
+- The processing order is unspecified.
+
+A property name optionally include an identifier like `key:ident.merge`. The identifier part is ignored by this operation and only serves to make it possible to have multiple source properties operating on a single destination property. For example, this can be used to prevent one configuration file from overwriting another one's properties:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JavaScript
+// file1.js
+var foremarkViewerConfig = Object.assign(window.foremarkViewerConfig, {
+    'mediaHandlers:file1.merge': {
+        'newhandler1': { /* ... */ },
+    },
+});
+
+// file2.js
+var foremarkViewerConfig = Object.assign(window.foremarkViewerConfig, {
+    'mediaHandlers:file2.merge': {
+        'newhandler2': { /* ... */ },
+    },
+});
+
+// The user-supplied configuration object looks like:
+{
+    'mediaHandlers:file1.merge': { newhandler1: { /* ... */ }, },
+    'mediaHandlers:file2.merge': { newhandler2: { /* ... */ }, },
+}
+
+// The final configuration object looks like:
+{
+    mediaHandlers: {
+        image: { /* ... */ },
+        newhandler1: { /* ... */ },
+        newhandler2: { /* ... */ },
+    }
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ## Media handlers
 
-!!! TODO: Yet to be added...
-    Media handlers
+`<mf-media>` elements are processed by the viewer through uses of media handlers.
+
+Media handlers are defined using the configuration system. The `MediaHandler` interface is defined as following:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TypeScript
+interface MediaHandler {
+    patterns: Pattern[] | null;
+    handler: (e: HTMLElement) => void;
+    priority: number;
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- `patterns` specifies zero or more URL patterns. A pattern is one of the following:
+    - A string.
+    - A `RegExp` object.
+    - A function that accepts a string as parameter and returns a boolean value.
+  If it's `null`, all elements will be matched.
+
+- `handler` specifies a function that processes a media element.
+
+- `priority` specifies a priority value. If there are multiple matching media
+  handlers, the one with the highest priority value will be chosen.
+
+The viewer provides several built-in media handlers (`BUILTIN_MEDIA_HANDLERS`). The `.merge` operator can be used to make modifications to the default set.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JavaScript
+var foremarkViewerConfig = Object.assign(window.foremarkViewerConfig, {
+    'mediaHandlers.merge': {
+        'image': null, // Disable the built-in image handler
+        'image.merge': {
+            // Or, just change the image handler's URL pattern.
+            // The image handler is not a catch-all handler any more.
+            patterns: [/\.jpg$/i],
+        },
+        'myhandler': { // Define a new handler
+            /* ... */
+        },
+    },
+});
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+### Image handler
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JavaScript
+BUILTIN_MEDIA_HANDLERS = {
+    'image': {
+        patterns: null,
+        handler: handleImageMedia,
+        priority: 0,
+    },
+    /* ... */
+};
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This media handler converts `<mf-media>` to `<img>` and simply copies all XML attributes. Its `patterns` is `null`, thus it serves as a catch-all handler.
 
 ## Table of contents
 

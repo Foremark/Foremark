@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Improved accessibility. Many elements now have ARIA roles and attributes.
 - Code blocks inside figures are no longer aligned to center.
 - A symbolic hyperlink now can include inline code fragments and other tags.
+- Add media handlers, a facility for embedding a variety of media types into a document.
 
 ## [0.0.4] - 2018-12-26
 

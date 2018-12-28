@@ -25,6 +25,10 @@ if (inputNode == null) {
     </${TagNames.Error}>`;
 }
 
+// Load the viewer config
+import {loadViewerConfigFromWindow} from './view/config';
+const viewerConfig = loadViewerConfigFromWindow();
+
 // `<mf-text>` is a shorthand syntax for `<mf><mf-text>...</mf-text></mf>`
 if (inputNode.tagName.toLowerCase() === TagNames.Text) {
     const mf = document.createElement(TagNames.Document);
@@ -54,7 +58,7 @@ if (!body) {
 
 // Apply view transformation
 import {prepareForemarkForViewing} from './view/mfview';
-prepareForemarkForViewing(inputNode);
+prepareForemarkForViewing(inputNode, viewerConfig);
 
 // Set the page title
 const title = inputNode.getElementsByTagName(TagNames.Title)[0];
