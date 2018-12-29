@@ -1,8 +1,9 @@
 // This module defines built-in media handlers.
-import {ViewerConfig} from './config';
-import {TagNames} from '../foremark';
-import {Pattern, patternMatches} from '../utils/pattern';
-import {escapeXmlText} from '../utils/dom';
+import {ViewerConfig} from '../config';
+import {TagNames} from '../../foremark';
+import {Pattern, patternMatches} from '../../utils/pattern';
+import {escapeXmlText} from '../../utils/dom';
+import {handleAudioMedia, handleImageMedia, handleVideoMedia} from './html5';
 
 export interface MediaHandler {
     /**
@@ -78,44 +79,4 @@ export function processMediaElement(e: Element, config: ViewerConfig): void | Pr
     }
 
     return bestHandler.handler(e);
-}
-
-function handleImageMedia(e: Element): void {
-    const img = e.ownerDocument!.createElement('img');
-
-    let attrs = e.attributes;
-    for (let i = 0, c = attrs.length; i < c; ++i) {
-        img.setAttribute(attrs[i].name, attrs[i].value);
-    }
-
-    e.parentElement!.insertBefore(img, e);
-    e.parentElement!.removeChild(e);
-}
-
-function handleVideoMedia(e: Element): void {
-    const img = e.ownerDocument!.createElement('video');
-
-    img.setAttribute('controls', 'controls');
-
-    let attrs = e.attributes;
-    for (let i = 0, c = attrs.length; i < c; ++i) {
-        img.setAttribute(attrs[i].name, attrs[i].value);
-    }
-
-    e.parentElement!.insertBefore(img, e);
-    e.parentElement!.removeChild(e);
-}
-
-function handleAudioMedia(e: Element): void {
-    const img = e.ownerDocument!.createElement('audio');
-
-    img.setAttribute('controls', 'controls');
-
-    let attrs = e.attributes;
-    for (let i = 0, c = attrs.length; i < c; ++i) {
-        img.setAttribute(attrs[i].name, attrs[i].value);
-    }
-
-    e.parentElement!.insertBefore(img, e);
-    e.parentElement!.removeChild(e);
 }
