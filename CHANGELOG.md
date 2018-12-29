@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.0.5] - 2018-12-30
+
 - Improved accessibility. Many elements now have ARIA roles and attributes.
 - Code blocks inside figures are no longer aligned to center.
 - A symbolic hyperlink now can include inline code fragments and other tags.
@@ -36,7 +38,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial release.
 
-[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.4...HEAD
+[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.5...HEAD
+[0.0.5]: https://github.com/Foremark/Foremark/compare/0.0.4...0.0.5
 [0.0.4]: https://github.com/Foremark/Foremark/compare/0.0.3...0.0.4
 [0.0.3]: https://github.com/Foremark/Foremark/compare/0.0.2...0.0.3
 [0.0.2]: https://github.com/Foremark/Foremark/compare/0.0.1...0.0.2
