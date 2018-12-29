@@ -16,6 +16,14 @@ export const BUILTIN_OEMBED_ENDPOINTS: {[key: string]: OEmbedEndpoint} = {
         ],
         url: 'http://api.clyp.it/oembed/?format=json',
     },
+    'codepen': {
+        schemes: [
+            'http://codepen.io/*',
+            'https://codepen.io/*',
+        ],
+        url: 'http://codepen.io/api/oembed?format=js',
+        format: 'jsonp',
+    },
     'deviantart': {
         schemes: [
             'http://*.deviantart.com/art/*',
