@@ -459,22 +459,16 @@ main {
         padding: 0.4em 0.6em;
     }
 
+    img, video, audio {
+        max-width: 100%;
+    }
+
     // Floating contents and blocks
     mf-figure, mf-note {
         display: block;
         margin: 1em 1em;
         p {
             margin: 0.25em 0;
-        }
-    }
-
-    // Automatically scale images in blocks if they are the only child of
-    // the containing paragraph
-    mf-figure, mf-note {
-        > div > p {
-            > img, > mf-diagram {
-                &:first-child:last-child { max-width: 100%; }
-            }
         }
     }
 
