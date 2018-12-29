@@ -183,12 +183,28 @@ export const OEMBED_MEDIA_HANDLER: MediaHandler = {
                     `</a>`;
                 break;
             case 'photo':
+                let imageUrl = resp.url;
+                if (!imageUrl) {
+                    // Derpibooru quirk: Doesn't return `url`
+                    imageUrl = resp.thumbnail_url;
+                }
+                if (!imageUrl) {
+                    element.outerHTML = `<a href="${escapeXmlText(src)}">` +
+                        escapeXmlText(resp.title || src) +
+                        `</a>`;
+                    break;
+                }
+                if (imageUrl.startsWith('//')) {
+                    // Derpibooru quirk: `thumbnail_url` doesn't have a protocol
+                    imageUrl = 'https:' + imageUrl;
+                }
+
                 const img = element.ownerDocument!.createElement('img');
-                img.src = resp.url;
+                img.src = imageUrl;
                 img.alt = img.title = '"' + resp.title + '"' +
                     (resp.author_name ? ` (by ${resp.author_name})` : '');
 
-                const a = element.ownerDocument!.createElement('a');;
+                const a = element.ownerDocument!.createElement('a');
                 a.href = src;
 
                 element.parentElement!.insertBefore(a, element);

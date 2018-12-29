@@ -24,6 +24,16 @@ export const BUILTIN_OEMBED_ENDPOINTS: {[key: string]: OEmbedEndpoint} = {
         url: 'http://codepen.io/api/oembed?format=js',
         format: 'jsonp',
     },
+    'derpibooru': {
+        schemes: [
+            'https://derpibooru.org/*',
+            'https://derpibooru.org/images/*',
+            'https://trixiebooru.org/*',
+            'https://trixiebooru.org/images/*',
+            'https://derpicdn.net/img/*',
+        ],
+        url: 'https://derpibooru.org/oembed.json',
+    },
     'deviantart': {
         schemes: [
             'http://*.deviantart.com/art/*',
