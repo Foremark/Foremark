@@ -9,6 +9,13 @@ import {OEmbedEndpoint} from './oembed';
  * As such, we include a small hand-picked set of them.
  */
 export const BUILTIN_OEMBED_ENDPOINTS: {[key: string]: OEmbedEndpoint} = {
+    'clyp': {
+        schemes: [
+            'http://clyp.it/*',
+            'http://clyp.it/playlist/*',
+        ],
+        url: 'http://api.clyp.it/oembed/?format=json',
+    },
     'deviantart': {
         schemes: [
             'http://*.deviantart.com/art/*',
