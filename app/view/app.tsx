@@ -6,7 +6,6 @@ import {Port} from './components/port';
 import {SignalHook} from './components/signalhook';
 import {TableOfContents} from './toc';
 import {SearchPane} from './search';
-import {onLoaderUpdate, isLoaderActive} from './loader';
 
 const CN = require('./app.less');
 document.getElementsByTagName('html')[0].classList.add('mf-processed');
@@ -18,6 +17,7 @@ function shouldShowTocByDefault(document: HTMLElement): boolean {
 
 export interface AppProps {
     foremarkDocument: HTMLElement;
+    renderPromise: Promise<void>;
 }
 
 interface AppState {
@@ -45,10 +45,14 @@ export class App extends React.Component<AppProps, AppState> {
         this.state = {
             tocVisible: shouldShowTocByDefault(props.foremarkDocument),
             sidebarModalVisible: false,
-            loaderActivity: isLoaderActive(),
+            loaderActivity: true,
             searchQuery: '',
             searchFocus: false,
         };
+
+        props.renderPromise.then(() => {
+            this.setState({loaderActivity: false});
+        });
     }
 
     @bind
@@ -66,13 +70,6 @@ export class App extends React.Component<AppProps, AppState> {
     private handleSidebarModalToggle(e: Event): void {
         const sidebarModalVisible = (e.target as HTMLInputElement).checked;
         this.setState({ sidebarModalVisible });
-    }
-
-    @bind
-    private handleLoaderUpdate(): void {
-        this.setState({
-            loaderActivity: isLoaderActive(),
-        });
     }
 
     @bind
@@ -117,8 +114,6 @@ export class App extends React.Component<AppProps, AppState> {
                     [CN.sidebarModalVisible]: state.sidebarModalVisible,
                     [CN.sidebarVisible]: isModelessSidebarVisible,
                 })}>
-
-            <SignalHook signal={onLoaderUpdate} slot={this.handleLoaderUpdate} />
 
             <aside>
                 <div className={CN.modalBackground}

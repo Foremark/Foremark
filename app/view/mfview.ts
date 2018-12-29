@@ -19,7 +19,7 @@ function makeNonce(): string {
 /**
  * Transforms Foremark XML for viewing.
  */
-export function prepareForemarkForViewing(node: Element, config: ViewerConfig): void {
+export function prepareForemarkForViewing(node: Element, config: ViewerConfig): Promise<void> {
     // Modify headings
     const counter = new Float64Array(10);
     const names: string[] = ['', '', '', '', '', '', '', '', '', ''];
@@ -409,16 +409,22 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
     node.setAttribute('role', 'document');
 
     // Render complex elements
+    const promises: PromiseLike<void>[] = [];
     forEachNodePreorder(node, node => {
         if (node instanceof Element) {
             const tagName = node.tagName.toLowerCase();
             if (HANDLERS.hasOwnProperty(tagName)) {
-                HANDLERS[tagName](node, config);
+                const promise = HANDLERS[tagName](node, config);
+                if (promise) {
+                    promises.push(promise);
+                }
                 return false;
             }
         }
         return true;
     });
+
+    return Promise.all(promises).then(() => {});
 }
 
 const katexInlineOptions = {
@@ -450,7 +456,7 @@ const katexDisplayOptions: katex.KatexOptions = {
     ... katexInlineOptions,
 };
 
-const HANDLERS: { [tagName: string]: (node: Element, vc: ViewerConfig) => void } & Object = {
+const HANDLERS: { [tagName: string]: (node: Element, vc: ViewerConfig) => void | PromiseLike<void> } & Object = {
     [TagNames.Equation]: async (node) => {
         const katex = await lazyModules.katex();
         node.innerHTML = katex.renderToString(node.textContent || '', katexInlineOptions);
@@ -493,9 +499,7 @@ const HANDLERS: { [tagName: string]: (node: Element, vc: ViewerConfig) => void }
 
         inner.style.maxWidth = `${width}px`;
     },
-    [TagNames.Media]: (node, config) => {
-        processMediaElement(node, config);
-    },
+    [TagNames.Media]: (node, config) => processMediaElement(node, config),
     'table': (node) => {
         // Wrap `<table>` with a `<div>` to display a horizontal scrollbar
         // as needed

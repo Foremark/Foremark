@@ -32,7 +32,7 @@ const body = document.getElementsByTagName('body')[0]!;
 
 // Apply view transformation
 import {prepareForemarkForViewing} from './view/mfview';
-prepareForemarkForViewing(inputNode, viewerConfig);
+const renderPromise = prepareForemarkForViewing(inputNode, viewerConfig);
 
 // Set the page title
 const title = inputNode.getElementsByTagName(TagNames.Title)[0];
@@ -53,5 +53,8 @@ body.appendChild(reactRoot);
 import * as React from 'preact';
 import {App} from './view/app';
 
-React.render(<App foremarkDocument={inputNode as HTMLElement} />, reactRoot);
+React.render(<App
+    foremarkDocument={inputNode as HTMLElement}
+    renderPromise={renderPromise}
+/>, reactRoot);
 

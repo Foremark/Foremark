@@ -14,7 +14,7 @@ export interface MediaHandler {
     /**
      * A function used to process a media element.
      */
-    handler: (e: Element) => void;
+    handler: (e: Element) => void | PromiseLike<void>;
 
     /**
      * If there are multiple matching media handlers, the one with the highest
@@ -44,7 +44,7 @@ export const BUILTIN_MEDIA_HANDLERS = {
     },
 };
 
-export function processMediaElement(e: Element, config: ViewerConfig): void {
+export function processMediaElement(e: Element, config: ViewerConfig): void | PromiseLike<void> {
     const src = e.getAttribute('src');
     if (!src) {
         e.outerHTML = `<${TagNames.Error}>` +
@@ -77,7 +77,7 @@ export function processMediaElement(e: Element, config: ViewerConfig): void {
         return;
     }
 
-    bestHandler.handler(e);
+    return bestHandler.handler(e);
 }
 
 function handleImageMedia(e: Element): void {
