@@ -75,6 +75,14 @@ export const BUILTIN_OEMBED_ENDPOINTS: {[key: string]: OEmbedEndpoint} = {
         url: 'https://www.slideshare.net/api/oembed/2?format=json',
         format: 'jsonp',
     },
+    'twitter': {
+        schemes: [
+            'https://twitter.com/*/status/*',
+            'https://*.twitter.com/*/status/*',
+        ],
+        url: 'https://publish.twitter.com/oembed?format=json',
+        format: 'jsonp',
+    },
     'soundcloud': {
         schemes: [
             'http://soundcloud.com/*',
