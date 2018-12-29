@@ -1,15 +1,15 @@
 // Provides a type for describing a set of strings.
 
-export type Pattern =
+export type Pattern<T> =
     RegExp |
-    ((text: string) => boolean) |
+    ((text: string, options: T) => boolean) |
     string;
 
-export function patternMatches(text: string, pat: Pattern): boolean {
+export function patternMatches<T>(text: string, pat: Pattern<T>, options: T): boolean {
     if (pat instanceof RegExp) {
         return pat.test(text);
     } else if (typeof pat === 'function') {
-        return pat(text);
+        return pat(text, options);
     } else if (typeof pat === 'string') {
         return pat === text;
     } else {

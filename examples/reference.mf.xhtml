@@ -825,13 +825,14 @@ var foremarkViewerConfig = Object.assign(window.foremarkViewerConfig, {
 
 Media handlers are defined using the configuration system. The `MediaHandler` interface is defined as following:
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TypeScript
-interface MediaHandler {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TypeScript
+interface MediaHandler<T> {
     patterns: Pattern[] | null;
-    handler: (e: HTMLElement) => void;
+    handler: (e: HTMLElement, options?: T) => void | PromiseLike<void>;
+    options?: T;
     priority: number;
 }
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - `patterns` specifies zero or more URL patterns. A pattern is one of the following:
     - A string.
@@ -839,10 +840,14 @@ interface MediaHandler {
     - A function that accepts a string as parameter and returns a boolean value.
   If it's `null`, all elements will be matched.
 
-- `handler` specifies a function that processes a media element.
+- `handler` specifies a function that processes a media element. It may return a [`Promise`][] which resolves when the processing is completed.
+
+- `options` is passed to `handler`.
 
 - `priority` specifies a priority value. If there are multiple matching media
   handlers, the one with the highest priority value will be chosen.
+
+[`Promise`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/promise
 
 The viewer provides several built-in media handlers (`BUILTIN_MEDIA_HANDLERS`). The `.merge` operator can be used to make modifications to the default set.
 

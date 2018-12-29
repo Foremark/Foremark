@@ -10,12 +10,14 @@ export interface MediaHandler {
      * Describes the pattern of a media URL. This media handler will be used if
      * any of the specified patterns match a media URL.
      */
-    patterns: ReadonlyArray<Pattern> | null;
+    patterns: ReadonlyArray<Pattern<unknown>> | null;
 
     /**
      * A function used to process a media element.
      */
-    handler: (e: Element) => void | PromiseLike<void>;
+    handler: (e: Element, options?: unknown) => void | PromiseLike<void>;
+
+    options?: unknown;
 
     /**
      * If there are multiple matching media handlers, the one with the highest
@@ -61,7 +63,7 @@ export function processMediaElement(e: Element, config: ViewerConfig): void | Pr
         if (
             handler && (
                 handler.patterns == null ||
-                handler.patterns.find(e => patternMatches(src, e))
+                handler.patterns.find(e => patternMatches(src, e, handler.options))
             ) &&
             handler.priority >
                 (bestHandler ? bestHandler.priority : Number.NEGATIVE_INFINITY)
@@ -78,5 +80,5 @@ export function processMediaElement(e: Element, config: ViewerConfig): void | Pr
         return;
     }
 
-    return bestHandler.handler(e);
+    return bestHandler.handler(e, bestHandler.options);
 }
