@@ -1,9 +1,7 @@
-import {decodeHTML} from 'entities';
-
 import {TagNames} from '../foremark';
 import {
     transformHtmlWith, escapeXmlText, legalizeAttributes, InternalTagNames,
-    transformTextNodeWith, forEachNodePreorder,
+    transformTextNodeWith, forEachNodePreorder, unescapeXmlText,
 } from '../utils/dom';
 import {removePrefix} from '../utils/string';
 import {replaceTables} from './table';
@@ -322,15 +320,15 @@ export function expandMfText(node: Element): void {
                     }
                     const e = stack.pop()!; // `stack[i - 1]`
 
-                    output[e[1]] = decodeHTML(output[e[1]]);
-                    output.push(decodeHTML(tag));
+                    output[e[1]] = unescapeXmlText(output[e[1]]);
+                    output.push(unescapeXmlText(tag));
                 } else {
                     // A matching opening tag wasn't found.
                     output.push(tag);
                 }
             } else if (tag.endsWith('/&gt;')) {
                 // `<a />`
-                output.push(decodeHTML(tag));
+                output.push(unescapeXmlText(tag));
             } else {
                 // `<a>`
                 stack.push([openingTagName, output.length]);
@@ -508,7 +506,7 @@ export function expandMfText(node: Element): void {
     transformHtmlWith(node, html => html.replace(
         new RegExp(`\\[${FLOATING_SIZE_RE.source}(${ENDNOTE_ID_RE.source}|${FIGURE_ID_RE.source})\\]`, 'g'),
         (_, id) => {
-            id = decodeHTML(id);
+            id = unescapeXmlText(id);
             return `<${TagNames.Ref} to="${escapeXmlText(id)}" />`;
         }
     ), isNonVerbatimElement);
@@ -531,8 +529,8 @@ export function expandMfText(node: Element): void {
                 urlRaw = urlRaw.substring(1, urlRaw.length - 1);
             }
 
-            const alt = decodeHTML(altRaw);
-            const url = decodeHTML(urlRaw), attribs = decodeHTML(attribsRaw);
+            const alt = unescapeXmlText(altRaw);
+            const url = unescapeXmlText(urlRaw), attribs = unescapeXmlText(attribsRaw);
 
             return `<${TagNames.Media} src="${escapeXmlText(url)}" alt="${escapeXmlText(alt)}"` +
                 `${legalizeAttributes(attribs, ['src', 'alt'], m => console.warn(m))} />`;

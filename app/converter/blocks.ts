@@ -1,12 +1,13 @@
-import {decodeHTML} from 'entities';
-
 import {TagNames} from '../foremark';
 import {
     TextInternalTagNames, ENDNOTE_ID_RE, FIGURE_ID_RE, MEDIA_PARAM_RE,
     FLOATING_SIZE_RE, parseFloatingSize,
 } from './common';
 import {removePrefix, analyzeIndent, IndentCommand} from '../utils/string';
-import {escapeXmlText, legalizeAttributes, TransformHtmlWithContext} from '../utils/dom';
+import {
+    escapeXmlText, legalizeAttributes, TransformHtmlWithContext,
+    unescapeXmlText,
+} from '../utils/dom';
 
 interface Level {
     /**
@@ -234,7 +235,7 @@ const Endnote = {
         let size: string | null = parseFloatingSize(marker.substr(1, 1));
         size = size ? ` size="${size}"` : '';
 
-        let id = decodeHTML(idRaw);
+        let id = unescapeXmlText(idRaw);
 
         // `id` is optional
         if (id !== '') {
@@ -267,7 +268,7 @@ const Figure = {
         let size: string | null = parseFloatingSize(marker.substr(1, 1));
         size = size ? ` size="${size}"` : '';
 
-        const id = decodeHTML(idRaw);
+        const id = unescapeXmlText(idRaw);
 
         return [
             Figure,
@@ -305,9 +306,9 @@ const ImageBlock = {
             urlRaw = urlRaw.substring(1, urlRaw.length - 1);
         }
 
-        let id = decodeHTML(idRaw);
-        const alt = decodeHTML(altRaw);
-        const url = decodeHTML(urlRaw), attribs = decodeHTML(attribsRaw);
+        let id = unescapeXmlText(idRaw);
+        const alt = unescapeXmlText(altRaw);
+        const url = unescapeXmlText(urlRaw), attribs = unescapeXmlText(attribsRaw);
 
         const img = `<p><${TagNames.Media} src="${escapeXmlText(url)}" alt="${escapeXmlText(alt)}"` +
             `${legalizeAttributes(attribs, ['src', 'alt'], e => console.warn(e))} /></p>`;

@@ -12,12 +12,9 @@
   "bugs": {
     "url": "https://github.com/Foremark/Foremark/issues"
   },
-  "dependencies": {
-    "entities": "^1.1.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/classnames": "^2.2.6",
-    "@types/entities": "^1.1.0",
     "@types/fetch-jsonp": "^1.0.0",
     "@types/highlight.js": "^9.12.3",
     "@types/katex": "^0.5.0",

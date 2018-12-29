@@ -7,11 +7,6 @@
   resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.6.tgz#dbe8a666156d556ed018e15a4c65f08937c3f628"
   integrity sha512-XHcYvVdbtAxVstjKxuULYqYaWIzHR15yr1pZj4fnGChuBVJlIAp9StJna0ZJNSgxPh4Nac2FL4JM3M11Tm6fqQ==
 
-"@types/entities@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@types/entities/-/entities-1.1.0.tgz#07ad60479dff7e1b61d95ce96697987d53a662cd"
-  integrity sha1-B61gR53/fhth2VzpZpeYfVOmYs0=
-
 "@types/fetch-jsonp@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@types/fetch-jsonp/-/fetch-jsonp-1.0.0.tgz#d623037e3b47e61c323179d91f6123a350f7ec01"
@@ -1396,7 +1391,7 @@ enhanced-resolve@^4.0.0, enhanced-resolve@^4.1.0:
     memory-fs "^0.4.0"
     tapable "^1.0.0"
 
-entities@^1.1.2, entities@~1.1.1:
+entities@~1.1.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/entities/-/entities-1.1.2.tgz#bdfa735299664dfafd34529ed4f8522a275fea56"
   integrity sha512-f2LZMYl1Fzu7YSBKg+RoROelpOaNrcGmE9AZubeDfrCEia483oW4MI4VyFd5VNHIgQ/7qm1I0wUHK1eJnn2y2w==

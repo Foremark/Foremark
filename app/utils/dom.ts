@@ -1,5 +1,3 @@
-import {decodeHTML} from 'entities';
-
 export const enum InternalTagNames {
     /**
      * The tag name used for placeholders by `transformHtmlWith`. However,
@@ -318,7 +316,7 @@ export function legalizeAttributes(
                     // Quotation mark elision - probably valid in HTML
                 }
 
-                value = decodeHTML(value);
+                value = unescapeXmlText(value);
 
                 value = `"${escapeXmlText(value)}"`;
             }
@@ -362,6 +360,41 @@ export function escapeXmlText(text: string): string {
         .replace(/>/g, '&gt;');
 }
 
+export function unescapeXmlText(xml: string): string {
+    // I could've used <https://www.npmjs.com/package/entities>, but that would
+    // increase the bundle size and the number of dependencies.
+
+    return xml.replace(/&.*?;/g, match => {
+        // Numeric character reference
+        if (/&#x[0-9a-f]+;/i.test(match)) {
+            const i = parseInt(match.substring(3, match.length - 1), 16);
+            if (i >= 0 && i < 65536) {
+                return String.fromCharCode(i);
+            } else {
+                return match;
+            }
+        }
+        if (/&#[0-9]+;/.test(match)) {
+            const i = parseInt(match.substring(2, match.length - 1), 10);
+            if (i >= 0 && i < 65536) {
+                return String.fromCharCode(i);
+            } else {
+                return match;
+            }
+        }
+
+        // Character entity reference
+        switch (match) {
+            case '&amp;': return '&';
+            case '&apos;': return '\'';
+            case '&quot;': return '"';
+            case '&lt;': return '<';
+            case '&gt;': return '>';
+        }
+        return match;
+    });
+}
+
 /**
  * Attempts to fix malformed XML markup.
  *
@@ -385,7 +418,7 @@ export function legalizeXML(
     }
     for (let i = 0; i < parts.length; i += 4) {
         if (/[&<>]/.test(parts[i])) {
-            parts[i] = escapeXmlText(decodeHTML(parts[i]));
+            parts[i] = escapeXmlText(unescapeXmlText(parts[i]));
         }
     }
     return parts.join('');
