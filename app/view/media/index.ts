@@ -37,12 +37,12 @@ export const BUILTIN_MEDIA_HANDLERS = {
         priority: 0,
     },
     'video': {
-        patterns: [/\.(mp4|m4v|avi|pg|mov|wmv)$/i],
+        patterns: [/\.(mp4|m4v|ogm|ogv|avi|pg|mov|wmv|webm)$/i],
         handler: handleVideoMedia,
         priority: 20,
     },
     'audio': {
-        patterns: [/\.(mp3|ogg|wav|au|opus|m4a|wma)$/i],
+        patterns: [/\.(mp3|ogg|oga|spx|wav|au|opus|m4a|wma)$/i],
         handler: handleAudioMedia,
         priority: 10,
     },
