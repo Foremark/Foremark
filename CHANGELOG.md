@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Code blocks inside figures are no longer aligned to center.
 - A symbolic hyperlink now can include inline code fragments and other tags.
 - Add media handlers, a facility for embedding a variety of media types into a document.
+    - The following providers are supported by the oEmbed handler: Clyp, Codepen, Derpibooru, DeviantArt, Facebook, MixCloud, SlideShare, Twitter, SoundCloud, and Vimeo.
+    - Direct links are handled by one of the HTML5 media handlers depending on the file extension.
 - CSS is now embedded into JS files. This may lead to a significant reduction in the page load time in a high-latency environment.
 
 ## [0.0.4] - 2018-12-26
