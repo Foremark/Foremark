@@ -892,6 +892,34 @@ BUILTIN_MEDIA_HANDLERS = {
 
 These media handlers converts `<mf-media>` to `<img>`, `<video>`, or `<audio>` depending on file extensions and simply copies all XML attributes. `patterns` is `null` for the image handler, thus it serves as a catch-all handler.
 
+### Inline frame media handler
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JavaScript
+BUILTIN_MEDIA_HANDLERS = {
+    'youtube': {
+        patterns: [/* ... */],
+        handler: /* ... */,
+        priority: 150,
+        options: {
+            pattern: /* (regex) */,
+            frameUrl: 'https://www.youtube.com/embed/$1',
+        },
+    },
+    'sketchfab': {
+        patterns: [/* ... */],
+        handler: /* ... */,
+        priority: 150,
+        options: {
+            pattern: /* (regex) */,
+            frameUrl: 'https://sketchfab.com/models/$1/embed',
+        },
+    },
+    /* ... */
+};
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This media handler applies a `RegExp`-based replacement rule to generate an `<iframe>` url from a media URL. All attributes (except for `src`) are copied to a generated `<iframe>` element.
+
 ### oEmbed media handler
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JavaScript

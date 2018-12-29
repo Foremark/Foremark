@@ -5,6 +5,7 @@ import {Pattern, patternMatches} from '../../utils/pattern';
 import {escapeXmlText} from '../../utils/dom';
 import {handleAudioMedia, handleImageMedia, handleVideoMedia} from './html5';
 import {OEMBED_MEDIA_HANDLER} from './oembed';
+import {createIFrameMediaHandler} from './iframe';
 
 export interface MediaHandler {
     /**
@@ -47,6 +48,16 @@ export const BUILTIN_MEDIA_HANDLERS = {
         priority: 10,
     },
     'oembed': OEMBED_MEDIA_HANDLER,
+    'youtube': createIFrameMediaHandler(
+        150,
+        /^https:\/\/(?:www\.)?(?:youtube\.com\/\S*?v=|youtu\.be\/)([\w\d-]+)(&.*)?$/i,
+        'https://www.youtube.com/embed/$1',
+    ),
+    'sketchfab': createIFrameMediaHandler(
+        150,
+        /^https?:\/\/(?:sketchfab\.com\/models\/)([^?/]+)$/i,
+        'https://sketchfab.com/models/$1/embed',
+    ),
 };
 
 export async function processMediaElement(e: Element, config: ViewerConfig): Promise<void> {
