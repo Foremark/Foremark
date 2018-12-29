@@ -155,7 +155,7 @@ The association cannot be formed across the boundaries of `<mf-text>`.
 </mf-text>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-## Images
+## Media
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
 The pudding face looks like
@@ -165,20 +165,20 @@ The pudding face looks like
 [pudding]: https://derpicdn.net/img/2018/11/8/1877696/medium.png
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Inline images are directly rendered as HTML `<img>` elements.
+Inline media are directly rendered as `<mf-media>` elements.
 
 Read [Symbolic hyperlinks](#foremarktext/hyperlinks/symbolichyperlinks) for more about symbolic hyperlinks (`[pudding]` in the above example).
 
-Use the block syntax to insert an image block using `<mf-figure>`. The block syntax is distinguished by the colon at the end and the addition of an optional figure label:
+Use the block syntax to insert a media block using `<mf-figure>`. The block syntax is distinguished by the colon at the end and the addition of an optional media label:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
 The pudding faces are shown below:
 
 ![^][alttext](https://derpicdn.net/img/2018/11/8/1877696/medium.png):
-    Image block (manually positioned)
+    Media block (manually positioned)
 
 ![!!][alttext](https://derpicdn.net/img/2018/11/8/1877696/medium.png):
-    Image block (manually positioned) but takes entire a row
+    Media block (manually positioned) but takes entire a row
 
 ![!Figure fig1][alttext](https://derpicdn.net/img/2018/11/8/1877696/medium.png):
     Figure (possibly automatically positioned)
@@ -187,25 +187,25 @@ The pudding faces are shown below:
 The first part (`[^]`, `[!Figure fig1]`) is based on [the floating contents block syntax](#foremarktext/floatingcontents). Sidenote labels (e.g., `[!basenameonly]`) may not be used.
 
 !!! Warning
-    `![^][][symbol]:` (A image block with a symbolic name) is not supported.
+    `![^][][symbol]:` (A media block with a symbolic name) is not supported.
 
-An image tag optionally include XML attributes:
+A media tag optionally include XML attributes:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
 ![](https://derpicdn.net/img/2018/11/8/1877696/medium.png style="animation: 2000ms _2qw9KkueUdLlzZdwjgAKzl both infinite linear")
 
 ![^][](https://derpicdn.net/img/2018/11/8/1877696/medium.png style="animation: 2000ms _2qw9KkueUdLlzZdwjgAKzl both infinite linear"):
-    Image caption
+    Media caption
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
-<img src="https://derpicdn.net/img/2018/11/8/1877696/medium.png"
+<mf-media src="https://derpicdn.net/img/2018/11/8/1877696/medium.png"
      style="animation: 2000ms _2qw9KkueUdLlzZdwjgAKzl both infinite linear" />
 
 <mf-figure>
     <mf-figure-caption>
-        Image caption
+        Media caption
     </mf-figure-caption>
     <p>
-        <img src="https://derpicdn.net/img/2018/11/8/1877696/medium.png"
+        <mf-media src="https://derpicdn.net/img/2018/11/8/1877696/medium.png"
              style="animation: 2000ms _2qw9KkueUdLlzZdwjgAKzl both infinite linear" />
     </p>
 </mf-figure>
@@ -274,7 +274,7 @@ The number prefix and the base name together forms a label identifier.
     The preceding `^` and `!` symbols do not constitute the label identifier. so it's technically possible to refer to a figure with a different symbol. However, it's considered a bad practice because it makes it harder to find a tag using a text editor's search functionality.
 
 !!! Tip
-    Although the figure syntax described here can be used for any kinds of contents, it's better to use the image block syntax if you just intend to display an image as a figure.
+    Although the figure syntax described here can be used for any kinds of contents, it's better to use the media block syntax if you just intend to display a media file as a figure.
 
 !!! Note: Differences from Markdeep
     - Figures and sidenotes use the unified system. Still, there is a dedicated syntax for figures.
@@ -821,7 +821,7 @@ var foremarkViewerConfig = Object.assign(window.foremarkViewerConfig, {
 
 ## Media handlers
 
-`<mf-media>` elements are processed by the viewer through uses of media handlers.
+`<mf-media>` elements are processed using media handlers.
 
 Media handlers are defined using the configuration system. The `MediaHandler` interface is defined as following:
 
