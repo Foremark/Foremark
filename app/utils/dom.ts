@@ -368,18 +368,24 @@ export function escapeXmlText(text: string): string {
  * This function is designed to only fix particular classes of errors found in
  * wild, specifically:
  *
- *  - SoundCloud's oEmbed response includes an unescaped ampersands in
+ *  - SoundCloud's oEmbed response includes unescaped ampersands in
  *    attributes.
  *  - Vimeo's oEmbed response uses attribute value elision.
+ *  - Facebook's oEmbed response includes unescaped ampersands in text contents.
  */
 export function legalizeXML(
     xml: string,
     onwarning?: (message: string) => void,
 ): string {
-    const parts = xml.split(/(<[^\s]+)([^>]*)(>)/);
+    const parts = xml.split(/(<[^\s>]+)([^>]*)(>)/);
     for (let i = 2; i < parts.length; i += 4) {
         if (parts[i] !== '') {
             parts[i] = legalizeAttributes(parts[i], [], onwarning);
+        }
+    }
+    for (let i = 0; i < parts.length; i += 4) {
+        if (/[&<>]/.test(parts[i])) {
+            parts[i] = escapeXmlText(decodeHTML(parts[i]));
         }
     }
     return parts.join('');

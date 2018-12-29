@@ -34,6 +34,28 @@ export const BUILTIN_OEMBED_ENDPOINTS: {[key: string]: OEmbedEndpoint} = {
         url: 'http://backend.deviantart.com/oembed?format=jsonp',
         format: 'jsonp',
     },
+    'facebook-post': {
+        schemes: [
+            'https://www.facebook.com/*/posts/*',
+            'https://www.facebook.com/photos/*',
+            'https://www.facebook.com/photo.php',
+            'https://www.facebook.com/*/activity/*',
+            'https://www.facebook.com/permalink.php',
+            'https://www.facebook.com/media/set?set=*',
+            'https://www.facebook.com/questions/*',
+            'https://www.facebook.com/notes/*/*/*',
+        ],
+        url: 'https://www.facebook.com/plugins/post/oembed.json',
+        format: 'jsonp',
+    },
+    'facebook': {
+        schemes: [
+            'https://www.facebook.com/*/videos/*',
+            'https://www.facebook.com/video.php',
+        ],
+        url: 'https://www.facebook.com/plugins/video/oembed.json',
+        format: 'jsonp',
+    },
     'soundcloud': {
         schemes: [
             'http://soundcloud.com/*',
