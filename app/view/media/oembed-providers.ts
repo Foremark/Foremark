@@ -56,6 +56,14 @@ export const BUILTIN_OEMBED_ENDPOINTS: {[key: string]: OEmbedEndpoint} = {
         url: 'https://www.facebook.com/plugins/video/oembed.json',
         format: 'jsonp',
     },
+    'mixcloud': {
+        schemes: [
+            'http://www.mixcloud.com/*/*/',
+            'https://www.mixcloud.com/*/*/',
+        ],
+        url: 'https://www.mixcloud.com/oembed/?format=json',
+        format: 'jsonp',
+    },
     'soundcloud': {
         schemes: [
             'http://soundcloud.com/*',
