@@ -65,7 +65,7 @@ The final HTML is displayed by a web-based viewer application embedded in `forem
 
 - `browser/` — Foremark processor + viewer to be loaded by Foremark files.
     - `foremark.js` — The main file of the viewer.
-    - `foremark-*.js`, `*.css`, `assets/` — Asset files that are loaded on demand.
+    - `foremark-*.js`, `assets/` — Asset files that are loaded on demand.
     - `foremark.bundle.js` — Includes all of the above files in a single large package. (Self-contained bundle)
     - `*.wasm`
     - `licenses.txt` — License information of all software packages included in this directory.
