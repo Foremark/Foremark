@@ -390,6 +390,7 @@ export function unescapeXmlText(xml: string): string {
             case '&quot;': return '"';
             case '&lt;': return '<';
             case '&gt;': return '>';
+            case '&nbsp;': return ' ';
         }
         return match;
     });
