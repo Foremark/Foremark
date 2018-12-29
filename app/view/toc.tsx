@@ -152,6 +152,10 @@ function enumerateNodes(document: HTMLElement): Node[] {
         if (!(node instanceof HTMLElement)) {
             return;
         }
+        if (node.tagName.match(/blockquote|details|fieldset|figure|td/i)) {
+            // Sectioning root
+            return false;
+        }
         const match = node.tagName.match(/^h([0-9])$/i);
         if (match) {
             // Find the anchor element
