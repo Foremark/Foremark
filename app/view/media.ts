@@ -32,6 +32,16 @@ export const BUILTIN_MEDIA_HANDLERS = {
         handler: handleImageMedia,
         priority: 0,
     },
+    'video': {
+        patterns: [/\.(mp4|m4v|avi|pg|mov|wmv)$/i],
+        handler: handleVideoMedia,
+        priority: 20,
+    },
+    'audio': {
+        patterns: [/\.(mp3|ogg|wav|au|opus|m4a|wma)$/i],
+        handler: handleAudioMedia,
+        priority: 10,
+    },
 };
 
 export function processMediaElement(e: Element, config: ViewerConfig): void {
@@ -72,6 +82,34 @@ export function processMediaElement(e: Element, config: ViewerConfig): void {
 
 function handleImageMedia(e: Element): void {
     const img = e.ownerDocument!.createElement('img');
+
+    let attrs = e.attributes;
+    for (let i = 0, c = attrs.length; i < c; ++i) {
+        img.setAttribute(attrs[i].name, attrs[i].value);
+    }
+
+    e.parentElement!.insertBefore(img, e);
+    e.parentElement!.removeChild(e);
+}
+
+function handleVideoMedia(e: Element): void {
+    const img = e.ownerDocument!.createElement('video');
+
+    img.setAttribute('controls', 'controls');
+
+    let attrs = e.attributes;
+    for (let i = 0, c = attrs.length; i < c; ++i) {
+        img.setAttribute(attrs[i].name, attrs[i].value);
+    }
+
+    e.parentElement!.insertBefore(img, e);
+    e.parentElement!.removeChild(e);
+}
+
+function handleAudioMedia(e: Element): void {
+    const img = e.ownerDocument!.createElement('audio');
+
+    img.setAttribute('controls', 'controls');
 
     let attrs = e.attributes;
     for (let i = 0, c = attrs.length; i < c; ++i) {

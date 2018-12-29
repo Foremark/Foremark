@@ -862,7 +862,7 @@ var foremarkViewerConfig = Object.assign(window.foremarkViewerConfig, {
 });
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-### Image handler
+### HTML5 media handlers
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JavaScript
 BUILTIN_MEDIA_HANDLERS = {
@@ -871,11 +871,21 @@ BUILTIN_MEDIA_HANDLERS = {
         handler: handleImageMedia,
         priority: 0,
     },
+    'video': {
+        patterns: [/\.(mp4|m4v|avi|pg|mov|wmv)$/i],
+        handler: handleVideoMedia,
+        priority: 20,
+    },
+    'audio': {
+        patterns: [/\.(mp3|ogg|wav|au|opus|m4a|wma)$/i],
+        handler: handleAudioMedia,
+        priority: 10,
+    },
     /* ... */
 };
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This media handler converts `<mf-media>` to `<img>` and simply copies all XML attributes. Its `patterns` is `null`, thus it serves as a catch-all handler.
+These media handlers converts `<mf-media>` to `<img>`, `<video>`, or `<audio>` depending on file extensions and simply copies all XML attributes. `patterns` is `null` for the image handler, thus it serves as a catch-all handler.
 
 ## Table of contents
 
