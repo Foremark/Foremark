@@ -318,6 +318,8 @@ export function legalizeAttributes(
                     // Quotation mark elision - probably valid in HTML
                 }
 
+                value = decodeHTML(value);
+
                 value = `"${escapeXmlText(value)}"`;
             }
 
@@ -358,4 +360,27 @@ export function escapeXmlText(text: string): string {
         .replace(/"/g, '&quot;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
+}
+
+/**
+ * Attempts to fix malformed XML markup.
+ *
+ * This function is designed to only fix particular classes of errors found in
+ * wild, specifically:
+ *
+ *  - SoundCloud's oEmbed response includes an unescaped ampersands in
+ *    attributes.
+ *  - Vimeo's oEmbed response uses attribute value elision.
+ */
+export function legalizeXML(
+    xml: string,
+    onwarning?: (message: string) => void,
+): string {
+    const parts = xml.split(/(<[^\s]+)([^>]*)(>)/);
+    for (let i = 2; i < parts.length; i += 4) {
+        if (parts[i] !== '') {
+            parts[i] = legalizeAttributes(parts[i], [], onwarning);
+        }
+    }
+    return parts.join('');
 }

@@ -4,6 +4,7 @@ import {TagNames} from '../../foremark';
 import {Pattern, patternMatches} from '../../utils/pattern';
 import {escapeXmlText} from '../../utils/dom';
 import {handleAudioMedia, handleImageMedia, handleVideoMedia} from './html5';
+import {OEMBED_MEDIA_HANDLER} from './oembed';
 
 export interface MediaHandler {
     /**
@@ -45,6 +46,7 @@ export const BUILTIN_MEDIA_HANDLERS = {
         handler: handleAudioMedia,
         priority: 10,
     },
+    'oembed': OEMBED_MEDIA_HANDLER,
 };
 
 export async function processMediaElement(e: Element, config: ViewerConfig): Promise<void> {

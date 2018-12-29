@@ -12,6 +12,11 @@
   resolved "https://registry.yarnpkg.com/@types/entities/-/entities-1.1.0.tgz#07ad60479dff7e1b61d95ce96697987d53a662cd"
   integrity sha1-B61gR53/fhth2VzpZpeYfVOmYs0=
 
+"@types/fetch-jsonp@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@types/fetch-jsonp/-/fetch-jsonp-1.0.0.tgz#d623037e3b47e61c323179d91f6123a350f7ec01"
+  integrity sha1-1iMDfjtH5hwyMXnZH2Ejo1D37AE=
+
 "@types/highlight.js@^9.12.3":
   version "9.12.3"
   resolved "https://registry.yarnpkg.com/@types/highlight.js/-/highlight.js-9.12.3.tgz#b672cfaac25cbbc634a0fd92c515f66faa18dbca"
@@ -1629,6 +1634,11 @@ faye-websocket@~0.11.1:
   integrity sha1-8O/hjE9W5PQK/H4Gxxn9XuYYjzg=
   dependencies:
     websocket-driver ">=0.5.1"
+
+fetch-jsonp@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/fetch-jsonp/-/fetch-jsonp-1.1.3.tgz#9eb9e585ba08aaf700563538d17bbebbcd5a3db2"
+  integrity sha1-nrnlhboIqvcAVjU40Xu+u81aPbI=
 
 figgy-pudding@^3.1.0, figgy-pudding@^3.5.1:
   version "3.5.1"

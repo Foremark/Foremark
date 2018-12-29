@@ -892,6 +892,69 @@ BUILTIN_MEDIA_HANDLERS = {
 
 These media handlers converts `<mf-media>` to `<img>`, `<video>`, or `<audio>` depending on file extensions and simply copies all XML attributes. `patterns` is `null` for the image handler, thus it serves as a catch-all handler.
 
+### oEmbed media handler
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JavaScript
+BUILTIN_MEDIA_HANDLERS = {
+    'oembed': {
+        patterns: [/* ... */],
+        handler: /* ... */,
+        priority: 100,
+        options: {
+            endpoints: {
+                'vimeo': /* ... */,
+                'deviantart': /* ... */,
+                'soundcloud': /* ... */,
+                /* ... */
+            },
+        },
+    },
+    /* ... */
+};
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This media handler embeds an embedded representation of a URL using the [oEmbed protocol][].
+
+`options.endpoints` defines a set of oEmbed endpoints. Each endpoint defines a support URL scheme and the endpoint URL to which the media handler sends a request to generate the embedded representation of a media URL. Each endpoint is defined using the `OEmbedEndpoint` interface:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TypeScript
+interface OEmbedEndpoint {
+    schemes: string[];
+    url: string;
+    format?: 'json' | 'jsonp';
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- `schemes`: One or more URL schemes. The syntax is based on "2.1. Configuration" of the oEmbed specification.
+- `url`: The endpoint URL.
+- `format`: The expected response format. Note that the media handler does not add this to the endpoint URL automatically.
+
+For example, the `OEmbedEndpoint` object for DeviantArt looks like this:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JavaScript
+{
+    schemes: [
+        'http://*.deviantart.com/art/*',
+        'http://*.deviantart.com/*#/d*',
+        'http://fav.me/*',
+        'http://sta.sh/*'
+    ],
+    url: 'http://backend.deviantart.com/oembed?format=jsonp',
+    format: 'jsonp',
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Compare this with [the çorresponding provider definition][].
+
+The media handler is activated if a media URL matches any of the defined endpoint URL scheme. The media URL is supplied as a `url` query parameter. An additional query parameter can be specified using a XML attribute with prefix `oembed-`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Foremark
+![](https://vimeo.com/channels/staffpicks/151493973 oembed-maxwidth="1280")
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[oEmbed protocol]: https://oembed.com
+[the çorresponding provider definition]: https://github.com/iamcal/oembed/blob/master/providers/deviantart.com.yml
+
 ## Table of contents
 
 The viewer displays a table of contents that allows quick navigation to various parts of a page.

@@ -50,3 +50,7 @@ export function analyzeIndent(indent: string, ref: string): IndentCommand {
         throw new Error();
     }
 }
+
+export function escapeRegExp(x: string): string {
+    return x.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
+}
