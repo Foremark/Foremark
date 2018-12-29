@@ -47,7 +47,7 @@ export const BUILTIN_MEDIA_HANDLERS = {
     },
 };
 
-export function processMediaElement(e: Element, config: ViewerConfig): void | PromiseLike<void> {
+export async function processMediaElement(e: Element, config: ViewerConfig): Promise<void> {
     const src = e.getAttribute('src');
     if (!src) {
         e.outerHTML = `<${TagNames.Error}>` +
@@ -56,29 +56,38 @@ export function processMediaElement(e: Element, config: ViewerConfig): void | Pr
         return;
     }
 
-    let bestHandler: MediaHandler | null = null;
+    try {
+        let bestHandler: MediaHandler | null = null;
 
-    for (const key in config.mediaHandlers) {
-        const handler = config.mediaHandlers[key];
-        if (
-            handler && (
-                handler.patterns == null ||
-                handler.patterns.find(e => patternMatches(src, e, handler.options))
-            ) &&
-            handler.priority >
-                (bestHandler ? bestHandler.priority : Number.NEGATIVE_INFINITY)
-        ) {
-            bestHandler = handler;
+        for (const key in config.mediaHandlers) {
+            const handler = config.mediaHandlers[key];
+            if (
+                handler && (
+                    handler.patterns == null ||
+                    handler.patterns.find(e => patternMatches(src, e, handler.options))
+                ) &&
+                handler.priority >
+                    (bestHandler ? bestHandler.priority : Number.NEGATIVE_INFINITY)
+            ) {
+                bestHandler = handler;
+            }
         }
-    }
 
-    if (!bestHandler) {
+        if (!bestHandler) {
+            e.outerHTML = `<${TagNames.Error}>` +
+                `<code>&lt;${TagNames.Media}&gt;</code>: no matching media handler ` +
+                `for media URL <code>${escapeXmlText(src)}</code>` +
+            `</${TagNames.Error}>`;
+            return;
+        }
+
+        await bestHandler.handler(e, bestHandler.options);
+    } catch (error) {
         e.outerHTML = `<${TagNames.Error}>` +
-            `<code>&lt;${TagNames.Media}&gt;</code>: no matching media handler ` +
-            `for media URL <code>${escapeXmlText(src)}</code>` +
+            `<code>&lt;${TagNames.Media}&gt;</code>: processing failed ` +
+            `for media URL <code>${escapeXmlText(src)}</code>: ` +
+            `<code>${escapeXmlText(String(error))}</code>: ` +
         `</${TagNames.Error}>`;
         return;
     }
-
-    return bestHandler.handler(e, bestHandler.options);
 }
