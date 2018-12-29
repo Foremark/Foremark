@@ -183,7 +183,7 @@ export const OEMBED_MEDIA_HANDLER: MediaHandler = {
                     `</a>`;
                 break;
             case 'photo':
-                let imageUrl = resp.url;
+                let imageUrl: string | undefined = resp.url;
                 if (!imageUrl) {
                     // Derpibooru quirk: Doesn't return `url`
                     imageUrl = resp.thumbnail_url;
