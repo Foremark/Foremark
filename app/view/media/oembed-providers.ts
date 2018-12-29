@@ -64,6 +64,17 @@ export const BUILTIN_OEMBED_ENDPOINTS: {[key: string]: OEmbedEndpoint} = {
         url: 'https://www.mixcloud.com/oembed/?format=json',
         format: 'jsonp',
     },
+    'slideshare': {
+        schemes: [
+            'https://www.slideshare.net/*/*',
+            'https://fr.slideshare.net/*/*',
+            'https://de.slideshare.net/*/*',
+            'https://es.slideshare.net/*/*',
+            'https://pt.slideshare.net/*/*',
+        ],
+        url: 'https://www.slideshare.net/api/oembed/2?format=json',
+        format: 'jsonp',
+    },
     'soundcloud': {
         schemes: [
             'http://soundcloud.com/*',
@@ -82,6 +93,7 @@ export const BUILTIN_OEMBED_ENDPOINTS: {[key: string]: OEmbedEndpoint} = {
         ],
         url: 'https://vimeo.com/api/oembed.json',
     },
+    // Reddit: Doesn't support CORS or JSONP.
     // YouTube: Doesn't support CORS or JSONP.
     // Sketchfab: Doesn't support CORS or JSONP.
 };
