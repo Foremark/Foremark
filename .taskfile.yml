@@ -1,8 +1,7 @@
 - name: test
-  hide: true
   task:
-    - echo "Error: no test specified"
-    - exit 1
+    - - taskfile build:dist
+    - - mocha
 
 - name: start
   task: webpack-dev-server --config webpack.dev.js
@@ -56,4 +55,4 @@
     - - cat wasm/cargo-license.txt >> browser/licenses.txt
 
 - name: build:dist
-  task: tsc -d
+  task: tsc -p tsconfig.build.json

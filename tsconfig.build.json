@@ -1,8 +1,6 @@
 /*
- * This TypeScript configuration is used by development tools and `ts-loader`.
- *
- * Do not feed this configuration directly into `tsc` - The compiled modules
- * use the ES6 `import` syntax, which is not supported by Node.js v10.
+ * This TypeScript configuration produces modules loadable by Node.js and
+ * bundle tools such as Webpack.
  */
 {
     "compilerOptions": {
@@ -11,7 +9,8 @@
         "sourceMap": true,
         "strict": true,
         "strictNullChecks": true,
-        "module": "esNext",
+        "declaration": true,
+        "module": "CommonJS",
         "target": "es5",
         "jsx": "react",
         "jsxFactory": "React.h", /* Preact */
@@ -26,8 +25,9 @@
         "experimentalDecorators": true,
     },
     "include": [
-        "app/**/*.ts",
-        "app/**/*.tsx",
+        "app/converter/*.ts",
+        "app/utils/*.ts",
+        "app/*.ts",
         "lib/*.d.ts",
     ]
 }
