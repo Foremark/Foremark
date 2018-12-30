@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.0.6] - 2018-12-31
+
 - The user interface was restyled to make it less intrusive to the contents.
 - The search field is now functional.
 - `expandMfText` now can be used in a Node.js environment.
@@ -48,7 +50,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial release.
 
-[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.5...HEAD
+[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.6...HEAD
+[0.0.6]: https://github.com/Foremark/Foremark/compare/0.0.5...0.0.6
 [0.0.5]: https://github.com/Foremark/Foremark/compare/0.0.4...0.0.5
 [0.0.4]: https://github.com/Foremark/Foremark/compare/0.0.3...0.0.4
 [0.0.3]: https://github.com/Foremark/Foremark/compare/0.0.2...0.0.3
