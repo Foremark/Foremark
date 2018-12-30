@@ -1,6 +1,6 @@
 import * as React from 'preact';
 
-const eventKeys: string[] = ['scroll', 'resize'];
+const eventKeys: string[] = ['scroll', 'resize', 'keydown'];
 
 export interface EventHookProps<T> {
     [key: string]: any;
@@ -9,6 +9,7 @@ export interface EventHookProps<T> {
 
     scroll?: (this: T, ev: UIEvent) => any;
     resize?: (this: T, ev: UIEvent) => any;
+    keydown?: (this: T, ev: KeyboardEvent) => any;
 }
 
 /**

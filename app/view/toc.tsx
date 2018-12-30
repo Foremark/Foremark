@@ -172,6 +172,19 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
         return viewNode;
     }
 
+    /**
+     * Navigates a node. The node will be activated and scrolled into the
+     * TOC's view.
+     */
+    private selectViewNode(viewNode: ViewNode): void {
+        navigateNode(viewNode.node);
+        this.didNavigateNode(viewNode.node);
+
+        if (viewNode.nodeView) {
+            viewNode.nodeView.scrollIntoView();
+        }
+    }
+
     @bind
     private handleKey(e: KeyboardEvent): void {
         if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
@@ -229,12 +242,7 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
             }
 
             if (viewNode) {
-                navigateNode(viewNode.node);
-                this.didNavigateNode(viewNode.node);
-
-                if (viewNode.nodeView) {
-                    viewNode.nodeView.scrollIntoView();
-                }
+                this.selectViewNode(viewNode);
             }
 
             e.preventDefault();
@@ -250,19 +258,24 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
                         return;
                     }
 
-                    viewNode = viewNode.parent;
-                    navigateNode(viewNode.node);
-                    this.didNavigateNode(viewNode.node);
-
-                    if (viewNode.nodeView) {
-                        viewNode.nodeView.scrollIntoView();
-                    }
+                    this.selectViewNode(viewNode.parent);
                 } else if (viewNode.nodeView) {
                     // Expand/collapse the currently highlighted node
                     viewNode.nodeView.isExpanded = expand;
                 }
                 e.preventDefault();
             }
+        }
+    }
+
+    /**
+     * Navigates the top visible node. Does nothing if there are no nodes.
+     */
+    selectFirstNode(): void {
+        const viewNode = this.rootViewNode.children[0];
+        if (viewNode) {
+            this.selectViewNode(viewNode);
+            this.domRoot!.focus();
         }
     }
 

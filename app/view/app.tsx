@@ -3,7 +3,7 @@ import {bind} from 'bind-decorator';
 import * as classnames from 'classnames';
 
 import {Port} from './components/port';
-import {SignalHook} from './components/signalhook';
+import {EventHook} from './components/eventhook';
 import {TableOfContents} from './toc';
 
 const CN = require('./app.less');
@@ -36,6 +36,9 @@ interface AppState {
 
 export class App extends React.Component<AppProps, AppState> {
     refs: any;
+
+    private searchQueryElement: HTMLInputElement | null;
+    private tocComponent: TableOfContents | null;
 
     constructor(props: AppProps) {
         super(props);
@@ -83,6 +86,42 @@ export class App extends React.Component<AppProps, AppState> {
         return state.tocVisible;
     }
 
+    @bind
+    private handleWindowKeyDown(e: KeyboardEvent): void {
+        if (e.key === '/') {
+            if (e.target === this.searchQueryElement) {
+                return;
+            }
+            this.searchQueryElement!.focus();
+            e.preventDefault();
+            e.stopPropagation();
+        } else if (e.key === 'Escape') {
+            if (e.target === this.searchQueryElement) {
+                return;
+            }
+
+            // Clear the search field
+            this.setState({searchQuery: ''});
+        }
+    }
+
+    @bind
+    private handleSearchQueryKeyDown(e: KeyboardEvent): void {
+        if (e.key === 'Escape') {
+            // Lose focus
+            this.searchQueryElement!.blur();
+
+            // Clear the search field
+            this.setState({searchQuery: ''});
+
+            e.preventDefault();
+            e.stopPropagation();
+        } else if (e.key === 'ArrowDown') {
+            // Select the first row in the TOC
+            this.tocComponent!.selectFirstNode();
+        }
+    }
+
     render() {
         const {state, isModelessSidebarVisible} = this;
         return <div className={classnames({
@@ -90,6 +129,8 @@ export class App extends React.Component<AppProps, AppState> {
                     [CN.sidebarModalVisible]: state.sidebarModalVisible,
                     [CN.sidebarVisible]: isModelessSidebarVisible,
                 })}>
+
+            <EventHook target={window} keydown={this.handleWindowKeyDown} />
 
             <aside>
                 <div className={CN.modalBackground}
@@ -133,8 +174,10 @@ export class App extends React.Component<AppProps, AppState> {
                             onInput={this.handleSearchQuery}
                             value={state.searchQuery}
                             type='search'
+                            ref={e => this.searchQueryElement = e}
+                            onKeyDown={this.handleSearchQueryKeyDown}
                             aria-label='Search'
-                            placeholder="Search" />
+                            placeholder="Click or hit '/' to search" />
                         <span />
                     </span>
                     {/* TODO: "clear" button */}
@@ -142,6 +185,7 @@ export class App extends React.Component<AppProps, AppState> {
 
                     <nav>
                         <TableOfContents
+                            ref={e => this.tocComponent = e}
                             foremarkDocument={this.props.foremarkDocument}
                             searchQuery={state.searchQuery} />
                     </nav>
