@@ -19,6 +19,13 @@ The first paragraph starting with a boldface text is treated as a header.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
                           **Document title**
 A subtitle or whatever deemed appropriate to be displayed near the title
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<mf-title>
+    Document title
+</mf-title>
+<mf-lead>
+    A subtitle or whatever deemed appropriate to be displayed near the title
+</mf-lead>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Block quotations
@@ -39,13 +46,22 @@ tempor incididunt ut labore et dolore magna aliqua.
 Still in a block quotation...
 
 No longer in a block quotation.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<p>Here comes a famous passage:</p>
+<blockquote><p>
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua.
+Still in a block quotation...
+</p></blockquote>
+
+<p>No longer in a block quotation.</p>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Block quotes are processed before most kinds of Foremark constructs (even HTML tags!). However, code blocks are processed earlier so that quotation marks inside a code fence are handled as intended:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
-> <b>This `<b>` element does not
-> have the `>` sign in it.</b>
+> <i>This `<i>` element does not
+> have the `>` sign in it.</i>
 >
 > ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
 >
@@ -53,6 +69,17 @@ Block quotes are processed before most kinds of Foremark constructs (even HTML t
 > >
 >
 > ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<blockquote>
+<p><i>This <code>&lt;i&gt;</code> element does not
+have the <code>&gt;</code> sign in it.</i></p>
+<mf-codeblock><mf-code type="Markdown">
+
+>
+>
+
+</mf-code></mf-codeblock>
+</blockquote>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -83,6 +110,12 @@ Foremark Text interprets well-formed HTML tags embedded in a text node as HTML t
 Valid tag: <br />
 Extra whitespaces: < br / > (displayed as "< br / >")
 Self-closing: <br> (displayed as "<br>" unless there's `</br>`)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<p>
+Valid tag: <br />
+Extra whitespaces: &lt; br / &gt; (displayed as "&lt; br / &gt;")
+Self-closing: &lt;br&gt; (displayed as "&lt;br&gt;" unless there's <code>&lt;/br&gt;</code>)
+</p>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 !!! Note
@@ -112,7 +145,14 @@ Self-closing: <br> (displayed as "<br>" unless there's `</br>`)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
 [This](https://www.example.com) is a normal Markdown hyperlink.
 
-[This](https://www.example.com "title") has a `title` attribute.
+[This](https://www.example.com "lo mupli" attr="value") has some attributes.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<p>
+<a href="https://www.example.com">This</a> is a normal Markdown hyperlink.
+</p>
+<p>
+<a href="https://www.example.com" title="lo mupli" attr="value">This</a> has some attributes.
+</p>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Symbolic hyperlinks
@@ -123,12 +163,21 @@ Link targets can be placed out-of-text:
 [**This**] [] is a symbolic hyperlink with an implied symbol name.
 
 [This] [example] is a symbolic hyperlink with an explicit symbol name.
-ALso, notice that the link target can span across multiple lines.
+Also, notice that the link target can span across multiple lines.
 All link breaks within a link target are removed.
 
 [**This**]:  https://www.example.com
 [example]:   https://
-             www.example.com "title text here"
+             www.example.com "title text here" attr="value"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<p>
+<a href="https://www.example.com"><b>This</b></a> is a symbolic hyperlink with an implied symbol name.
+</p>
+<p>
+<a href="https://www.example.com" title="title text here" attr="value">This</a> is a symbolic hyperlink with an explicit symbol name.
+Also, notice that the link target can span across multiple lines.
+All link breaks within a link target are removed.
+</p>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Symbol names are case-sensitive.
@@ -150,6 +199,13 @@ A symbolic hyperlink is not formed if no link target could be associated.
 
 [example]: https://www.example.com
 [example]: https://www.example.com/this-link-target-definition-is-ignored
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<p>
+[This][example] is not a hyperlink and is displayed as <code>[This][example]</code>.
+</p>
+<p>
+<a href="https://www.example.com">This</a> is a hyperlink.
+</p>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The association cannot be formed across the boundaries of `<mf-text>`.
@@ -171,6 +227,12 @@ The pudding face looks like
 ![alt text (optional)][pudding].
 
 [pudding]: https://derpicdn.net/img/2018/11/8/1877696/medium.png
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<p>
+The pudding face looks like
+<mf-media src="https://derpicdn.net/img/2018/11/8/1877696/medium.png" alt="alt text (optional)" /> or
+<mf-media src="https://derpicdn.net/img/2018/11/8/1877696/medium.png" alt="alt text (optional)" />.
+</p>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Inline media are directly rendered as `<mf-media>` elements.
@@ -190,6 +252,29 @@ The pudding faces are shown below:
 
 ![!Figure fig1][alttext](https://derpicdn.net/img/2018/11/8/1877696/medium.png):
     Figure (possibly automatically positioned)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<p>The pudding faces are shown below:</p>
+
+<mf-figure>
+<p><mf-media src="https://derpicdn.net/img/2018/11/8/1877696/medium.png" alt="alttext" /></p>
+<mf-figure-caption><p>
+    Media block (manually positioned)
+</p></mf-figure-caption>
+</mf-figure>
+
+<mf-figure size="full">
+<p><mf-media src="https://derpicdn.net/img/2018/11/8/1877696/medium.png" alt="alttext" /></p>
+<mf-figure-caption><p>
+    Media block (manually positioned) but takes entire a row
+</p></mf-figure-caption>
+</mf-figure>
+
+<mf-figure id="Figure fig1" size="large">
+<p><mf-media src="https://derpicdn.net/img/2018/11/8/1877696/medium.png" alt="alttext" /></p>
+<mf-figure-caption><p>
+    Figure (possibly automatically positioned)
+</p></mf-figure-caption>
+</mf-figure>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The first part (`[^]`, `[!Figure fig1]`) is based on [the floating contents block syntax](#foremarktext/floatingcontents). Sidenote labels (e.g., `[!basenameonly]`) may not be used.
@@ -205,17 +290,18 @@ A media tag optionally include XML attributes:
 ![^][](https://derpicdn.net/img/2018/11/8/1877696/medium.png style="animation: 2000ms _2qw9KkueUdLlzZdwjgAKzl both infinite linear"):
     Media caption
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
-<mf-media src="https://derpicdn.net/img/2018/11/8/1877696/medium.png"
+<p>
+<mf-media src="https://derpicdn.net/img/2018/11/8/1877696/medium.png" alt=""
      style="animation: 2000ms _2qw9KkueUdLlzZdwjgAKzl both infinite linear" />
-
+</p>
 <mf-figure>
-    <mf-figure-caption>
-        Media caption
-    </mf-figure-caption>
     <p>
-        <mf-media src="https://derpicdn.net/img/2018/11/8/1877696/medium.png"
+        <mf-media src="https://derpicdn.net/img/2018/11/8/1877696/medium.png" alt=""
              style="animation: 2000ms _2qw9KkueUdLlzZdwjgAKzl both infinite linear" />
     </p>
+    <mf-figure-caption>
+        <p>Media caption</p>
+    </mf-figure-caption>
 </mf-figure>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -363,6 +449,22 @@ Second level
 ##### Fifth level
 
 ...
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<h1>First level</h1>
+
+<h2>Second level</h2>
+
+<h1>First level</h1>
+
+<h2>Second level</h2>
+
+<h3>Third level</h3>
+
+<h4>Fourth level</h4>
+
+<h5>Fifth level</h5>
+
+<p>...</p>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Horizontal rules
@@ -379,6 +481,8 @@ _ _ _
 *****
 
 * * *
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<hr /><hr /><hr /><hr /><hr /><hr />
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Lists
@@ -404,9 +508,9 @@ A line starting with one of the markers starts a list. The list goes on until a 
 We're out!
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
 <ul>
-    <li class="minus">Marker line
+<li class="minus"><p>Marker line
 Non-marker lines
-  And goes on...</li>
+  And goes on...</p></li>
 </ul>
 <p>We're out!</p>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -419,11 +523,11 @@ Consecutive items with the same list type are merged into one list:
 1. Item3
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
 <ul>
-    <li class="minus">Item1</li>
-    <li class="minus">Item2</li>
+    <li class="minus"><p>Item1</p></li>
+    <li class="minus"><p>Item2</p></li>
 </ul>
-<ol start="1">
-    <li>Item3</li>
+<ol>
+    <li><p>Item3</p></li>
 </ol>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -434,12 +538,12 @@ A number in ordered lists *does* matter. A non-sequential number restarts a list
 3. Item2
 4. Item3
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
-<ol start="1">
-    <li>Item1</li>
+<ol>
+    <li><p>Item1</p></li>
 </ol>
 <ol start="3">
-    <li>Item2</li>
-    <li>Item3</li>
+    <li><p>Item2</p></li>
+    <li><p>Item3</p></li>
 </ol>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -449,6 +553,12 @@ Definition lists takes the last line as the caption:
 Asymmetric cryptography
 :   An encryption system that uses pairs of keys: public keys
     and private keys.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<dl>
+<dt><p>Asymmetric cryptography</p></dt>
+<dd><p>An encryption system that uses pairs of keys: public keys
+and private keys.</p></dd>
+</dl>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Admonitions
@@ -457,7 +567,7 @@ Asymmetric cryptography
 !!! Danger: Can I have your attention please?!
     The message follows...
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
-<mf-admonition type="Danger">
+<mf-admonition type="danger">
     <mf-admonition-title>
         Can I have your attention please?!
     </mf-admonition-title>
@@ -481,6 +591,11 @@ A caption line is in one of the following formats:
 $$ \Lo(X, \wo) = \Le(X, \wo) + \int_\Omega \Li(X, \wi) ~ f_X(\wi, \wo) ~ | \n \cdot \wi | ~ d\wi $$
 
 Look at an inline equation: $e^{i \pi} + 1 = 0$
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<mf-eq-display>\Lo(X, \wo) = \Le(X, \wo) + \int_\Omega \Li(X, \wi) ~ f_X(\wi, \wo) ~ | \n \cdot \wi | ~ d\wi</mf-eq-display>
+<p>
+Look at an inline equation: <mf-eq>e^{i \pi} + 1 = 0</mf-eq>
+</p>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 !!! TODO: Yet to be added...
@@ -521,7 +636,24 @@ cillum dolore eu fugiat nulla pariatur.</p>
 | `~~strikethrough~~`        | ~~strikethrough~~ | ]]>
 | <code>`inline code`</code> | `inline code`     | <![CDATA[
 
-Formatted text may cross lines, but not paragraphs. Formatting can be applied to a part of words:
+Formatted text may cross lines, but not paragraphs.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Foremark
+Lorem ipsum dolor **sit amet,
+consectetur** adipisicing _elit
+
+Duis_ aute irure dolor in ...
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<p>
+Lorem ipsum dolor <b>sit amet,
+consectetur</b> adipisicing _elit
+</p>
+<p>
+Duis_ aute irure dolor in ...
+</p>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Formatting can be applied to a part of words:
 
 |           Source           |                 Result                 |
 |----------------------------|----------------------------------------|
@@ -1014,6 +1146,8 @@ mf-code[type="XML converted"] {
     display: block;
     padding-left: 16px;
     margin-top: 0.5em;
+    opacity: 0.9;
+    font-size: 80%;
 }
 mf-code[type="XML converted"]:before {
     content: "XML output";
