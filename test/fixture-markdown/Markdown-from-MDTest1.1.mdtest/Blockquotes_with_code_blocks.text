@@ -1,11 +1,15 @@
 > Example:
-> 
->     sub status {
->         print "working";
->     }
-> 
+>
+> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> sub status {
+>     print "working";
+> }
+> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
 > Or:
-> 
->     sub status {
->         return "working";
->     }
+>
+> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> sub status {
+>     return "working";
+> }
+> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

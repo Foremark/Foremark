@@ -1,11 +1,11 @@
 <h1>Markdown: Basics</h1>
 
 <ul id="ProjectSubmenu">
-    <li><a href="/projects/markdown/" title="Markdown Project Page">Main</a></li>
-    <li><a class="selected" title="Markdown Basics">Basics</a></li>
-    <li><a href="/projects/markdown/syntax" title="Markdown Syntax Documentation">Syntax</a></li>
-    <li><a href="/projects/markdown/license" title="Pricing and License Information">License</a></li>
-    <li><a href="/projects/markdown/dingus" title="Online Markdown Web Form">Dingus</a></li>
+    <li><p><a href="/projects/markdown/" title="Markdown Project Page">Main</a></p></li>
+    <li><p><a class="selected" title="Markdown Basics">Basics</a></p></li>
+    <li><p><a href="/projects/markdown/syntax" title="Markdown Syntax Documentation">Syntax</a></p></li>
+    <li><p><a href="/projects/markdown/license" title="Pricing and License Information">License</a></p></li>
+    <li><p><a href="/projects/markdown/dingus" title="Online Markdown Web Form">Dingus</a></p></li>
 </ul>
 
 <h2>Getting the Gist of Markdown's Formatting Syntax</h2>
@@ -42,7 +42,7 @@ HTML header level.</p>
 
 <p>Markdown:</p>
 
-<pre><code>A First Level Header
+<mf-codeblock><mf-code type="">A First Level Header
 ====================
 
 A Second Level Header
@@ -62,11 +62,11 @@ dog's back.
 &gt; This is the second paragraph in the blockquote.
 &gt;
 &gt; ## This is an H2 in a blockquote
-</code></pre>
+</mf-code></mf-codeblock>
 
 <p>Output:</p>
 
-<pre><code>&lt;h1&gt;A First Level Header&lt;/h1&gt;
+<mf-codeblock><mf-code type="">&lt;h1&gt;A First Level Header&lt;/h1&gt;
 
 &lt;h2&gt;A Second Level Header&lt;/h2&gt;
 
@@ -86,7 +86,7 @@ dog's back.&lt;/p&gt;
 
     &lt;h2&gt;This is an H2 in a blockquote&lt;/h2&gt;
 &lt;/blockquote&gt;
-</code></pre>
+</mf-code></mf-codeblock>
 
 <h3>Phrase Emphasis</h3>
 
@@ -94,21 +94,21 @@ dog's back.&lt;/p&gt;
 
 <p>Markdown:</p>
 
-<pre><code>Some of these words *are emphasized*.
+<mf-codeblock><mf-code type="">Some of these words *are emphasized*.
 Some of these words _are emphasized also_.
 
 Use two asterisks for **strong emphasis**.
 Or, if you prefer, __use two underscores instead__.
-</code></pre>
+</mf-code></mf-codeblock>
 
 <p>Output:</p>
 
-<pre><code>&lt;p&gt;Some of these words &lt;em&gt;are emphasized&lt;/em&gt;.
-Some of these words &lt;em&gt;are emphasized also&lt;/em&gt;.&lt;/p&gt;
+<mf-codeblock><mf-code type="">&lt;p&gt;Some of these words &lt;i&gt;are emphasized&lt;/i&gt;.
+Some of these words &lt;i&gt;are emphasized also&lt;/i&gt;.&lt;/p&gt;
 
-&lt;p&gt;Use two asterisks for &lt;strong&gt;strong emphasis&lt;/strong&gt;.
-Or, if you prefer, &lt;strong&gt;use two underscores instead&lt;/strong&gt;.&lt;/p&gt;
-</code></pre>
+&lt;p&gt;Use two asterisks for &lt;b&gt;strong emphasis&lt;/b&gt;.
+Or, if you prefer, &lt;b&gt;use two underscores instead&lt;/b&gt;.&lt;/p&gt;
+</mf-code></mf-codeblock>
 
 <h2>Lists</h2>
 
@@ -116,70 +116,70 @@ Or, if you prefer, &lt;strong&gt;use two underscores instead&lt;/strong&gt;.&lt;
 <code>+</code>, and <code>-</code>) as list markers. These three markers are
 interchangable; this:</p>
 
-<pre><code>*   Candy.
+<mf-codeblock><mf-code type="">*   Candy.
 *   Gum.
 *   Booze.
-</code></pre>
+</mf-code></mf-codeblock>
 
 <p>this:</p>
 
-<pre><code>+   Candy.
+<mf-codeblock><mf-code type="">+   Candy.
 +   Gum.
 +   Booze.
-</code></pre>
+</mf-code></mf-codeblock>
 
 <p>and this:</p>
 
-<pre><code>-   Candy.
+<mf-codeblock><mf-code type="">-   Candy.
 -   Gum.
 -   Booze.
-</code></pre>
+</mf-code></mf-codeblock>
 
 <p>all produce the same output:</p>
 
-<pre><code>&lt;ul&gt;
+<mf-codeblock><mf-code type="">&lt;ul&gt;
 &lt;li&gt;Candy.&lt;/li&gt;
 &lt;li&gt;Gum.&lt;/li&gt;
 &lt;li&gt;Booze.&lt;/li&gt;
 &lt;/ul&gt;
-</code></pre>
+</mf-code></mf-codeblock>
 
 <p>Ordered (numbered) lists use regular numbers, followed by periods, as
 list markers:</p>
 
-<pre><code>1.  Red
+<mf-codeblock><mf-code type="">1.  Red
 2.  Green
 3.  Blue
-</code></pre>
+</mf-code></mf-codeblock>
 
 <p>Output:</p>
 
-<pre><code>&lt;ol&gt;
+<mf-codeblock><mf-code type="">&lt;ol&gt;
 &lt;li&gt;Red&lt;/li&gt;
 &lt;li&gt;Green&lt;/li&gt;
 &lt;li&gt;Blue&lt;/li&gt;
 &lt;/ol&gt;
-</code></pre>
+</mf-code></mf-codeblock>
 
 <p>If you put blank lines between items, you'll get <code>&lt;p&gt;</code> tags for the
 list item text. You can create multi-paragraph list items by indenting
 the paragraphs by 4 spaces or 1 tab:</p>
 
-<pre><code>*   A list item.
+<mf-codeblock><mf-code type="">*   A list item.
 
     With multiple paragraphs.
 
 *   Another item in the list.
-</code></pre>
+</mf-code></mf-codeblock>
 
 <p>Output:</p>
 
-<pre><code>&lt;ul&gt;
+<mf-codeblock><mf-code type="">&lt;ul&gt;
 &lt;li&gt;&lt;p&gt;A list item.&lt;/p&gt;
 &lt;p&gt;With multiple paragraphs.&lt;/p&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;Another item in the list.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
-</code></pre>
+</mf-code></mf-codeblock>
 
 <h3>Links</h3>
 
@@ -190,59 +190,59 @@ text you want to turn into a link.</p>
 <p>Inline-style links use parentheses immediately after the link text.
 For example:</p>
 
-<pre><code>This is an [example link](http://example.com/).
-</code></pre>
+<mf-codeblock><mf-code type="">This is an [example link](http://example.com/).
+</mf-code></mf-codeblock>
 
 <p>Output:</p>
 
-<pre><code>&lt;p&gt;This is an &lt;a href="http://example.com/"&gt;
+<mf-codeblock><mf-code type="">&lt;p&gt;This is an &lt;a href="http://example.com/"&gt;
 example link&lt;/a&gt;.&lt;/p&gt;
-</code></pre>
+</mf-code></mf-codeblock>
 
 <p>Optionally, you may include a title attribute in the parentheses:</p>
 
-<pre><code>This is an [example link](http://example.com/ "With a Title").
-</code></pre>
+<mf-codeblock><mf-code type="">This is an [example link](http://example.com/ "With a Title").
+</mf-code></mf-codeblock>
 
 <p>Output:</p>
 
-<pre><code>&lt;p&gt;This is an &lt;a href="http://example.com/" title="With a Title"&gt;
+<mf-codeblock><mf-code type="">&lt;p&gt;This is an &lt;a href="http://example.com/" title="With a Title"&gt;
 example link&lt;/a&gt;.&lt;/p&gt;
-</code></pre>
+</mf-code></mf-codeblock>
 
 <p>Reference-style links allow you to refer to your links by names, which
 you define elsewhere in your document:</p>
 
-<pre><code>I get 10 times more traffic from [Google][1] than from
+<mf-codeblock><mf-code type="">I get 10 times more traffic from [Google][1] than from
 [Yahoo][2] or [MSN][3].
 
 [1]: http://google.com/        "Google"
 [2]: http://search.yahoo.com/  "Yahoo Search"
 [3]: http://search.msn.com/    "MSN Search"
-</code></pre>
+</mf-code></mf-codeblock>
 
 <p>Output:</p>
 
-<pre><code>&lt;p&gt;I get 10 times more traffic from &lt;a href="http://google.com/"
+<mf-codeblock><mf-code type="">&lt;p&gt;I get 10 times more traffic from &lt;a href="http://google.com/"
 title="Google"&gt;Google&lt;/a&gt; than from &lt;a href="http://search.yahoo.com/"
 title="Yahoo Search"&gt;Yahoo&lt;/a&gt; or &lt;a href="http://search.msn.com/"
 title="MSN Search"&gt;MSN&lt;/a&gt;.&lt;/p&gt;
-</code></pre>
+</mf-code></mf-codeblock>
 
 <p>The title attribute is optional. Link names may contain letters,
 numbers and spaces, but are <i>not</i> case sensitive:</p>
 
-<pre><code>I start my morning with a cup of coffee and
+<mf-codeblock><mf-code type="">I start my morning with a cup of coffee and
 [The New York Times][NY Times].
 
 [ny times]: http://www.nytimes.com/
-</code></pre>
+</mf-code></mf-codeblock>
 
 <p>Output:</p>
 
-<pre><code>&lt;p&gt;I start my morning with a cup of coffee and
+<mf-codeblock><mf-code type="">&lt;p&gt;I start my morning with a cup of coffee and
 &lt;a href="http://www.nytimes.com/"&gt;The New York Times&lt;/a&gt;.&lt;/p&gt;
-</code></pre>
+</mf-code></mf-codeblock>
 
 <h3>Images</h3>
 
@@ -250,20 +250,20 @@ numbers and spaces, but are <i>not</i> case sensitive:</p>
 
 <p>Inline (titles are optional):</p>
 
-<pre><code>![alt text](/path/to/img.jpg "Title")
-</code></pre>
+<mf-codeblock><mf-code type="">![alt text](/path/to/img.jpg "Title")
+</mf-code></mf-codeblock>
 
 <p>Reference-style:</p>
 
-<pre><code>![alt text][id]
+<mf-codeblock><mf-code type="">![alt text][id]
 
 [id]: /path/to/img.jpg "Title"
-</code></pre>
+</mf-code></mf-codeblock>
 
 <p>Both of the above examples produce the same output:</p>
 
-<pre><code>&lt;img src="/path/to/img.jpg" alt="alt text" title="Title" /&gt;
-</code></pre>
+<mf-codeblock><mf-code type="">&lt;img src="/path/to/img.jpg" alt="alt text" title="Title" /&gt;
+</mf-code></mf-codeblock>
 
 <h3>Code</h3>
 
@@ -272,21 +272,21 @@ backtick quotes. Any ampersands (<code>&amp;</code>) and angle brackets (<code>&
 <code>&gt;</code>) will automatically be translated into HTML entities. This makes
 it easy to use Markdown to write about HTML example code:</p>
 
-<pre><code>I strongly recommend against using any `&lt;blink&gt;` tags.
+<mf-codeblock><mf-code type="">I strongly recommend against using any `&lt;blink&gt;` tags.
 
 I wish SmartyPants used named entities like `&amp;mdash;`
 instead of decimal-encoded entites like `&amp;#8212;`.
-</code></pre>
+</mf-code></mf-codeblock>
 
 <p>Output:</p>
 
-<pre><code>&lt;p&gt;I strongly recommend against using any
+<mf-codeblock><mf-code type="">&lt;p&gt;I strongly recommend against using any
 &lt;code&gt;&amp;lt;blink&amp;gt;&lt;/code&gt; tags.&lt;/p&gt;
 
 &lt;p&gt;I wish SmartyPants used named entities like
 &lt;code&gt;&amp;amp;mdash;&lt;/code&gt; instead of decimal-encoded
 entites like &lt;code&gt;&amp;amp;#8212;&lt;/code&gt;.&lt;/p&gt;
-</code></pre>
+</mf-code></mf-codeblock>
 
 <p>To specify an entire block of pre-formatted code, indent every line of
 the block by 4 spaces or 1 tab. Just like with code spans, <code>&amp;</code>, <code>&lt;</code>,
@@ -294,21 +294,21 @@ and <code>&gt;</code> characters will be escaped automatically.</p>
 
 <p>Markdown:</p>
 
-<pre><code>If you want your page to validate under XHTML 1.0 Strict,
+<mf-codeblock><mf-code type="">If you want your page to validate under XHTML 1.0 Strict,
 you've got to put paragraph tags in your blockquotes:
 
     &lt;blockquote&gt;
         &lt;p&gt;For example.&lt;/p&gt;
     &lt;/blockquote&gt;
-</code></pre>
+</mf-code></mf-codeblock>
 
 <p>Output:</p>
 
-<pre><code>&lt;p&gt;If you want your page to validate under XHTML 1.0 Strict,
+<mf-codeblock><mf-code type="">&lt;p&gt;If you want your page to validate under XHTML 1.0 Strict,
 you've got to put paragraph tags in your blockquotes:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;&amp;lt;blockquote&amp;gt;
     &amp;lt;p&amp;gt;For example.&amp;lt;/p&amp;gt;
 &amp;lt;/blockquote&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
-</code></pre>
+</mf-code></mf-codeblock>
