@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.0.7] - 2018-12-31
+
+- Remove test code from the NPM package
+
 ## [0.0.6] - 2018-12-31
 
 - The user interface was restyled to make it less intrusive to the contents.
@@ -50,7 +54,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial release.
 
-[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.6...HEAD
+[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.7...HEAD
+[0.0.7]: https://github.com/Foremark/Foremark/compare/0.0.6...0.0.7
 [0.0.6]: https://github.com/Foremark/Foremark/compare/0.0.5...0.0.6
 [0.0.5]: https://github.com/Foremark/Foremark/compare/0.0.4...0.0.5
 [0.0.4]: https://github.com/Foremark/Foremark/compare/0.0.3...0.0.4
