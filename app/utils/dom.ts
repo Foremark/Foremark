@@ -26,7 +26,53 @@ function placeholderHtmlWithId(name: string, i: any): string {
 const PLACEHOLDER_REGEX = /<[-_a-zA-Z0-9]+ ph-id="([0-9]+)" \/>/g;
 const PLACEHOLDER_ATTR = 'ph-id';
 
-const testElement = document.createElement('i');
+let testElement: HTMLElement;
+
+/**
+ * Constructors of DOM types;
+ *
+ * Node.js does not provide DOM types, so they must be supplied externally
+ * when we are in a Node.js environment.
+ */
+export let DomTypes: DomTypes;
+
+export interface DomTypes {
+    Text: typeof Text;
+    Element: typeof Element;
+}
+
+export interface Dom extends DomTypes {
+    document: Document;
+}
+
+/**
+ * Specifies a DOM global object used for internal operations.
+ *
+ * You must call this function first if the library is being used in a Node.js
+ * environment.
+ *
+ * # Example
+ *
+ *     import {JSDOM} from 'jsdom';
+ *     const dom = new JSDOM('<html />', {
+ *         contentType: 'application/xml',
+ *     });
+ *     setWorkingDom(dom.window);
+ *
+ */
+export function setWorkingDom(window: Dom) {
+    const e = window.document.createElement('i');
+    if (e.tagName !== 'i') {
+        throw new Error("Sanity check failed - maybe the document is not XML?");
+    }
+
+    testElement = e;
+    DomTypes = window;
+}
+
+if (typeof window !== 'undefined') {
+    setWorkingDom(window as any);
+}
 
 export interface TransformHtmlWithContext {
     /**
@@ -60,7 +106,7 @@ export function transformHtmlWith(
     if (reverse) {
         for (let n: Node | null = node.lastChild; n; ) {
             const next = n.previousSibling;
-            if (n instanceof Element && recursionFilter && recursionFilter(n)) {
+            if (n instanceof DomTypes.Element && recursionFilter && recursionFilter(n)) {
                 transformHtmlWith(n, tx, recursionFilter);
             }
             n = next;
@@ -68,7 +114,7 @@ export function transformHtmlWith(
     } else {
         for (let n: Node | null = node.firstChild; n; ) {
             const next = n.nextSibling;
-            if (n instanceof Element && recursionFilter && recursionFilter(n)) {
+            if (n instanceof DomTypes.Element && recursionFilter && recursionFilter(n)) {
                 transformHtmlWith(n, tx, recursionFilter);
             }
             n = next;
@@ -79,12 +125,12 @@ export function transformHtmlWith(
     const placeholders = new Map<string, Node>();
     let html = '';
     for (let n: Node | null = node.firstChild; n; n = n.nextSibling) {
-        if (n instanceof Text) {
+        if (n instanceof DomTypes.Text) {
             html += n.textContent!
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;');
-        } else if (n instanceof Element) {
+        } else if (n instanceof DomTypes.Element) {
             if (recursionFilter && recursionFilter(n)) {
                 transformHtmlWith(n, tx, recursionFilter);
             }
@@ -148,7 +194,7 @@ export function transformHtmlWith(
 
         for (let child: Node | null = e.firstChild; child; ) {
             const next = child.nextSibling;
-            if (child instanceof Element) {
+            if (child instanceof DomTypes.Element) {
                 fillPlaceholders(child);
             }
             child = next;
@@ -185,9 +231,9 @@ export function transformTextNodeWith(
     reverse: boolean,
 ) {
     (reverse ? forEachNodeReversePreorder : forEachNodePreorder)(node, node => {
-        if (node instanceof Element) {
+        if (node instanceof DomTypes.Element) {
             return recursionFilter(node);
-        } else if (node instanceof Text) {
+        } else if (node instanceof DomTypes.Text) {
             let html = node.textContent!
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
@@ -222,7 +268,7 @@ export function forEachNodePreorder(node: Node, f: (node: Node) => boolean | voi
     if (f(node) === false) {
         return;
     }
-    if (node instanceof Element) {
+    if (node instanceof DomTypes.Element) {
         for (let n: Node | null = node.firstChild; n; ) {
             const next = n.nextSibling;
             forEachNodePreorder(n, f);
@@ -241,7 +287,7 @@ export function forEachNodeReversePreorder(node: Node, f: (node: Node) => boolea
     if (f(node) === false) {
         return;
     }
-    if (node instanceof Element) {
+    if (node instanceof DomTypes.Element) {
         for (let n: Node | null = node.lastChild; n; ) {
             const next = n.previousSibling;
             forEachNodePreorder(n, f);

@@ -1,7 +1,7 @@
 import {TagNames} from '../foremark';
 import {
     transformHtmlWith, escapeXmlText, legalizeAttributes, InternalTagNames,
-    transformTextNodeWith, forEachNodePreorder, unescapeXmlText,
+    transformTextNodeWith, forEachNodePreorder, unescapeXmlText, DomTypes,
 } from '../utils/dom';
 import {removePrefix} from '../utils/string';
 import {replaceTables} from './table';
@@ -63,7 +63,7 @@ const VERBATIM_ELEMENTS_MAP = new Map(VERBATIM_ELEMENTS.map(
 export function expandMfText(node: Element): void {
     if (node.tagName.toLowerCase() !== TagNames.Text) {
         for (let n: Node | null = node.firstChild; n; n = n.nextSibling) {
-            if (n instanceof Element) {
+            if (n instanceof DomTypes.Element) {
                 expandMfText(n);
             }
         }
@@ -80,11 +80,11 @@ export function expandMfText(node: Element): void {
     // per text node basis, so this example won't be recognized as a hyperlink
     // without this step.
     forEachNodePreorder(node, node => {
-        if (!(node instanceof Text) || node.nextSibling instanceof Text) {
+        if (!(node instanceof DomTypes.Text) || node.nextSibling instanceof DomTypes.Text) {
             return;
         }
         // This is the last one of one or more consecutive text nodes.
-        if (!(node.previousSibling instanceof Text)) {
+        if (!(node.previousSibling instanceof DomTypes.Text)) {
             // One consecutive text node.
             return;
         }
@@ -93,7 +93,7 @@ export function expandMfText(node: Element): void {
         const parts: string[] = [node.textContent!];
         const parent = node.parentElement!;
 
-        for (let n: Node | null = node.previousSibling; n instanceof Text; ) {
+        for (let n: Node | null = node.previousSibling; n instanceof DomTypes.Text; ) {
             const next: Node | null = n.previousSibling;
             parts.unshift(n.textContent!);
             parent.removeChild(n);
@@ -664,10 +664,10 @@ export function expandMfText(node: Element): void {
         }
         let bold: Element | null = null;
         for (let n: Node | null = firstPara.firstChild; n; n = n!.nextSibling) {
-            if ((n instanceof Text) && n.textContent!.match(/^\s*$/)) {
+            if ((n instanceof DomTypes.Text) && n.textContent!.match(/^\s*$/)) {
                 continue;
             }
-            if (!(n instanceof Element) || (n.tagName !== 'B' && n.tagName !== 'b')) {
+            if (!(n instanceof DomTypes.Element) || (n.tagName !== 'B' && n.tagName !== 'b')) {
                 return;
             }
             bold = n;
@@ -691,7 +691,7 @@ export function expandMfText(node: Element): void {
         const lead = node.ownerDocument!.createElement(TagNames.Lead);
         let isEmpty = true;
         for (let n: Node | null = bold.nextSibling; n; ) {
-            if (!(n instanceof Text) || !n.textContent!.match(/^\s*$/)) {
+            if (!(n instanceof DomTypes.Text) || !n.textContent!.match(/^\s*$/)) {
                 isEmpty = false;
             }
 
