@@ -266,10 +266,10 @@ export function expandMfText(node: Element): void {
     ), e => e === node || isBlockquote(e), false);
 
     // Parse HTML comments
-    transformTextNodeWith(node, html => html.replace(
+    transformHtmlWith(node, html => html.replace(
         /&lt;(!--\s[\s\S]*?--)&gt;/g,
         (_, inner) => `<${inner}>`,
-    ), e => e === node || isBlockquote(e), false);
+    ), e => e === node || isBlockquote(e));
 
     // Replace well-formed HTML tags
     // The regex performs all validation of individual tags. The code checks
