@@ -54,7 +54,6 @@ The final HTML is displayed by a web-based viewer application embedded in `forem
     - `diagram/` — An interface to Svgbob from the main application.
     - `svgbob/` — Git subtree of <https://github.com/ivanceras/svgbob.git>.
 - `examples/` — Example Foremark files.
-    - `browser` → `../browser` (symlink)
     - `*.mf.xhtml`
 - `test/` — [Mocha](https://mochajs.org/) tests. They require `dist/` to run.
 
