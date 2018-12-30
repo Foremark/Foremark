@@ -98,6 +98,11 @@ export class App extends React.Component<AppProps, AppState> {
             if (e.target === this.searchQueryElement) {
                 return;
             }
+            if (window.matchMedia(`screen and (max-width: ${StyleConstants.ScreenMediumMax}px)`).matches) {
+                this.setState({sidebarModalVisible: true});
+            } else {
+                this.setState({tocVisible: true});
+            }
             this.searchQueryElement!.focus();
             e.preventDefault();
             e.stopPropagation();
