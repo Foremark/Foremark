@@ -105,6 +105,8 @@ Self-closing: <br> (displayed as "<br>" unless there's `</br>`)
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
 [This](https://www.example.com) is a normal Markdown hyperlink.
+
+[This](https://www.example.com "title") has a `title` attribute.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ### Symbolic hyperlinks
@@ -120,7 +122,7 @@ All link breaks within a link target are removed.
 
 [**This**]:  https://www.example.com
 [example]:   https://
-             www.example.com
+             www.example.com "title text here"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Symbol names are case-sensitive.

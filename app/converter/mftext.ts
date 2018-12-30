@@ -516,7 +516,7 @@ export function expandMfText(node: Element): void {
         /(^|[^!])\[([^\[\]]+?)\]\(("?)([^<>\s"]+?)\3(\s+[^\)]*?)?\)/g,
         (match, pre, text, maybeQuote, url: string, attribs = '') => {
             url = escapeXmlText(url);
-            attribs = legalizeAttributes(attribs, ['href'], e => console.warn(e));
+            attribs = legalizeAttributes(attribs, ['href'], e => console.warn(e), ['title']);
             return pre + `<a href="${url}"${attribs}>${text}</a>`;
         }
     ), isNonVerbatimElement);
@@ -573,19 +573,20 @@ export function expandMfText(node: Element): void {
                     linkSymbolTable.delete(symbolName);
 
                     linkTarget = linkTarget.trim();
-                    if (isImage) {
-                        const match = linkTarget.match(/^(?:(")?([^"]*)\1)( .*)?$/);
-                        if (match) {
-                            let [_1, _2, url, attribs] = match;
+                    const match = linkTarget.match(/^(?:(")?([^"]*?)\1)( .*)?$/);
+                    if (match) {
+                        let [_1, _2, url, attribs] = match;
+                        if (isImage) {
                             attribs = legalizeAttributes(attribs || '', ['src', 'alt'], e => console.warn(e));
                             output.unshift(`<${TagNames.Media} src="${escapeXmlText(url)}" alt="${escapeXmlText(text)}"${attribs} />`);
                         } else {
-                            output.unshift(`<${TagNames.Error}>Failed to parse the link target: <code>` +
-                                escapeXmlText(linkTarget) +
-                                `</code></${TagNames.Error}>`);
+                            attribs = legalizeAttributes(attribs || '', ['href'], e => console.warn(e), ['title']);
+                            output.unshift(`<a href="${escapeXmlText(url)}"${attribs}>${text}</a>`);
                         }
                     } else {
-                        output.unshift(`<a href="${escapeXmlText(linkTarget)}">${text}</a>`);
+                        output.unshift(`<${TagNames.Error}>Failed to parse the link target: <code>` +
+                            escapeXmlText(linkTarget) +
+                            `</code></${TagNames.Error}>`);
                     }
                 } else {
                     // Link target wasn't found; treat the fragment as a normal text

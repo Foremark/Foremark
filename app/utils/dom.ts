@@ -303,30 +303,52 @@ export function forEachNodeReversePreorder(node: Node, f: (node: Node) => boolea
  * duplicate attributes. Found attributes are added to `attributeNames`.
  *
  * Example: `legalizeAttributes(' a b="<>"')` returns `' a="a" b="&lt;&gt;"'`.
+ *
+ * # Positional attributes
+ *
+ * This function can automatically add a name to an attribute without one. The
+ * attribute names are chosen from `positionalAttributes`.
  */
 export function legalizeAttributes(
     xml: string,
     attributeNames: string[],
     onwarning: (message: string) => void = () => {},
+    positionalAttributes?: ArrayLike<string>,
 ): string {
     const [_, spaces, inner] = xml.match(/^(\s*)(.*)$/)!;
+    let nextIndex = 0;
 
     return spaces + (' ' + inner).replace(
         // This regex matches a XML attribute with rather forgiving syntax.
         // The union of all matches must cover entire the input except for
         // trailing whitespace characters (if any).
-        /(\s*)([^\s=]+)(?:(\s*=\s*)("[^"]*"?|'[^']*'?|[^"'\s]+)?)?/ig,
-        //^^^  ^^^^^^^^             ^^^^^^^^ ^^^^^^^^ ^^^^^^^^
-        // |    name                 "value"  'value'  value
+        /(\s*)(?:([^"'\s=][^\s=]*)(?:(\s*=\s*)("[^"]*"?|'[^']*'?|[^"'\s]+)?)?|("[^"]*"?|'[^']*'?))/ig,
+        //^^^     ^^^^^^^^^^^^^^^             ^^^^^^^^ ^^^^^^^^ ^^^^^^^^       ^^^^^^^^^^^^^^^^^
+        // |       name                        "value"  'value'  value      positional attr.
         // +-- separating space
-        (_, space, name, equal?: string, value?: string) => {
+        (_, space, name, equal?: string, value?: string, posAttr?: string) => {
             if (space === '') {
                 onwarning("A separator between attributes is missing.");
                 space = ' ';
             }
-            if (!isValidXmlName(name)) {
-                onwarning(`Invalid attribute name: '${name}'`);
-                return '';
+
+            if (posAttr) {
+                if (!positionalAttributes) {
+                    onwarning(`Attribute name is missing.`);
+                    return '';
+                }
+                if (nextIndex >= positionalAttributes.length) {
+                    onwarning(`No more positional attributes.`);
+                    return '';
+                }
+                name = positionalAttributes[nextIndex++];
+                equal = '=';
+                value = posAttr;
+            } else {
+                if (!isValidXmlName(name)) {
+                    onwarning(`Invalid attribute name: '${name}'`);
+                    return '';
+                }
             }
 
             if (attributeNames.indexOf(name) >= 0) {
