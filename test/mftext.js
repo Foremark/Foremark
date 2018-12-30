@@ -46,7 +46,11 @@ function runSingle(textPath, htmlPath) {
     squashWhitespaces(refBody);
 
     // Compare
-    assert.strictEqual(body.outerHTML, refBody.outerHTML);
+    const prettify = s => s.replace(/<\/?p>/g, '$&\n');
+    assert.strictEqual(
+        prettify(body.outerHTML),
+        prettify(refBody.outerHTML),
+    );
 }
 
 function scanFixture(dir) {
