@@ -5,6 +5,7 @@ import * as classnames from 'classnames';
 import {Port} from './components/port';
 import {EventHook} from './components/eventhook';
 import {forEachNodePreorder} from '../utils/dom';
+import {Debouncer} from '../utils/debouncer';
 
 const CN = require('./toc.less');
 
@@ -38,6 +39,8 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
     private searchRoot?: ViewNode;
 
     private suspendActiveNodeUpdate = false;
+
+    private domRoot?: HTMLDivElement;
 
     constructor(props: TableOfContentsProps) {
         super(props);
@@ -119,6 +122,13 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
 
     @bind
     private handleNodeClick(viewNode: ViewNode): void {
+        this.didNavigateNode(viewNode.node);
+    }
+
+    /**
+     * Should be called after a node is navigated.
+     */
+    private didNavigateNode(node: Node): void {
         // If a user clicks a node near the end of the document, the scroll
         // position is limited by the bottom edge of the document. As a result,
         // the active node determined by `recalculateAndSetActiveNode` might not
@@ -127,16 +137,144 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
         // We fix this by temporarily overriding the decision by
         // `recalculateAndSetActiveNode`.
         this.suspendActiveNodeUpdate = true;
-        this.setActiveNode(viewNode.node);
+        this.setActiveNode(node);
         setTimeout(() => {
             this.suspendActiveNodeUpdate = false;
         }, 50);
     }
 
-    render() {
-        const root = this.props.searchQuery ?
+    private get rootViewNode(): ViewNode {
+        return this.props.searchQuery ?
             this.searchRoot! : this.mainRoot;
-        return <ul className={CN.root} role='tree'>
+    }
+
+    private get highlightedViewNode(): ViewNode | null {
+        const path = this.state.activeNodePath;
+        let viewNode = this.rootViewNode;
+
+        for (let i = 1; i < path.length; ++i) {
+            if (viewNode.expanded === false) {
+                break;
+            }
+
+            const node = path[i];
+            const childViewNode = viewNode.children.find(c => c.node === node);
+            if (!childViewNode) {
+                break;
+            }
+            viewNode = childViewNode;
+        }
+
+        if (viewNode === this.rootViewNode) {
+            return null;
+        }
+
+        return viewNode;
+    }
+
+    @bind
+    private handleKey(e: KeyboardEvent): void {
+        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+            let viewNode = this.highlightedViewNode;
+
+            if (viewNode) {
+                // Find the next/previous node in the displayed order.
+                // Only the visible nodes are considered.
+                if (e.key === 'ArrowUp') {
+                    if (!viewNode.parent) {
+                        return;
+                    }
+                    const i = viewNode.parent.children.indexOf(viewNode);
+                    if (i < 0) {
+                        throw new Error();
+                    }
+                    if (i === 0) {
+                        viewNode = viewNode.parent;
+                        if (viewNode === this.rootViewNode) {
+                            return;
+                        }
+                    } else {
+                        // Find the last visible view node in the previous sibling's
+                        // descendants
+                        viewNode = viewNode.parent.children[i - 1];
+                        while (viewNode.expanded === true && viewNode.children.length > 0) {
+                            viewNode = viewNode.children[viewNode.children.length - 1];
+                        }
+                    }
+                } else {
+                    if (viewNode.expanded === false || viewNode.children.length === 0) {
+                        while (true) {
+                            if (!viewNode.parent) {
+                                return;
+                            }
+                            const children = viewNode.parent.children;
+                            const i = children.indexOf(viewNode);
+                            if (i < 0) {
+                                throw new Error();
+                            }
+                            if (i + 1 === children.length) {
+                                viewNode = viewNode.parent;
+                            } else {
+                                viewNode = children[i + 1];
+                                break;
+                            }
+                        }
+                    } else {
+                        viewNode = viewNode.children[0];
+                    }
+                }
+            } else {
+                // Choose the first node
+                viewNode = this.rootViewNode.children[0];
+            }
+
+            if (viewNode) {
+                navigateNode(viewNode.node);
+                this.didNavigateNode(viewNode.node);
+
+                if (viewNode.nodeView) {
+                    viewNode.nodeView.scrollIntoView();
+                }
+            }
+
+            e.preventDefault();
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+            let viewNode = this.highlightedViewNode;
+
+            const expand = e.key === 'ArrowRight';
+
+            if (viewNode) {
+                if ((viewNode.expanded === false || viewNode.children.length === 0) && !expand) {
+                    // Activate the parent node
+                    if (!viewNode.parent || viewNode.parent === this.rootViewNode) {
+                        return;
+                    }
+
+                    viewNode = viewNode.parent;
+                    navigateNode(viewNode.node);
+                    this.didNavigateNode(viewNode.node);
+
+                    if (viewNode.nodeView) {
+                        viewNode.nodeView.scrollIntoView();
+                    }
+                } else if (viewNode.nodeView) {
+                    // Expand/collapse the currently highlighted node
+                    viewNode.nodeView.isExpanded = expand;
+                }
+                e.preventDefault();
+            }
+        }
+    }
+
+    render() {
+        const root = this.rootViewNode;
+        return <ul
+            className={CN.root}
+            role='tree'
+            tabIndex={0}
+            ref={e => this.domRoot = e}
+            onKeyDown={this.handleKey}
+        >
             <EventHook target={document} scroll={this.handleScroll} />
             <EventHook target={window} resize={this.handleResize} />
 
@@ -239,6 +377,7 @@ interface ViewNode {
     unfilteredChildren: ViewNode[];
     parent: ViewNode | null;
     expanded: boolean | null;
+    nodeView: NodeView | null;
 }
 
 let nextViewNodeId = 1;
@@ -252,8 +391,9 @@ function createViewNode(node: Node, parent: ViewNode | null): ViewNode {
         id: nextViewNodeId++,
         children: [],
         unfilteredChildren: [],
-        parent: null,
+        parent,
         expanded: null,
+        nodeView: null,
     };
     viewNode.children = node.children
         .map(child => createViewNode(child, viewNode));
@@ -274,6 +414,18 @@ function applyFilterOnViewNode(viewNode: ViewNode, query: (node: Node) => boolea
     return viewNode.children.length > 0 || query(viewNode.node);
 }
 
+const NAVIGATE_DEBOUNCER = new Debouncer();
+
+/**
+ * Programmatically navigate to a node.
+ */
+function navigateNode(node: Node): void {
+    NAVIGATE_DEBOUNCER.invoke(() => {
+        window.history.replaceState(null, document.title, '#' + node.anchor!.id);
+    }, 500);
+    node.anchor!.scrollIntoView(true);
+}
+
 interface NodeViewProps {
     viewNode: ViewNode;
     onNodeClick: (viewNode: ViewNode) => void;
@@ -288,6 +440,7 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
     refs: any;
 
     private label: HTMLElement;
+    private element?: HTMLElement;
 
     constructor(props: NodeViewProps) {
         super(props);
@@ -309,7 +462,7 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
         return viewNode.node === tocState.activeNodePath[viewNode.node.level];
     }
 
-    private get isExpanded(): boolean {
+    get isExpanded(): boolean {
         if (this.props.viewNode.children.length === 0) {
             return false;
         }
@@ -318,28 +471,78 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
             this.shouldExpandByDefault;
     }
 
+    set isExpanded(expanded: boolean) {
+        if (this.props.viewNode.children.length === 0) {
+            return;
+        }
+
+        this.props.viewNode.expanded = expanded;
+        this.setState({ expanded });
+    }
+
     private get isActive(): boolean {
         const {viewNode, tocState} = this.props;
 
+        const nextLevel = tocState.activeNodePath[viewNode.node.level + 1];
+
         // If the node is expanded, do not display it as active unless the
         // node is exactly the active node (not an ancestor of it).
-        if (this.isExpanded && tocState.activeNodePath.length != viewNode.node.level + 1) {
+        if (
+            this.isExpanded && tocState.activeNodePath.length != viewNode.node.level + 1 &&
+            // Only consider a part of the path that is included in the view model.
+            // In a filtered view, a suffix of the path might not be in the view model.
+            viewNode.children.find(c => c.node === nextLevel)
+        ) {
             return false;
         }
 
         return viewNode.node === tocState.activeNodePath[viewNode.node.level];
     }
 
+    componentDidMount(): void {
+        this.props.viewNode.nodeView = this;
+    }
+
+    componentWillUnmount(): void {
+        if (this.props.viewNode.nodeView === this) {
+            this.props.viewNode.nodeView = null;
+        }
+    }
+
+    scrollIntoView(): void {
+        if (this.element) {
+            // Scroll the view only if `element` is completely or partially
+            // hidden due to scrolling
+            let top = this.element.offsetTop;
+            let bottom = top + this.element.offsetHeight;
+            let e = this.element.offsetParent as HTMLElement;
+            while (e && getComputedStyle(e).overflowY !== 'auto') {
+                top += e.offsetTop;
+                bottom += e.offsetTop;
+                e = e.offsetParent as HTMLElement;
+            }
+            if (top < e.scrollTop) {
+                this.element.scrollIntoView(true);
+            } else if (bottom > e.scrollTop + e.clientHeight) {
+                this.element.scrollIntoView(false);
+            }
+        }
+    }
+
     @bind
-    private handleClick(): void {
+    private handleClick(e: Event): void {
         this.props.onNodeClick(this.props.viewNode);
+
+        // Intercept the link action to prevent losing a keyboard focus.
+        e.stopPropagation();
+        e.preventDefault();
+
+        navigateNode(this.props.viewNode.node);
     }
 
     @bind
     private handleToggle(e: Event): void {
-        const expanded = !this.isExpanded;
-        this.props.viewNode.expanded = expanded;
-        this.setState({ expanded });
+        this.isExpanded = !this.isExpanded;
         e.stopPropagation();
         e.preventDefault();
     }
@@ -354,12 +557,14 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
 
         return <li
                 class={classnames({
+                    [CN.item]: true,
                     [CN.active]: isActive,
                     [CN['L' + node.level]]: true,
                 })}
                 role='treeitem'
                 aria-selected={`${isActive}`}
                 aria-expanded={viewNode.children.length > 0 && `${isExpanded}`}
+                ref={e => this.element = e}
             >
             <Port
                 tagName='a'

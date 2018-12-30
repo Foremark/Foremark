@@ -14,108 +14,117 @@
         padding: 0;
     }
 
-    li {
-        list-style: none;
+    &:focus {
+        outline: none;
+    }
+}
+
+li.item {
+    list-style: none;
+    margin: 0; padding: 0;
+
+    > a {
+        color: inherit;
+        text-decoration: none;
+        display: block;
+        padding: 0.25rem 0;
+
+        @media (max-width: @screen-medium-max) {
+            padding: 0.35rem 0;
+        }
+    }
+
+    // Expand/collapse button
+    > a > button {
+        float: left;
         margin: 0; padding: 0;
+        width: 1.5em; height: 1em;
+        position: relative;
+        top: calc(0.02em);
 
-        > a {
-            color: inherit;
-            text-decoration: none;
-            display: block;
-            padding: 0.25rem 0;
+        border: none; background: none;
+        @text-hidden();
 
-            @media (max-width: @screen-medium-max) {
-                padding: 0.35rem 0;
+        cursor: pointer;
+        outline: none;
+
+        &:before {
+            content: "";
+            position: absolute;
+            left: calc(50% - 3px); top: calc(50% - 3px);
+            box-sizing: border-box;
+            width: 6px; height: 6px;
+            border-bottom: 2px solid;
+            border-right: 2px solid;
+            border-color: #666;
+            @media (prefers-color-scheme: dark) {
+                border-color: #eee;
             }
+            opacity: 0.6;
+        }
+        &.collapsed:before {
+            transform: rotate(-45deg);
+        }
+        &.expanded:before {
+            transform: rotate(45deg) translate(0, -2px);
+        }
+        &:disabled {
+            pointer-events: none;
+            visibility: hidden;
+        }
+    }
+
+    > a > * {
+        // `h1`...`h6` matches here. Remove all heading-specific styles.
+        font-family: inherit;
+        font-style: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+        margin: 0;
+        padding: 0;
+        padding-left: 0.2em;
+        display: block;
+        overflow: hidden;
+    }
+    // Indentation
+    .indent(@level) { padding-left: unit((0.1 + pow(@level, 0.7)), em); }
+    &.L1 > a { .indent(0); }
+    &.L2 > a { .indent(1); }
+    &.L3 > a { .indent(2); }
+    &.L4 > a { .indent(3); }
+    &.L5 > a { .indent(4); }
+    &.L6 > a { .indent(5); }
+    &.L7 > a { .indent(6); }
+    &.L8 > a { .indent(7); }
+    &.L9 > a { .indent(8); }
+
+    &.active {
+        > a > button:before {
+            border-color: #eee;
+        }
+        > a {
+            background: #7f7f7f;
+            color: #eee;
         }
 
-        // Expand/collapse button
-        > a > button {
-            float: left;
-            margin: 0; padding: 0;
-            width: 1.5em; height: 1em;
-            position: relative;
-            top: calc(0.02em);
+        .root:focus &, .root:focus-within & {
+            > a { background: @accent-color; }
+        }
 
-            border: none; background: none;
-            @text-hidden();
-
-            cursor: pointer;
-            outline: none;
-
-            &:before {
-                content: "";
-                position: absolute;
-                left: calc(50% - 3px); top: calc(50% - 3px);
-                box-sizing: border-box;
-                width: 6px; height: 6px;
-                border-bottom: 2px solid;
-                border-right: 2px solid;
+        // Use a different style for a smaller screen
+        @media (max-width: @screen-medium-max) {
+            > a > button:before {
                 border-color: #666;
                 @media (prefers-color-scheme: dark) {
                     border-color: #eee;
                 }
-                opacity: 0.6;
-            }
-            &.collapsed:before {
-                transform: rotate(-45deg);
-            }
-            &.expanded:before {
-                transform: rotate(45deg) translate(0, -2px);
-            }
-            &:disabled {
-                pointer-events: none;
-                visibility: hidden;
-            }
-        }
-
-        > a > * {
-            // `h1`...`h6` matches here. Remove all heading-specific styles.
-            font-family: inherit;
-            font-style: inherit;
-            font-size: inherit;
-            font-weight: inherit;
-            margin: 0;
-            padding: 0;
-            padding-left: 0.2em;
-            display: block;
-            overflow: hidden;
-        }
-        // Indentation
-        .indent(@level) { padding-left: unit((0.1 + pow(@level, 0.7)), em); }
-        &.L1 > a { .indent(0); }
-        &.L2 > a { .indent(1); }
-        &.L3 > a { .indent(2); }
-        &.L4 > a { .indent(3); }
-        &.L5 > a { .indent(4); }
-        &.L6 > a { .indent(5); }
-        &.L7 > a { .indent(6); }
-        &.L8 > a { .indent(7); }
-        &.L9 > a { .indent(8); }
-
-        &.active {
-            > a > button:before {
-                border-color: #eee;
             }
             > a {
-                background: @accent-color;
-                color: #eee;
-            }
-
-            // Use a different style for a smaller screen
-            @media (max-width: @screen-medium-max) {
-                > a > button:before {
-                    border-color: #666;
-                    @media (prefers-color-scheme: dark) {
-                        border-color: #eee;
-                    }
-                }
-                > a {
-                    background: transparent;
-                    color: @accent-color;
-                    @media (prefers-color-scheme: dark) { color: @accent-color-brighter; }
-                    font-weight: 500;
-                }
+                // Override `.root:focus` style
+                background: transparent !important;
+                color: @accent-color;
+                @media (prefers-color-scheme: dark) { color: @accent-color-brighter; }
+                font-weight: 500;
             }
         }
     }
