@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.0.8] - 2018-12-31
+
 - Apply `-webkit-overflow-scrolling` on tables for inertia scrolling on iOS
 - Reset the visibility flag of the sidebar modal when it's hidden.
 
@@ -57,7 +59,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial release.
 
-[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.7...HEAD
+[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.8...HEAD
+[0.0.8]: https://github.com/Foremark/Foremark/compare/0.0.7...0.0.8
 [0.0.7]: https://github.com/Foremark/Foremark/compare/0.0.6...0.0.7
 [0.0.6]: https://github.com/Foremark/Foremark/compare/0.0.5...0.0.6
 [0.0.5]: https://github.com/Foremark/Foremark/compare/0.0.4...0.0.5
