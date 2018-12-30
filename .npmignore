@@ -7,6 +7,7 @@
 /Cargo.lock
 /Cargo.toml
 /tools
+/test
 
 # Build configurations
 /tsconfig.json
