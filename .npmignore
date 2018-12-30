@@ -11,6 +11,7 @@
 
 # Build configurations
 /tsconfig.json
+/tsconfig.build.json
 /*.js
 
 # Development artifacts
