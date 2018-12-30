@@ -2,7 +2,7 @@
 
 <pre><code>&lt;em&gt;Emphasis&lt;/em&gt;</code></pre>
 
-<p>Result: <em>Emphasis</em></p>
+<p>Result: <i>Emphasis</i></p>
 
 <p>Input:</p>
 
@@ -16,26 +16,26 @@
 <img src='http://jigsaw.w3.org/css-validator/images/vcss' /><div>
 <p>
 <p>This is</p>
-<em>
+<i>
 <p>true</p>
-</em>
+</i>
 <p>markdown text (paragraph)</p>
 </p>
 <p>
 <p>
 <p>This is</p>
-<em>
+<i>
 <p>true</p>
-</em>
+</i>
 <p>markdown text (no paragraph)</p>
 </p>
 </p>
 	<p>
 <p>
 <p>This is</p>
-<em>
+<i>
 <p>true</p>
-</em>
+</i>
 <p>markdown text (block paragraph)</p>
 </p>
 </p>
@@ -43,24 +43,24 @@
 <tr>
 <td>
 <p>This is</p>
-<em>
+<i>
 <p>true</p>
-</em>
+</i>
 <p>markdown text. (no par)</p>
 </td>
 <td>
 <p>This is</p>
-<em>
+<i>
 <p>true</p>
-</em>
+</i>
 <p>markdown text. (par)</p>
 </td>
 </tr>
 </table>
 <p>The following is invalid HTML, and will generate an error:</p>
-<pre class='markdown-html-error' style='border: solid 3px red; background-color: pink'>HTML parse error: 
+<pre class='markdown-html-error' style='border: solid 3px red; background-color: pink'>HTML parse error:
 &lt;table&gt;
 &lt;td markdown=&quot;1&quot;&gt;This is *true* markdown text. (no par)&lt;/td&gt;
 &lt;td markdown=&quot;block&quot;&gt;This is *true* markdown text. (par)&lt;/td&gt;
-&lt;/tr&gt;</pre><pre class='markdown-html-error' style='border: solid 3px red; background-color: pink'>HTML parse error: 
+&lt;/tr&gt;</pre><pre class='markdown-html-error' style='border: solid 3px red; background-color: pink'>HTML parse error:
 &lt;/table&gt;</pre>

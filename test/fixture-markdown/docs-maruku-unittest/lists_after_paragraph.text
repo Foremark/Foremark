@@ -13,13 +13,13 @@ Paragraph, list with 4 spaces:
 Paragraph, list with 1 tab:
 	* ciao
 
-Paragraph (1 space after), list with no space: 
+Paragraph (1 space after), list with no space:
 * ciao
 
-Paragraph (2 spaces after), list with no space:  
+Paragraph (2 spaces after), list with no space:
 * ciao
 
-Paragraph (3 spaces after), list with no space:   
+Paragraph (3 spaces after), list with no space:
 * ciao
 
 Paragraph with block quote:
@@ -37,9 +37,9 @@ Paragraph with html after
 <div></div>
 
 Paragraph with html after, indented:
-     <em>Emphasis</em>
+     <i>Emphasis</i>
 
-Paragraph with html after, indented: <em>Emphasis</em> *tralla* <em>Emph</em>
+Paragraph with html after, indented: <i>Emphasis</i> *tralla* <i>Emph</i>
 
-Paragraph with html after, indented: <em>Emphasis *tralla* Emph</em>
+Paragraph with html after, indented: <i>Emphasis *tralla* Emph</i>
 
