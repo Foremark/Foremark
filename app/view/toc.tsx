@@ -26,7 +26,7 @@ interface TableOfContentsState {
 export class TableOfContents extends React.Component<TableOfContentsProps, TableOfContentsState> {
     refs: any;
 
-    private root: Node;
+    private root: ViewNode;
     private allNodes: Node[];
 
     private suspendActiveNodeUpdate = false;
@@ -39,7 +39,11 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
         };
 
         this.allNodes = enumerateNodes(props.foremarkDocument);
-        this.root = buildNodeTree(this.allNodes);
+        const root = buildNodeTree(this.allNodes);
+
+        // Create a view model of the TOC.
+        this.root = createViewNode(root, null);
+        this.root.expanded = true;
     }
 
     @bind
@@ -91,7 +95,7 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
     }
 
     @bind
-    private handleNodeClick(node: Node): void {
+    private handleNodeClick(viewNode: ViewNode): void {
         // If a user clicks a node near the end of the document, the scroll
         // position is limited by the bottom edge of the document. As a result,
         // the active node determined by `recalculateAndSetActiveNode` might not
@@ -100,7 +104,7 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
         // We fix this by temporarily overriding the decision by
         // `recalculateAndSetActiveNode`.
         this.suspendActiveNodeUpdate = true;
-        this.setActiveNode(node);
+        this.setActiveNode(viewNode.node);
         setTimeout(() => {
             this.suspendActiveNodeUpdate = false;
         }, 50);
@@ -114,7 +118,7 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
             {this.root.children.map((child, i) =>
                 <NodeView
                     key={i}
-                    node={child}
+                    viewNode={child}
                     tocState={this.state}
                     onNodeClick={this.handleNodeClick} />)}
         </ul>;
@@ -129,8 +133,6 @@ interface Node {
     level: number;
     children: Node[];
     parent: Node | null;
-
-    expanded: boolean | null;
 }
 
 function enumerateNodes(document: HTMLElement): Node[] {
@@ -168,7 +170,6 @@ function enumerateNodes(document: HTMLElement): Node[] {
                 level: parseInt(match[1], 10),
                 children: [],
                 parent: null,
-                expanded: null,
             });
         }
     });
@@ -186,7 +187,6 @@ function buildNodeTree(nodes: Node[]): Node {
         level: 0,
         children: [],
         parent: null,
-        expanded: true,
     };
     const levels: Node[] = [];
     for (let i = 0; i < 10; ++i) {
@@ -204,9 +204,34 @@ function buildNodeTree(nodes: Node[]): Node {
     return root;
 }
 
-interface NodeViewProps {
+/**
+ * A view model of `Node`.
+ */
+interface ViewNode {
     node: Node;
-    onNodeClick: (node: Node) => void;
+    children: ViewNode[];
+    parent: ViewNode | null;
+    expanded: boolean | null;
+}
+
+/**
+ * Creates a `ViewNode` tree.
+ */
+function createViewNode(node: Node, parent: ViewNode | null): ViewNode {
+    const viewNode: ViewNode = {
+        node,
+        children: [],
+        parent: null,
+        expanded: null,
+    };
+    viewNode.children = node.children
+        .map(child => createViewNode(child, viewNode));
+    return viewNode;
+};
+
+interface NodeViewProps {
+    viewNode: ViewNode;
+    onNodeClick: (viewNode: ViewNode) => void;
     tocState: TableOfContentsState;
 }
 
@@ -223,20 +248,20 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
         super(props);
 
         this.state = {
-            expanded: props.node.expanded,
+            expanded: props.viewNode.expanded,
         };
 
         // Clone the heading element to create a TOC label
-        const label = this.label = props.node.label!.cloneNode(true) as HTMLElement;
+        const label = this.label = props.viewNode.node.label!.cloneNode(true) as HTMLElement;
         label.removeAttribute('id');
     }
 
     private get shouldExpandByDefault(): boolean {
-        const {node, tocState} = this.props;
+        const {viewNode, tocState} = this.props;
 
         // Expand by default if the active node is `node` or
         // a descendant of `node`
-        return node === tocState.activeNodePath[node.level];
+        return viewNode.node === tocState.activeNodePath[viewNode.node.level];
     }
 
     private get isExpanded(): boolean {
@@ -245,37 +270,38 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
     }
 
     private get isActive(): boolean {
-        const {node, tocState} = this.props;
+        const {viewNode, tocState} = this.props;
 
         // If the node is expanded, do not display it as active unless the
         // node is exactly the active node (not an ancestor of it).
-        if (this.isExpanded && tocState.activeNodePath.length != node.level + 1) {
+        if (this.isExpanded && tocState.activeNodePath.length != viewNode.node.level + 1) {
             return false;
         }
 
-        return node === tocState.activeNodePath[node.level];
+        return viewNode.node === tocState.activeNodePath[viewNode.node.level];
     }
 
     @bind
     private handleClick(): void {
-        this.props.onNodeClick(this.props.node);
+        this.props.onNodeClick(this.props.viewNode);
     }
 
     @bind
     private handleToggle(e: Event): void {
         const expanded = !this.isExpanded;
-        this.props.node.expanded = expanded;
+        this.props.viewNode.expanded = expanded;
         this.setState({ expanded });
         e.stopPropagation();
         e.preventDefault();
     }
 
     render() {
-        const {node, tocState, onNodeClick} = this.props;
+        const {viewNode, tocState, onNodeClick} = this.props;
+        const {node} = viewNode;
 
         const {isActive, isExpanded} = this;
 
-        const expandable = node.children.length > 0;
+        const expandable = viewNode.children.length > 0;
 
         return <li
                 class={classnames({
@@ -284,7 +310,7 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
                 })}
                 role='treeitem'
                 aria-selected={`${isActive}`}
-                aria-expanded={node.children.length > 0 && `${isExpanded}`}
+                aria-expanded={viewNode.children.length > 0 && `${isExpanded}`}
             >
             <Port
                 tagName='a'
@@ -303,12 +329,12 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
                 }
             </Port>
             {
-                isExpanded && node.children.length > 0 ?
+                isExpanded && viewNode.children.length > 0 ?
                     <ul role='group'>
-                        {node.children.map((child, i) =>
+                        {viewNode.children.map((child, i) =>
                             <NodeView
                                 key={i}
-                                node={child}
+                                viewNode={child}
                                 tocState={tocState}
                                 onNodeClick={onNodeClick} />)}
                     </ul>
