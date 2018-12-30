@@ -33,7 +33,6 @@ interface AppState {
     sidebarModalVisible: boolean;
     loaderActivity: boolean;
     searchQuery: string;
-    searchFocus: boolean;
 }
 
 export class App extends React.Component<AppProps, AppState> {
@@ -47,7 +46,6 @@ export class App extends React.Component<AppProps, AppState> {
             sidebarModalVisible: false,
             loaderActivity: true,
             searchQuery: '',
-            searchFocus: false,
         };
 
         props.renderPromise.then(() => {
@@ -60,9 +58,6 @@ export class App extends React.Component<AppProps, AppState> {
         const tocVisible = (e.target as HTMLInputElement).checked;
         this.setState({
             tocVisible,
-            // The sidebar is always visible when there's a search query. So,
-            // erase the search query if the user wants to hide the sidebar.
-            searchQuery: tocVisible ? this.state.searchQuery : '',
         });
     }
 
@@ -80,35 +75,17 @@ export class App extends React.Component<AppProps, AppState> {
     }
 
     @bind
-    private handleSearchEnter(): void {
-        this.setState({
-            searchFocus: true,
-            sidebarModalVisible: true,
-        });
-    }
-
-    @bind
-    private handleSearchLeave(): void {
-        this.setState({ searchFocus: false });
-    }
-
-    @bind
     private handleModalBackgroundClick(): void {
         this.setState({ sidebarModalVisible: false });
     }
 
-    private get isSearchPaneVisible(): boolean {
-        const {state} = this;
-        return state.searchQuery !== '' || state.searchFocus
-    }
-
     private get isModelessSidebarVisible(): boolean {
         const {state} = this;
-        return state.tocVisible || this.isSearchPaneVisible;
+        return state.tocVisible;
     }
 
     render() {
-        const {state, isModelessSidebarVisible, isSearchPaneVisible} = this;
+        const {state, isModelessSidebarVisible} = this;
         return <div className={classnames({
                     [CN.root]: true,
                     [CN.sidebarModalVisible]: state.sidebarModalVisible,
@@ -121,19 +98,6 @@ export class App extends React.Component<AppProps, AppState> {
                     />
 
                 <div className={CN.toolbar}>
-                    {/* Search field */}
-                    <input
-                        className={CN.search}
-                        onChange={this.handleSearchQuery}
-                        onFocus={this.handleSearchEnter}
-                        onBlur={this.handleSearchLeave}
-                        value={state.searchQuery}
-                        type='search'
-                        aria-label='Search'
-                        placeholder="Search" />
-                    {/* TODO: "clear" button */}
-                    {/* TODO: hotkeys: ESC, '/' */}
-
                     {/* Toggle sidebar visibility. */}
                     <input
                         id='sidebarToggle'
@@ -163,17 +127,21 @@ export class App extends React.Component<AppProps, AppState> {
                     { state.loaderActivity && <span className={CN.spinner} role='progressbar' /> }
                 </div>
                 <div className={CN.sidebar}>
-                    <nav className={classnames({
-                        [CN.show]: !isSearchPaneVisible,
-                    })}>
+                    {/* Search field */}
+                    <span className={CN.search}>
+                        <input
+                            onChange={this.handleSearchQuery}
+                            value={state.searchQuery}
+                            type='search'
+                            aria-label='Search'
+                            placeholder="Search" />
+                        <span />
+                    </span>
+                    {/* TODO: "clear" button */}
+                    {/* TODO: hotkeys: ESC, '/' */}
+
+                    <nav>
                         <TableOfContents foremarkDocument={this.props.foremarkDocument} />
-                    </nav>
-                    <nav className={classnames({
-                        [CN.show]: isSearchPaneVisible,
-                    })}>
-                        <SearchPane
-                            foremarkDocument={this.props.foremarkDocument}
-                            query={state.searchQuery} />
                     </nav>
                 </div>
             </aside>

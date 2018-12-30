@@ -80,85 +80,53 @@ body {
 .toolbar {
     position: fixed;
     left: 0; top: 0;
-    z-index: 200;
+    z-index: 100;
     white-space: nowrap;
-    margin: 5px 4px;
+    margin: 10px;
+    pointer-events: none;
 
     @media not screen { display: none; }
 
-    > * { vertical-align: bottom }
+    > * { vertical-align: middle; }
 
-    > input.search {
-        font-family: @ui-font-family;
-        font-size: 12px;
-        -webkit-appearance: none;
-        width: (@sidebar-width - 6px);
-        height: 24px;
-        box-sizing: border-box;
-        background: transparent;
-        color: inherit;
-        border: 1px solid #aaa;
-        padding: 4px 4px;
-        margin: 0 4px 0 0;
-        border-radius: 3px;
+    @buttom-highlight-color: #7f7f7f;
 
-        opacity: 0.5;
-        &:hover {
-            opacity: 1;
-        }
-        .sidebarVisible & {
-            opacity: 1;
-            background: white;
-            @media screen and (prefers-color-scheme: dark) {
-                background: #222;
-            }
-        }
+    // Animate the left position when the sidebar visibility is toggled
+    transition: 200ms transform;
+    .sidebarVisible & { transform: translateX(@sidebar-width); }
 
-        // Matching the style to the sidebar visibility in the "medium" screen
-        // size is complex, so we just opt to use the "sidebar is visible" style
-        // all the times.
-        @media (max-width: @screen-medium-max) {
-            opacity: 1;
-            background: white;
-            @media screen and (prefers-color-scheme: dark) {
-                background: #222;
-            }
-        }
+    // But not in screen sizes where the sidebar is displayed in a modal window.
+    @media (max-width: @screen-medium-max) {
+        transform: none !important;
     }
 
     // Toolbar button
     > input[type=checkbox] { display: none; }
     > input[type=checkbox] + label {
-        height: 24px;
+        height: 30px;
         display: inline-block;
         box-sizing: border-box;
         border: 1px solid #aaa;
-        border-radius: 3px;
+        border-radius: 1000px;
         opacity: 0.5;
         position: relative;
+        pointer-events: auto;
+        cursor: pointer;
         &:hover {
             opacity: 1;
         }
-
-        @media (max-width: @screen-medium-max) {
-            opacity: 1;
-            background: white;
-            @media screen and (prefers-color-scheme: dark) {
-                background: #222;
-            }
-        }
     }
     > input[type=checkbox]:checked + label {
-        border-color: @accent-color;
-        background: @accent-color;
+        border-color: @buttom-highlight-color;
+        background: @buttom-highlight-color;
         color: #eee;
         opacity: 1;
     }
 
     label.sidebarToggle, label.sidebarToggleModal {
-        width: 40px; @text-hidden();
+        width: 30px; @text-hidden();
         > span {
-            left: 13px; top: 6px; width: 12px;
+            left: 8px; top: 10px; width: 12px;
             &:before, &:after {
                 content: "";
                 left: 0; right: 0;
@@ -220,16 +188,18 @@ body {
 .sidebar {
     position: fixed;
     left: 0; top: 0; bottom: 0; width: @sidebar-width;
-    z-index: 100;
+    z-index: 200;
+    box-sizing: border-box;;
 
     @media not screen { display: none; }
 
-    @media (max-width: @screen-small-max) { width: 90%; }
+    @media (max-width: @screen-small-max) { width: 80%; }
 
     background: #fafafa;
     @media screen and (prefers-color-scheme: dark) {
         background: #444;
     }
+    border-right: 1px solid rgba(128, 128, 128, 0.4);
 
     // Animate toggling the sidebar
     transition: 200ms transform;
@@ -239,17 +209,59 @@ body {
         .root:not(.sidebarModalVisible) & { transform: translateX(-100%); }
     }
 
-    > nav {
-        display: none;
+    > span.search {
         position: absolute;
-        left: 0; top: 2em; right: 0; bottom: 0;
+        left: 7px;
+        top: 5px;
+
+        > input {
+            font-family: @ui-font-family;
+            font-size: 12px;
+            -webkit-appearance: none;
+            width: (@sidebar-width - 14px);
+            height: calc(1em + 12px);
+
+            box-sizing: border-box;
+
+            background: transparent;
+            color: inherit;
+            padding: 4px 4px;
+            margin: 0;
+            border-radius: 0;
+            border: none;
+
+            &::-webkit-search-decoration { -webkit-appearance: none; }
+        }
+
+        // Underline like Material UI
+        border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+        &:hover {
+            border-bottom-color: rgba(128, 128, 128, 0.2);
+        }
+
+        > input {
+            & + span {
+                position: absolute; content: "";
+                left: 0; bottom: -1px; height: 2px; width: 100%;
+                background: @accent-color;
+                transform: scaleX(0);
+                transform-origin: 0% 50%;
+                transition: 200ms transform;
+            }
+            &:focus {
+                outline: none;
+                & + span { transform: none; }
+            }
+        }
+    }
+
+    > nav {
+        display: block;
+        position: absolute;
+        left: 0; top: calc(1em + 16px); right: 0; bottom: 0;
         overflow: auto;
         pointer-events: auto;
         -webkit-overflow-scrolling: touch;
-
-        &.show {
-            display: block;
-        }
     }
 }
 

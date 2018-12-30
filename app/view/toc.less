@@ -23,6 +23,10 @@
             text-decoration: none;
             display: block;
             padding: 0.25rem 0;
+
+            @media (max-width: @screen-medium-max) {
+                padding: 0.35rem 0;
+            }
         }
 
         // Expand/collapse button
@@ -96,6 +100,22 @@
             > a {
                 background: @accent-color;
                 color: #eee;
+            }
+
+            // Use a different style for a smaller screen
+            @media (max-width: @screen-medium-max) {
+                > a > button:before {
+                    border-color: #666;
+                    @media (prefers-color-scheme: dark) {
+                        border-color: #eee;
+                    }
+                }
+                > a {
+                    background: transparent;
+                    color: @accent-color;
+                    @media (prefers-color-scheme: dark) { color: @accent-color-brighter; }
+                    font-weight: 500;
+                }
             }
         }
     }
