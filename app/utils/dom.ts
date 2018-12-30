@@ -39,6 +39,7 @@ export let DomTypes: DomTypes;
 export interface DomTypes {
     Text: typeof Text;
     Element: typeof Element;
+    HTMLElement: typeof HTMLElement;
 }
 
 export interface Dom extends DomTypes {
@@ -151,7 +152,7 @@ export function transformHtmlWith(
                 PLACEHOLDER_REGEX,
                 (match, id) => {
                     const original = placeholders.get(id);
-                    if (original instanceof HTMLElement) {
+                    if (original instanceof DomTypes.HTMLElement) {
                         return original.outerHTML;
                     } else {
                         return match;
