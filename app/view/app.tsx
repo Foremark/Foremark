@@ -5,6 +5,7 @@ import * as classnames from 'classnames';
 import {Port} from './components/port';
 import {EventHook} from './components/eventhook';
 import {TableOfContents} from './toc';
+import {StyleConstants} from './constants';
 
 const CN = require('./app.less');
 document.getElementsByTagName('html')[0].classList.add('mf-processed');
@@ -127,6 +128,25 @@ export class App extends React.Component<AppProps, AppState> {
         }
     }
 
+    @bind
+    private handleWindowResize(): void {
+        // The sidebar is displayed in a modal window only when the screen is
+        // smaller than this threshold. The visibility state is maintained
+        // separately for each of the modal and modeless versions of the sidebar.
+        //
+        // The visibility state of the modal version should be reset when
+        // a window is resized and the modal version is no longer visible and
+        // the modeless version is shown. Otherwise, users might observe a
+        // somewhat surprising behavior while resizing a window, like a modal
+        // sidebar all of sudden covering entire the screen just by resizing
+        // a window.
+        if (!window.matchMedia(`screen and (max-width: ${StyleConstants.ScreenMediumMax}px)`).matches) {
+            if (this.state.sidebarModalVisible) {
+                this.setState({sidebarModalVisible: false});
+            }
+        }
+    }
+
     render() {
         const {state, isModelessSidebarVisible} = this;
         return <div className={classnames({
@@ -135,7 +155,9 @@ export class App extends React.Component<AppProps, AppState> {
                     [CN.sidebarVisible]: isModelessSidebarVisible,
                 })}>
 
-            <EventHook target={window} keydown={this.handleWindowKeyDown} />
+            <EventHook target={window}
+                keydown={this.handleWindowKeyDown}
+                resize={this.handleWindowResize} />
 
             <aside>
                 <div className={CN.modalBackground}
