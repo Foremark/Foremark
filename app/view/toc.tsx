@@ -10,6 +10,11 @@ const CN = require('./toc.less');
 
 export interface TableOfContentsProps {
     foremarkDocument: HTMLElement;
+
+    /**
+     * When set, only the entries matching the query are displayed.
+     */
+    searchQuery?: string;
 }
 
 interface TableOfContentsState {
@@ -26,8 +31,11 @@ interface TableOfContentsState {
 export class TableOfContents extends React.Component<TableOfContentsProps, TableOfContentsState> {
     refs: any;
 
-    private root: ViewNode;
     private allNodes: Node[];
+    private root: Node;
+
+    private mainRoot: ViewNode;
+    private searchRoot?: ViewNode;
 
     private suspendActiveNodeUpdate = false;
 
@@ -39,11 +47,26 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
         };
 
         this.allNodes = enumerateNodes(props.foremarkDocument);
-        const root = buildNodeTree(this.allNodes);
+        const root = this.root = buildNodeTree(this.allNodes);
 
         // Create a view model of the TOC.
-        this.root = createViewNode(root, null);
-        this.root.expanded = true;
+        this.mainRoot = createViewNode(root, null);
+        this.mainRoot.expanded = true;
+    }
+
+    componentWillReceiveProps(
+        nextProps: TableOfContentsProps,
+        nextState: TableOfContentsState
+    ): void {
+        if (nextProps.searchQuery && nextProps.searchQuery !== this.props.searchQuery) {
+            // The search query was changed. Update the search view model.
+            const query = nextProps.searchQuery.toLowerCase();
+            this.searchRoot = createViewNode(this.root, null);
+            applyFilterOnViewNode(this.searchRoot, node => {
+                return node.label != null &&
+                    node.label.textContent!.toLowerCase().indexOf(query) >= 0;
+            });
+        }
     }
 
     @bind
@@ -111,13 +134,15 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
     }
 
     render() {
+        const root = this.props.searchQuery ?
+            this.searchRoot! : this.mainRoot;
         return <ul className={CN.root} role='tree'>
             <EventHook target={document} scroll={this.handleScroll} />
             <EventHook target={window} resize={this.handleResize} />
 
-            {this.root.children.map((child, i) =>
+            {root.children.map((child, i) =>
                 <NodeView
-                    key={i}
+                    key={child.id}
                     viewNode={child}
                     tocState={this.state}
                     onNodeClick={this.handleNodeClick} />)}
@@ -208,11 +233,15 @@ function buildNodeTree(nodes: Node[]): Node {
  * A view model of `Node`.
  */
 interface ViewNode {
+    id: number;
     node: Node;
     children: ViewNode[];
+    unfilteredChildren: ViewNode[];
     parent: ViewNode | null;
     expanded: boolean | null;
 }
+
+let nextViewNodeId = 1;
 
 /**
  * Creates a `ViewNode` tree.
@@ -220,14 +249,30 @@ interface ViewNode {
 function createViewNode(node: Node, parent: ViewNode | null): ViewNode {
     const viewNode: ViewNode = {
         node,
+        id: nextViewNodeId++,
         children: [],
+        unfilteredChildren: [],
         parent: null,
         expanded: null,
     };
     viewNode.children = node.children
         .map(child => createViewNode(child, viewNode));
+    viewNode.unfilteredChildren = viewNode.children;
     return viewNode;
-};
+}
+
+/**
+ * Applies a filter on a `ViewNode` tree. Returns `true` if there's a
+ * descendant node matching the filtering criteria.
+ */
+function applyFilterOnViewNode(viewNode: ViewNode, query: (node: Node) => boolean): boolean {
+    viewNode.expanded = true;
+
+    viewNode.children = viewNode.unfilteredChildren
+        .filter(childViewNode => applyFilterOnViewNode(childViewNode, query));
+
+    return viewNode.children.length > 0 || query(viewNode.node);
+}
 
 interface NodeViewProps {
     viewNode: ViewNode;
@@ -265,6 +310,10 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
     }
 
     private get isExpanded(): boolean {
+        if (this.props.viewNode.children.length === 0) {
+            return false;
+        }
+
         return this.state.expanded != null ? this.state.expanded :
             this.shouldExpandByDefault;
     }

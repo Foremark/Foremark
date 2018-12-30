@@ -5,7 +5,6 @@ import * as classnames from 'classnames';
 import {Port} from './components/port';
 import {SignalHook} from './components/signalhook';
 import {TableOfContents} from './toc';
-import {SearchPane} from './search';
 
 const CN = require('./app.less');
 document.getElementsByTagName('html')[0].classList.add('mf-processed');
@@ -131,6 +130,7 @@ export class App extends React.Component<AppProps, AppState> {
                     <span className={CN.search}>
                         <input
                             onChange={this.handleSearchQuery}
+                            onInput={this.handleSearchQuery}
                             value={state.searchQuery}
                             type='search'
                             aria-label='Search'
@@ -141,7 +141,9 @@ export class App extends React.Component<AppProps, AppState> {
                     {/* TODO: hotkeys: ESC, '/' */}
 
                     <nav>
-                        <TableOfContents foremarkDocument={this.props.foremarkDocument} />
+                        <TableOfContents
+                            foremarkDocument={this.props.foremarkDocument}
+                            searchQuery={state.searchQuery} />
                     </nav>
                 </div>
             </aside>
