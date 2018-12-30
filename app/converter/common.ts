@@ -33,7 +33,7 @@ export function parseFloatingSize(s: string): null | 'large' | 'full' {
 }
 
 /** The URL and attributes part of the media tag. */
-export const MEDIA_PARAM_RE = /("[^"<>]*"|[^"\s<>]+)(\s+[^\)]*?)?/;
-//                              ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^
-//                               URL (maybe quoted)  unvalidated attribs
-//                                                    e.g., ` class="a"`
+export const MEDIA_PARAM_RE = /("[^"<>]*"|[^"\s<>)]+)(\s+[^\)]*?)?/;
+//                              ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^
+//                               URL (maybe quoted)   unvalidated attribs
+//                                                     e.g., ` class="a"`

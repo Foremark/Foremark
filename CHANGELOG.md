@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Hyperlink titles can be specified using the syntax: `[text](url "title")`.
 - Removed `https://derpicdn.net/img/*` from Derpibooru's oEmbed URL scheme.
 - Text contents of `<mf-figure-caption>` are now wrapped with `<p>`.
+- Fixed a parsing issue that a closing parenthesis (`)`) of a media tag was sometimes overlooked.
 
 ## [0.0.5] - 2018-12-30
 
