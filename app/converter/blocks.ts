@@ -133,7 +133,7 @@ class OrderedList implements BlockState {
         const i = parseInt(marker, 10);
         return [
             new OrderedList(i + 1),
-            `<ol start="${i}"><li>`,
+            i == 1 ? `<ol><li>` : `<ol start="${i}"><li>`,
         ];
     }
 
