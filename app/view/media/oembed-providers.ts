@@ -30,7 +30,6 @@ export const BUILTIN_OEMBED_ENDPOINTS: {[key: string]: OEmbedEndpoint} = {
             'https://derpibooru.org/images/*',
             'https://trixiebooru.org/*',
             'https://trixiebooru.org/images/*',
-            'https://derpicdn.net/img/*',
         ],
         url: 'https://derpibooru.org/oembed.json',
     },
