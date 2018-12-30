@@ -548,9 +548,9 @@ export function expandMfText(node: Element): void {
 
             // Can't use `String#replace` here because it only scans a string in
             // the forward direction.
-            const parts = html.split(/((!)?\[([^\]]+)\]\[([^\^#!<>[\]][^<>[\]]*)?\])/g);
-            //                          ^     ^^^^^^      ^^^^^^^^^^^^^^^^^^^^
-            //                        image?   text        symbol name
+            const parts = html.split(/((!)?\[([^\]]+)\]\s*\[([^\^#!<>[\]][^<>[\]]*)?\])/g);
+            //                          ^     ^^^^^^         ^^^^^^^^^^^^^^^^^^^^
+            //                        image?   text           symbol name
             if (parts.length === 1) {
                 return html;
             }
