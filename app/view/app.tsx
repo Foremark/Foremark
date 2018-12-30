@@ -87,6 +87,11 @@ export class App extends React.Component<AppProps, AppState> {
     }
 
     @bind
+    private handleHideModalSidebar(): void {
+        this.setState({sidebarModalVisible: false});
+    }
+
+    @bind
     private handleWindowKeyDown(e: KeyboardEvent): void {
         if (e.key === '/') {
             if (e.target === this.searchQueryElement) {
@@ -187,6 +192,7 @@ export class App extends React.Component<AppProps, AppState> {
                         <TableOfContents
                             ref={e => this.tocComponent = e}
                             foremarkDocument={this.props.foremarkDocument}
+                            onNavigate={this.handleHideModalSidebar}
                             searchQuery={state.searchQuery} />
                     </nav>
                 </div>

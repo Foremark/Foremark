@@ -16,6 +16,8 @@ export interface TableOfContentsProps {
      * When set, only the entries matching the query are displayed.
      */
     searchQuery?: string;
+
+    onNavigate: () => void;
 }
 
 interface TableOfContentsState {
@@ -123,6 +125,7 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
     @bind
     private handleNodeClick(viewNode: ViewNode): void {
         this.didNavigateNode(viewNode.node);
+        this.props.onNavigate();
     }
 
     /**
