@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `expandMfText` now can be used in a Node.js environment.
 - Whitespace characters are now permitted between brackets in a symbolic hyperlink like `[text] [symname]`.
 - Hyperlink titles can be specified using the syntax: `[text](url "title")`.
+- Removed `https://derpicdn.net/img/*` from Derpibooru's oEmbed URL scheme.
+- Text contents of `<mf-figure-caption>` are now wrapped with `<p>`.
 
 ## [0.0.5] - 2018-12-30
 
