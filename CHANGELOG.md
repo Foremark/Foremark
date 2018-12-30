@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Made some borders thinner when printing.
+
 ## [0.0.8] - 2018-12-31
 
 - Apply `-webkit-overflow-scrolling` on tables for inertia scrolling on iOS
