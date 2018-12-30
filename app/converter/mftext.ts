@@ -393,6 +393,7 @@ export function expandMfText(node: Element): void {
         const {tagName} = e;
         return tagName === TagNames.Admonition ||
             tagName === TagNames.Figure ||
+            tagName === TagNames.FigureCaption ||
             tagName === TagNames.Note ||
             tagName === TagNames.Block ||
             tagName.match(/^(?:ul|ol|dl|li|dt|dd|blockquote)$/i) != null;
