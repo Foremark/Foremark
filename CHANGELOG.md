@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Apply `-webkit-overflow-scrolling` on tables for inertia scrolling on iOS
+
 ## [0.0.7] - 2018-12-31
 
 - Remove test code from the NPM package
