@@ -37,8 +37,8 @@ interface AppState {
 export class App extends React.Component<AppProps, AppState> {
     refs: any;
 
-    private searchQueryElement: HTMLInputElement | null;
-    private tocComponent: TableOfContents | null;
+    private searchQueryElement?: HTMLInputElement;
+    private tocComponent?: TableOfContents;
 
     constructor(props: AppProps) {
         super(props);
