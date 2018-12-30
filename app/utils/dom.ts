@@ -316,7 +316,10 @@ export function legalizeAttributes(
     onwarning: (message: string) => void = () => {},
     positionalAttributes?: ArrayLike<string>,
 ): string {
-    const [_, spaces, inner] = xml.match(/^(\s*)(.*)$/)!;
+    if (xml === '') {
+        return xml;
+    }
+    const [_, spaces, inner] = xml.match(/^(\s*)([^]*)$/)!;
     let nextIndex = 0;
 
     return spaces + (' ' + inner).replace(
