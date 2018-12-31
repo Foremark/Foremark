@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.0.9] - 2018-12-31
+
 - Made some borders thinner when printing.
+- Made a subtle improvement in the user experience.
+- Make font sizes slightly larger.
 
 ## [0.0.8] - 2018-12-31
 
@@ -61,7 +65,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial release.
 
-[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.8...HEAD
+[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.9...HEAD
+[0.0.9]: https://github.com/Foremark/Foremark/compare/0.0.8...0.0.9
 [0.0.8]: https://github.com/Foremark/Foremark/compare/0.0.7...0.0.8
 [0.0.7]: https://github.com/Foremark/Foremark/compare/0.0.6...0.0.7
 [0.0.6]: https://github.com/Foremark/Foremark/compare/0.0.5...0.0.6
