@@ -7,11 +7,12 @@
 html, body {
     background: white;
     font-family: @font-family;
-    font-size: 15px;
+    font-size: 16px;
     color: #444;
     line-height: 1.5;
     margin: 0;
     padding: 0;
+    -webkit-text-size-adjust: none;
 }
 
 body {
@@ -216,9 +217,9 @@ body {
 
         > input {
             font-family: @ui-font-family;
-            font-size: 12px;
+            font-size: 0.8rem;
             -webkit-appearance: none;
-            width: (@sidebar-width - 14px);
+            width: calc(@sidebar-width - 14px);
             height: calc(1em + 12px);
 
             box-sizing: border-box;
@@ -529,7 +530,7 @@ main {
         };
 
         mf:global(.has-sidenotes) {
-            margin-right: (@sidenote-width + @sidenote-body-separation);
+            margin-right: calc(@sidenote-width + @sidenote-body-separation);
 
             // "full" styling of figures
             mf-figure[size="full"] {
