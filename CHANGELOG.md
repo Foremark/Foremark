@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Outdentation in a list caused by hard wrapping no longer closes a list.
+
 ## [0.0.9] - 2018-12-31
 
 - Made some borders thinner when printing.

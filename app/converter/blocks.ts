@@ -441,23 +441,41 @@ export function replaceBlocks(html: string, ctx: TransformHtmlWithContext): stri
 
         let [_2, indent, lineBody] = line.match(/^(\s*)(.*)$/)!;
 
+        // Detect list marker
+        const markerMatch = lineBody.match(MARKER_LINE_PATTERN);
+
         // Detect outdent
         let indentCommand: IndentCommand;
-        while (
-            (indentCommand = analyzeIndent(indent, levels[0].originalIndentation))
-                == IndentCommand.Outdent
-        ) {
-            closeCurrentList();
+        if (!markerMatch && numPendingNewlines === 0) {
+            // The current line might have been hard wrapped from the last line
+            // like this:
+            // ```
+            //  - This is a long paragraph being
+            // wrapped. This line might look outside of the list but it's not
+            // ```
+            indentCommand = IndentCommand.Indent;
+        } else {
+            while (
+                (indentCommand = analyzeIndent(indent, levels[0].originalIndentation))
+                    == IndentCommand.Outdent
+            ) {
+                closeCurrentList();
+            }
         }
+
+        // indentCommand
+        //  - `Indent` = The current line is inside of `levels[0]`
+        //  - `Preserve` = The current line has the same indentation as `levels[0]`,
+        //    which means:
+        //     - It's outside of `levels[0]` but still inside of `levels[1]`
+        //     - It's a caption line of the next item in `levels[0]`
+        //       (only the case with `CaptionStyle.PrecedingLine`)
 
         // If we don't know the body indentation level yet, then guess one from
         // the first line of the body.
         if (levels[0].bodyIndentation == null) {
             levels[0].bodyIndentation = indent;
         }
-
-        // Detect list marker
-        const markerMatch = lineBody.match(MARKER_LINE_PATTERN);
 
         if (!markerMatch) {
             // No marker's here
@@ -480,8 +498,7 @@ export function replaceBlocks(html: string, ctx: TransformHtmlWithContext): stri
                 }
             }
 
-            // Copy blank lines (Actually, this is the only place where
-            // `numPendingNewlines` matters)
+            // Re-insert blank lines
             for (; numPendingNewlines; --numPendingNewlines) {
                 output.push('\n');
             }

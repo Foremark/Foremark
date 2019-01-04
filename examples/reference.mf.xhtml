@@ -499,7 +499,7 @@ The following types of lists are supported:
 | `42.`           | Ordered list (`<ol>`)    |             |
 | `:`             | Definition list (`<dl>`) |             |
 
-A line starting with one of the markers starts a list. The list goes on until a line with the original indentation is encountered:
+A line starting with one of the markers starts a list (such lines are called *marker lines*). The list goes on until a line with the original indentation is encountered:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
 - Marker line
@@ -511,6 +511,23 @@ We're out!
 <li class="minus"><p>Marker line
 Non-marker lines
   And goes on...</p></li>
+</ul>
+<p>We're out!</p>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To handle hard wrapping, outdentation is ignored unless the current line contains a marker or is separated by a blank line:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+- Marker line
+- Marker line
+And goes on...
+
+We're out!
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<ul>
+<li class="minus"><p>Marker line</p></li>
+<li class="minus"><p>Marker line
+And goes on...</p></li>
 </ul>
 <p>We're out!</p>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
