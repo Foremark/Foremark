@@ -466,6 +466,12 @@ const HANDLERS: { [tagName: string]: (node: Element, vc: ViewerConfig) => void |
         node.innerHTML = katex.renderToString(node.textContent || '', katexDisplayOptions);
     },
     [TagNames.Code]: async (node) => {
+        // Wrap it with `<pre>` so that it's formatted properly on Safari's
+        // Reader View.
+        const pre = node.ownerDocument!.createElement('pre');
+        node.parentElement!.insertBefore(pre, node);
+        pre.appendChild(node);
+
         const type = (node.getAttribute(AttributeNames.CodeType) || '').split(' ');
         const lang = type[0];
         if (lang === '') {
