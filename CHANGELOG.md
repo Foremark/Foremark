@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Added the WOFF2 version of every included web font. This reduces the downloaded asset size by up to 160KB.
+
 ## [0.0.10] - 2018-01-05
 
 - Outdentation in a list caused by hard wrapping no longer closes a list.
