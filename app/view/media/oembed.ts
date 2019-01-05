@@ -5,6 +5,30 @@ import {BUILTIN_OEMBED_ENDPOINTS} from './oembed-providers';
 import {escapeRegExp} from '../../utils/string';
 import {escapeXmlText, legalizeXML} from '../../utils/dom';
 
+/**
+ * Describes an oEmbed endpoint.
+ *
+ * # Example
+ *
+ * The `OEmbedEndpoint` object for DeviantArt would look like:
+ *
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JavaScript
+ * {
+ *     schemes: [
+ *         'http://*.deviantart.com/art/*',
+ *         'http://*.deviantart.com/*#/d*',
+ *         'http://fav.me/*',
+ *         'http://sta.sh/*'
+ *     ],
+ *     url: 'http://backend.deviantart.com/oembed?format=jsonp',
+ *     format: 'jsonp',
+ * }
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *
+ * Compare this with [the çorresponding provider definition][].
+ *
+ * [the çorresponding provider definition]: https://github.com/iamcal/oembed/blob/master/providers/deviantart.com.yml
+ */
 export interface OEmbedEndpoint {
     /**
      * URL scheme of the API endpoint. The syntax follows
@@ -25,6 +49,9 @@ export interface OEmbedEndpoint {
     format?: 'json' | 'jsonp';
 }
 
+/**
+ * Specifies options of the oEmbed media handler.
+ */
 export interface OEmbedOptions {
     endpoints: { [key: string]: OEmbedEndpoint | null; };
 }

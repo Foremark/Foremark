@@ -7,6 +7,9 @@ import {handleAudioMedia, handleImageMedia, handleVideoMedia} from './html5';
 import {OEMBED_MEDIA_HANDLER} from './oembed';
 import {createIFrameMediaHandler} from './iframe';
 
+/**
+ * Describes a media handler.
+ */
 export interface MediaHandler {
     /**
      * Describes the pattern of a media URL. This media handler will be used if
@@ -19,6 +22,10 @@ export interface MediaHandler {
      */
     handler: (e: Element, options?: unknown) => void | PromiseLike<void>;
 
+    /**
+     * The options of the media handler. This will be passed to functions
+     * specified by `handler` and `patterns`.
+     */
     options?: unknown;
 
     /**

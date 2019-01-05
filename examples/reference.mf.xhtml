@@ -8,7 +8,7 @@ This document describes the features supported by Foremark.
 
 !!! Note
 
-    Code blocks in this section including both of Foremark Text and converted 
+    Code blocks in this section including both of Foremark Text and converted
     Foremark XML are automatically compared against the actual conversion
     results by the test harness (`test/mftext.js`).
 
@@ -930,88 +930,21 @@ consequat.
 
 ## Configuration
 
-The viewer loads a configuration object from `window.foremarkViewerConfig`. The configuration is typed as following:
+The viewer loads a configuration object from `window.foremarkViewerConfig`.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TypeScript
-interface ViewerConfig {
-    mediaHandlers: { [key: string]: MediaHandler | null; };
-}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The signature of a configuration object is defined using the `ViewerConfig` interface. The viewer has the default configuration object and the user-specified configuration is merged into that. See [the auto-generated API reference][] for more details.
 
-There is a default configuration object. The user-provided configuration object is merged into the default configuration object using the **Merge** operation.
-
-The **Merge** operation iterates through the source object's properties. A property name specifies how the property is transferred to the destination object:
-
-- `key` or `key.replace` replaces or creates `destination[key]`.
-- `key.merge` applies the **Merge** operation on `destination[key]`. Both of `source[key]` and `destination[key]` must be objects.
-- `key.append` appends the elements from an array `source[key]` to `destionation[key]`. Both of `source[key]` and `destination[key]` must be arrays.
-- `key.prepend` prepends the elements from an array `source[key]` to `destionation[key]`. Both of `source[key]` and `destination[key]` must be arrays.
-- The processing order is unspecified.
-
-A property name optionally include an identifier like `key:ident.merge`. The identifier part is ignored by this operation and only serves to make it possible to have multiple source properties operating on a single destination property. For example, this can be used to prevent one configuration file from overwriting another one's properties:
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JavaScript
-// file1.js
-var foremarkViewerConfig = Object.assign(window.foremarkViewerConfig, {
-    'mediaHandlers:file1.merge': {
-        'newhandler1': { /* ... */ },
-    },
-});
-
-// file2.js
-var foremarkViewerConfig = Object.assign(window.foremarkViewerConfig, {
-    'mediaHandlers:file2.merge': {
-        'newhandler2': { /* ... */ },
-    },
-});
-
-// The user-supplied configuration object looks like:
-{
-    'mediaHandlers:file1.merge': { newhandler1: { /* ... */ }, },
-    'mediaHandlers:file2.merge': { newhandler2: { /* ... */ }, },
-}
-
-// The final configuration object looks like:
-{
-    mediaHandlers: {
-        image: { /* ... */ },
-        newhandler1: { /* ... */ },
-        newhandler2: { /* ... */ },
-    }
-}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[the auto-generated API reference]: https://foremark.github.io/Foremark/typedoc/interfaces/_view_config_.viewerconfig.html
 
 ## Media handlers
 
 `<mf-media>` elements are processed using media handlers.
 
-Media handlers are defined using the configuration system. The `MediaHandler` interface is defined as following:
+Media handlers are defined using the viewer configuration interface's `mediaHandlers` property. Each media handler is described using the `MediaHandler` interface. See [the auto-generated API reference][] for more details.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TypeScript
-interface MediaHandler<T> {
-    patterns: Pattern[] | null;
-    handler: (e: HTMLElement, options?: T) => void | PromiseLike<void>;
-    options?: T;
-    priority: number;
-}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[the auto-generated API reference]: https://foremark.github.io/Foremark/typedoc/interfaces/_view_media_index_.mediahandler.html
 
-- `patterns` specifies zero or more URL patterns. A pattern is one of the following:
-    - A string.
-    - A `RegExp` object.
-    - A function that accepts a string as parameter and returns a boolean value.
-  If it's `null`, all elements will be matched.
-
-- `handler` specifies a function that processes a media element. It may return a [`Promise`][] which resolves when the processing is completed.
-
-- `options` is passed to `handler`.
-
-- `priority` specifies a priority value. If there are multiple matching media
-  handlers, the one with the highest priority value will be chosen.
-
-[`Promise`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/promise
-
-The viewer provides several built-in media handlers (`BUILTIN_MEDIA_HANDLERS`). The `.merge` operator can be used to make modifications to the default set.
+The viewer provides several built-in media handlers ([`BUILTIN_MEDIA_HANDLERS`][]). [The `.merge` operator][] can be used to make modifications to the default set.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JavaScript
 var foremarkViewerConfig = Object.assign(window.foremarkViewerConfig, {
@@ -1028,6 +961,9 @@ var foremarkViewerConfig = Object.assign(window.foremarkViewerConfig, {
     },
 });
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[`BUILTIN_MEDIA_HANDLERS`]: https://foremark.github.io/Foremark/typedoc/modules/_view_media_index_.html#builtin_media_handlers
+[The `.merge` operator]: https://foremark.github.io/Foremark/typedoc/modules/_view_config_.html#mergeobjects
 
 ### HTML5 media handlers
 
@@ -1105,36 +1041,10 @@ BUILTIN_MEDIA_HANDLERS = {
 
 This media handler embeds an embedded representation of a URL using the [oEmbed protocol][].
 
-`options.endpoints` defines a set of oEmbed endpoints. Each endpoint defines a support URL scheme and the endpoint URL to which the media handler sends a request to generate the embedded representation of a media URL. Each endpoint is defined using the `OEmbedEndpoint` interface:
+`options.endpoints` defines a set of oEmbed endpoints. Each endpoint defines a support URL scheme and the endpoint URL to which the media handler sends a request to generate the embedded representation of a media URL. Each endpoint is defined using the [`OEmbedEndpoint`][] interface. The default set is defined by [`BUILTIN_OEMBED_ENDPOINTS`][].
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TypeScript
-interface OEmbedEndpoint {
-    schemes: string[];
-    url: string;
-    format?: 'json' | 'jsonp';
-}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-- `schemes`: One or more URL schemes. The syntax is based on "2.1. Configuration" of the oEmbed specification.
-- `url`: The endpoint URL.
-- `format`: The expected response format. Note that the media handler does not add this to the endpoint URL automatically.
-
-For example, the `OEmbedEndpoint` object for DeviantArt looks like this:
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JavaScript
-{
-    schemes: [
-        'http://*.deviantart.com/art/*',
-        'http://*.deviantart.com/*#/d*',
-        'http://fav.me/*',
-        'http://sta.sh/*'
-    ],
-    url: 'http://backend.deviantart.com/oembed?format=jsonp',
-    format: 'jsonp',
-}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Compare this with [the çorresponding provider definition][].
+[`OEmbedEndpoint`]: https://foremark.github.io/Foremark/typedoc/interfaces/_view_media_oembed_.oembedendpoint.html
+[`BUILTIN_OEMBED_ENDPOINTS`]: file:///Users/tcpp/Programs/Web/markdeep-plus/typedoc/modules/_view_media_oembed_providers_.html#builtin_oembed_endpoints
 
 The media handler is activated if a media URL matches any of the defined endpoint URL scheme. The media URL is supplied as a `url` query parameter. An additional query parameter can be specified using a XML attribute with prefix `oembed-`.
 
@@ -1143,7 +1053,6 @@ The media handler is activated if a media URL matches any of the defined endpoin
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 [oEmbed protocol]: https://oembed.com
-[the çorresponding provider definition]: https://github.com/iamcal/oembed/blob/master/providers/deviantart.com.yml
 
 ## Table of contents
 
