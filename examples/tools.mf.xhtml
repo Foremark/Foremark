@@ -43,14 +43,12 @@ Diagrams
     - It takes a [Graphviz DOT][] file and outputs an ASCII diagram.
     - This Perl module can be installed from CPAN. See [this article][] for how
       to install and use it.
-    - See [!Figure graph-easy-example] for an example output. `open door` and
-      `close door` were manually wrapped with double quotation marks to make
-      word spacing adequate. The input DOT code is shown in
-      [!Listing graph-easy-example].
+    - See [!Figure graph-easy-example] for an example output. The input DOT code
+      is shown in [!Listing graph-easy-example].
 
 [!Figure graph-easy-example]: An example output of `Graph::Easy`, rendered.
 
-      :::      "close door"
+      :::       close door
       :::  +-------------------+
       :::  |                   |
       :::  |                   |
@@ -59,20 +57,20 @@ Diagrams
       :::  |    |            +------------+                |
       :::  |    |    +-----> |    Init    | -+             |
       :::  |    |    |       +------------+  |             |
-      :::  |    |    |         |             |             | "close door"
+      :::  |    |    |         |             |             |  close door
       :::  |    |    | reset   | start       |             |
       :::  |    |    |         v             |             |
       :::  |    |    |       +------------+  |             |
       :::  |    |    +------ |  Heating   | <+-------------+
       :::  |    |            +------------+  |
       :::  |    |              |             |
-      :::  |    |              | "open door" |
+      :::  |    |              |  open door  |
       :::  |    |              v             |
       :::  |    |            +------------+  |
       :::  |    +----------- |  Waiting   | <+-------------+
       :::  |                 +------------+  |             |
       :::  |                   |             |             |
-      :::  |                   | reset       | "open door" |
+      :::  |                   | reset       |  open door  |
       :::  |                   v             |             |
       :::  |                 +------------+  |             | start
       :::  +---------------- |    Open    | <+             |
