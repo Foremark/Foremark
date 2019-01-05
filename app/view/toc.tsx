@@ -89,7 +89,9 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
             return;
         }
 
-        const refY = document.body.scrollTop + 40;
+        const {body} = document;
+        const html = document.getElementsByTagName('html')[0];
+        const refY = (body.scrollTop || html.scrollTop) + 40;
 
         let activeNode: Node | null = null;
         for (const node of this.allNodes) {
