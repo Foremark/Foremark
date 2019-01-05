@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Wrap `<mf-code>` with `<pre>` so that it's formatted as intended on Safari's Reader View.
 - Digrams are now rendered using a monospace font.
 - Fixed an issue that a figure label appears in a line isolated from the rest of the figure caption.
+- Fixed an issue that `<mf-ref>` generates an unnecessary whitespace (e.g., `Figure 1" "`).
 
 ## [0.0.9] - 2018-12-31
 
