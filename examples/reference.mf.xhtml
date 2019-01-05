@@ -82,6 +82,44 @@ have the <code>&gt;</code> sign in it.</i></p>
 </blockquote>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+## Fenced code blocks
+
+A line starting with three or more tildes (`~`) or backticks (<code>`</code>) starts a fenced code block. The fence can be followed by one or more keywords and the first one specifies the language:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Shell
+ $ yes hello world
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ None output
+ hello world
+ hello world
+ ...
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<mf-codeblock>
+<mf-code type="Shell">
+$ yes hello world
+</mf-code>
+<mf-code type="None output">
+hello world
+hello world
+...
+</mf-code>
+</mf-codeblock>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+ ```````````````````````````````
+ You sometimes want backticks
+ but that's okay too!
+ ```````````````````````````````
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<mf-codeblock>
+<mf-code type="">
+You sometimes want backticks
+but that's okay too!
+</mf-code>
+</mf-codeblock>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## HTML tags
 
