@@ -4,6 +4,7 @@
 /rust
 *.sublime-*
 /.taskfile.yml
+/.travis.yml
 /Cargo.lock
 /Cargo.toml
 /tools
