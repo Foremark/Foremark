@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Outdentation in a list caused by hard wrapping no longer closes a list.
 - Wrap `<mf-code>` with `<pre>` so that it's formatted as intended on Safari's Reader View.
 - Digrams are now rendered using a monospace font.
+- Fixed an issue that a figure label appears in a line isolated from the rest of the figure caption.
 
 ## [0.0.9] - 2018-12-31
 

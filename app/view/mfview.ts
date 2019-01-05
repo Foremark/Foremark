@@ -127,7 +127,7 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
             if (caption) {
                 const labelElem = document.createElement(ViewTagNames.FloatingElementLabel);
                 labelElem.textContent = label;
-                caption.insertBefore(labelElem, caption.firstChild);
+                prependPhrasingContent(labelElem, caption)
 
                 node.setAttribute('aria-labelledby', labelElem.id);
             }
@@ -153,7 +153,7 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
             const labelElem = document.createElement(ViewTagNames.FloatingElementLabel);
             const label = `${number}`;
             labelElem.textContent = label;
-            node.insertBefore(labelElem, node.firstChild);
+            prependPhrasingContent(labelElem, node)
 
             if (id) {
                 refLabelMap.set(id, [true, false, label]);
@@ -425,6 +425,34 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
     });
 
     return Promise.all(promises).then(() => {});
+}
+
+/**
+ * Insert a phrasing content to an appropriate location inside `container` so
+ * that it looks seamlessly prepended to the first text content of `container`.
+ *
+ * Consider the following example of `container`:
+ *
+ *     <div>
+ *     <p>para</p>
+ *     </div>
+ *
+ * In this case, `e` would be inserted just before the text node `para`.
+ */
+function prependPhrasingContent(e: Element, container: Element): void {
+    let child: Node | null = container.firstChild;
+
+    // Skip whitespaces
+    while (child && child instanceof Text && /^\s*$/.test(child.textContent!)) {
+        child = child.nextSibling;
+    }
+
+    // Descend into a `<p>`?
+    if (child instanceof HTMLParagraphElement) {
+        return prependPhrasingContent(e, child);
+    }
+
+    container.insertBefore(e, child);
 }
 
 const katexInlineOptions = {

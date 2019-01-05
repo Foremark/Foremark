@@ -497,16 +497,16 @@ main {
 
     mf-figure {
         text-align: center;
-        > div > mf-figure-caption {
+        > div > mf-figure-caption, > div > p > mf-figure-caption {
             display: block;
-            > mf-label {
+            mf-label {
                 font-weight: bold;
             }
         }
     }
 
     mf-note {
-        > div > mf-label {
+        > div > mf-label, > div > p > mf-label {
             display: block;
             float: left;
             vertical-align: super;
