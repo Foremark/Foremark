@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.0.10] - 2018-01-05
+
 - Outdentation in a list caused by hard wrapping no longer closes a list.
 - Wrap `<mf-code>` with `<pre>` so that it's formatted as intended on Safari's Reader View.
 - Digrams are now rendered using a monospace font.
@@ -71,7 +73,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial release.
 
-[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.9...HEAD
+[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.10...HEAD
+[0.0.10]: https://github.com/Foremark/Foremark/compare/0.0.9...0.0.10
 [0.0.9]: https://github.com/Foremark/Foremark/compare/0.0.8...0.0.9
 [0.0.8]: https://github.com/Foremark/Foremark/compare/0.0.7...0.0.8
 [0.0.7]: https://github.com/Foremark/Foremark/compare/0.0.6...0.0.7
