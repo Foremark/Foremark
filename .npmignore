@@ -20,6 +20,7 @@
 /wasm
 /target
 *.map
+/typedoc
 
 # TypeScript source maps (which are useless without source code)
 /dist/**/*.map
