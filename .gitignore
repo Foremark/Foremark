@@ -3,6 +3,7 @@
 /browser
 /dist
 /*.tgz
+/typedoc
 
 # Rust build artifacts
 /target

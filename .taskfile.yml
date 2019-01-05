@@ -6,6 +6,9 @@
 - name: start
   task: webpack-dev-server --config webpack.dev.js
 
+- name: doc
+  task: node_modules/.bin/typedoc --out typedoc app
+
 - name: build
   tasks:
     # `build:wasm` generates ES modules, so run it before other tasks

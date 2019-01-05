@@ -40,6 +40,7 @@
     "taskfile": "^0.8.5",
     "terser-webpack-plugin": "^1.1.0",
     "ts-loader": "^5.3.1",
+    "typedoc": "^0.14.0",
     "typescript": "^3.2.2",
     "url-loader": "^1.1.2",
     "webpack": "^4.27.1",
@@ -50,6 +51,7 @@
   "scripts": {
     "test": "taskfile test",
     "start": "taskfile start",
+    "doc": "taskfile doc",
     "prepublishOnly": "rm -rf browser dist && npm run build",
     "build": "taskfile build",
     "build:wasm": "taskfile build:wasm",
