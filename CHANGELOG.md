@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 - Added the WOFF2 version of every included web font. This reduces the downloaded asset size by up to 160KB.
+- Changed the way viewer configuration objects are supplied. Configuration objects now can be provided from asynchronously loaded script tags, paving the way to collectively customize the behavior of a set of documents.
 
 ## [0.0.10] - 2018-01-05
 

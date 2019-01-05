@@ -35,4 +35,4 @@ if (!body) {
 
 // If we use `import` here, the TypeScript compiler would move it to the top of
 // this script, defeating the purpose of this module.
-require('./browser-stage1');
+require('./browser-stage1').browserMain();

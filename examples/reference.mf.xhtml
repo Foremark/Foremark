@@ -968,7 +968,17 @@ consequat.
 
 ## Configuration
 
-The viewer loads a configuration object from `window.foremarkViewerConfig`.
+The viewer receives configuration objects through `window.foremarkConfig`. Each script tag with `data-rel="foremark-config"` must supply **exactly one** configuration object:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ HTML
+<script data-rel="foremark-config">
+(window.foremarkConfig = window.foremarkConfig || []).push({
+    /* ... */
+});
+</script>
+
+<script src="global.js" data-rel="foremark-config" async="async" />
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The signature of a configuration object is defined using the `ViewerConfig` interface. The viewer has the default configuration object and the user-specified configuration is merged into that. See [the auto-generated API reference][] for more details.
 
@@ -985,7 +995,7 @@ Media handlers are defined using the viewer configuration interface's `mediaHand
 The viewer provides several built-in media handlers ([`BUILTIN_MEDIA_HANDLERS`][]). [The `.merge` operator][] can be used to make modifications to the default set.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JavaScript
-var foremarkViewerConfig = Object.assign(window.foremarkViewerConfig, {
+(window.foremarkConfig = window.foremarkConfig || []).push({
     'mediaHandlers.merge': {
         'image': null, // Disable the built-in image handler
         'image.merge': {

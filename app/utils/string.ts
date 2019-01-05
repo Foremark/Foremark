@@ -54,3 +54,11 @@ export function analyzeIndent(indent: string, ref: string): IndentCommand {
 export function escapeRegExp(x: string): string {
     return x.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
 }
+
+export function truncateStringWithEllipsisSign(x: string, len: number): string {
+    if (x.length > len) {
+        return x.substr(0, len) + '…';
+    } else {
+        return x;
+    }
+}
