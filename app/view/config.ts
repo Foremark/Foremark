@@ -215,18 +215,18 @@ function mergeObjects(base: any, add: any): any {
     const baseNew = Object.assign({}, base);
 
     for (let key in add) {
-        const [_, ident, mode = 'replace'] =
+        const [_, ident, mode = '.replace'] =
             /([^:.]+)(?::[^.]*)?(\.(?:merge|append|prepend|replace))?/.exec(key)!;
 
         switch (mode) {
-            case 'replace':
+            case '.replace':
                 baseNew[ident] = add[key];
                 break;
-            case 'merge':
+            case '.merge':
                 baseNew[ident] = mergeObjects(baseNew[ident], add[key]);
                 break;
-            case 'append':
-            case 'prepend':
+            case '.append':
+            case '.prepend':
                 baseNew[ident] = mergeArrays(baseNew[ident], add[key], mode);
                 break;
             default:
@@ -237,15 +237,15 @@ function mergeObjects(base: any, add: any): any {
     return baseNew;
 }
 
-function mergeArrays(base: any, add: any, mode: 'append' | 'prepend'): any {
+function mergeArrays(base: any, add: any, mode: '.append' | '.prepend'): any {
     if (!(base instanceof Array) || !(add instanceof Array)) {
         throw new Error("Only can append/prepend arrays");
     }
 
     switch (mode) {
-        case 'append':
+        case '.append':
             return base.concat(add);
-        case 'prepend':
+        case '.prepend':
             return add.concat(base);
         default:
             throw new Error();
