@@ -6,6 +6,7 @@ import {Port} from './components/port';
 import {EventHook} from './components/eventhook';
 import {TableOfContents} from './toc';
 import {StyleConstants} from './constants';
+import {Sitemap} from './sitemap';
 
 const CN = require('./app.less');
 document.getElementsByTagName('html')[0].classList.add('mf-processed');
@@ -17,6 +18,7 @@ function shouldShowTocByDefault(document: HTMLElement): boolean {
 
 export interface AppProps {
     foremarkDocument: HTMLElement;
+    sitemap: Sitemap | null;
     renderPromise: Promise<void>;
 }
 
@@ -44,8 +46,10 @@ export class App extends React.Component<AppProps, AppState> {
     constructor(props: AppProps) {
         super(props);
 
+        const forceShowToc = /(^\?|&)toc=1($|&)/.test(document.location.search);
+
         this.state = {
-            tocVisible: shouldShowTocByDefault(props.foremarkDocument),
+            tocVisible: forceShowToc || shouldShowTocByDefault(props.foremarkDocument),
             sidebarModalVisible: false,
             loaderActivity: true,
             searchQuery: '',
@@ -219,6 +223,7 @@ export class App extends React.Component<AppProps, AppState> {
                         <TableOfContents
                             ref={e => this.tocComponent = e}
                             foremarkDocument={this.props.foremarkDocument}
+                            sitemap={this.props.sitemap}
                             onNavigate={this.handleHideModalSidebar}
                             searchQuery={state.searchQuery} />
                     </nav>

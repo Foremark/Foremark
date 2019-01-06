@@ -6,6 +6,7 @@ import {TagNames} from './foremark';
 import {loadViewerConfigFromWindow} from './view/config';
 import {expandMfText} from './converter/mftext';
 import {prepareForemarkForViewing} from './view/mfview';
+import {processSitemap} from './view/sitemap';
 
 export async function browserMain(): Promise<void> {
     // Load the input from the current document
@@ -19,6 +20,10 @@ export async function browserMain(): Promise<void> {
 
     // Load the viewer config
     const [viewerConfig, configErrors] = await loadViewerConfigFromWindow();
+
+    // Load the sitemap
+    const [sitemap, sitemapErrors] = processSitemap(
+        viewerConfig.sitemap, viewerConfig.sitemapDocumentRoot);
 
     // `<mf-text>` is a shorthand syntax for `<mf><mf-text>...</mf-text></mf>`
     if (inputNode.tagName.toLowerCase() === TagNames.Text) {
@@ -52,6 +57,13 @@ export async function browserMain(): Promise<void> {
         inputNode.insertBefore(errorTag, inputNode.firstChild);
     }
 
+    if (sitemapErrors.length) {
+        const errorTag = document.createElement(TagNames.Error);
+        errorTag.innerHTML = `An error occured while loading a sitemap:<ul><li>` +
+            sitemapErrors.join('</li><li>') + `</li></ul>`;
+        inputNode.insertBefore(errorTag, inputNode.firstChild);
+    }
+
     // Add viewport size hint
     head.insertAdjacentHTML(
         'beforeend',
@@ -64,6 +76,7 @@ export async function browserMain(): Promise<void> {
 
     React.render(<App
         foremarkDocument={inputNode as HTMLElement}
+        sitemap={sitemap}
         renderPromise={renderPromise}
     />, reactRoot);
 }

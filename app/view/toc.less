@@ -34,6 +34,18 @@ li.item {
         }
     }
 
+    &.external > a {
+        opacity: 0.7;
+        &:hover { text-decoration: underline; }
+
+        // Disabled entry
+        &[href=""] {
+            opacity: 0.5;
+            cursor: default !important;
+            text-decoration: none !important;
+        }
+    }
+
     // Expand/collapse button
     > a > button {
         float: left;

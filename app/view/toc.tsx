@@ -6,11 +6,13 @@ import {Port} from './components/port';
 import {EventHook} from './components/eventhook';
 import {forEachNodePreorder} from '../utils/dom';
 import {Debouncer} from '../utils/debouncer';
+import {SitemapEntry, Sitemap} from './sitemap';
 
 const CN = require('./toc.less');
 
 export interface TableOfContentsProps {
     foremarkDocument: HTMLElement;
+    sitemap: Sitemap | null;
 
     /**
      * When set, only the entries matching the query are displayed.
@@ -34,10 +36,14 @@ interface TableOfContentsState {
 export class TableOfContents extends React.Component<TableOfContentsProps, TableOfContentsState> {
     refs: any;
 
-    private allNodes: Node[];
-    private root: Node;
+    private readonly allNodes: InternalNode[];
+    /** The root node of the TOC. The root itself is not displayed. */
+    private readonly root: Node;
+    /** The root node of the current page's TOC tree. When a sitemap is disabled,
+     * this is identical to `root`. */
+    private readonly localRoot: Node;
 
-    private mainRoot: ViewNode;
+    private readonly mainRoot: ViewNode;
     private searchRoot?: ViewNode;
 
     private suspendActiveNodeUpdate = false;
@@ -52,11 +58,20 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
         };
 
         this.allNodes = enumerateNodes(props.foremarkDocument);
-        const root = this.root = buildNodeTree(this.allNodes);
+        let root = this.localRoot = buildNodeTree(this.allNodes);
+
+        if (props.sitemap) {
+            [root, this.localRoot] = incorporateSitemapIntoNodeTree(root, props.sitemap);
+        }
+        this.root = root;
+
+        recalculateLevels(root, 0);
 
         // Create a view model of the TOC.
         this.mainRoot = createViewNode(root, null);
         this.mainRoot.expanded = true;
+
+        setTimeout(() => this.recalculateAndSetActiveNode(), 0);
     }
 
     componentWillReceiveProps(
@@ -68,7 +83,7 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
             const query = nextProps.searchQuery.toLowerCase();
             this.searchRoot = createViewNode(this.root, null);
             applyFilterOnViewNode(this.searchRoot, node => {
-                return node.label != null &&
+                return node.type !== NodeType.Root &&
                     node.label.textContent!.toLowerCase().indexOf(query) >= 0;
             });
         }
@@ -94,9 +109,14 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
         const refY = (body.scrollTop || html.scrollTop) + 40;
 
         let activeNode: Node | null = null;
+
+        if (this.localRoot.type !== NodeType.Root) {
+            activeNode = this.localRoot;
+        }
+
         for (const node of this.allNodes) {
             let top = 0;
-            for (let e: HTMLElement | null = node.anchor!; e; e = e.offsetParent as HTMLElement) {
+            for (let e: HTMLElement | null = node.anchor; e; e = e.offsetParent as HTMLElement) {
                 top += e.offsetTop;
             }
             if (top > refY) {
@@ -182,7 +202,7 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
      * TOC's view.
      */
     private selectViewNode(viewNode: ViewNode): void {
-        navigateNode(viewNode.node);
+        navigateNode(viewNode.node, false, this.props.sitemap);
         this.didNavigateNode(viewNode.node);
 
         if (viewNode.nodeView) {
@@ -270,6 +290,13 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
                 }
                 e.preventDefault();
             }
+        } else if (e.key === 'Enter') {
+            // Navigate to the node - even if it's external
+            const viewNode = this.highlightedViewNode;
+            if (viewNode) {
+                navigateNode(viewNode.node, true, this.props.sitemap);
+                this.props.onNavigate();
+            }
         }
     }
 
@@ -301,23 +328,61 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
                     key={child.id}
                     viewNode={child}
                     tocState={this.state}
+                    sitemap={this.props.sitemap}
                     onNodeClick={this.handleNodeClick} />)}
         </ul>;
     }
 }
 
-interface Node {
-    /** The HTML element of the heading. `null` for the root node. */
-    label: HTMLElement | null;
-    /** The HTML element of the anchor. `null` for the root node. */
-    anchor: HTMLElement | null;
+const enum NodeType {
+    /** A hyperlink to a section in the current document. */
+    Internal,
+    /** A hyperlink to an external document. */
+    External,
+    /** The local root of the current document. */
+    Top,
+    /** A root node. */
+    Root,
+}
+
+interface BaseNode {
+    type: NodeType;
     level: number;
     children: Node[];
     parent: Node | null;
 }
 
-function enumerateNodes(document: HTMLElement): Node[] {
-    const nodes: Node[] = [];
+interface RootNode extends BaseNode {
+    type: NodeType.Root;
+}
+
+interface InternalNode extends BaseNode {
+    type: NodeType.Internal;
+    /** The HTML element of the heading. */
+    label: HTMLElement;
+    /** The HTML element of the anchor. `null` for the root node and
+     * document root nodes (`type` is not `Internal`). */
+    anchor: HTMLElement;
+}
+
+interface TopNode extends BaseNode {
+    type: NodeType.Top;
+    /** The HTML element of the heading. */
+    label: HTMLElement;
+    sitemapEntry: SitemapEntry;
+}
+
+interface ExternalNode extends BaseNode {
+    type: NodeType.External;
+    /** The HTML element of the heading. */
+    label: HTMLElement;
+    sitemapEntry: SitemapEntry;
+}
+
+type Node = RootNode | InternalNode | TopNode | ExternalNode;
+
+function enumerateNodes(document: HTMLElement): InternalNode[] {
+    const nodes: InternalNode[] = [];
 
     const idMap = new Map<string, HTMLElement>();
     forEachNodePreorder(document, node => {
@@ -348,6 +413,7 @@ function enumerateNodes(document: HTMLElement): Node[] {
             nodes.push({
                 label: node,
                 anchor,
+                type: NodeType.Internal,
                 level: parseInt(match[1], 10),
                 children: [],
                 parent: null,
@@ -363,8 +429,7 @@ function enumerateNodes(document: HTMLElement): Node[] {
  */
 function buildNodeTree(nodes: Node[]): Node {
     const root: Node = {
-        label: null,
-        anchor: null,
+        type: NodeType.Root,
         level: 0,
         children: [],
         parent: null,
@@ -383,6 +448,72 @@ function buildNodeTree(nodes: Node[]): Node {
     }
 
     return root;
+}
+
+/**
+ * Construct a node tree from a sitemap and a node tree for the current page's
+ * headings. The original tree is destroyed.
+ */
+function incorporateSitemapIntoNodeTree(localRoot: Node, sitemap: Sitemap): [Node, Node] {
+    let newLocalRoot: Node | null = null;
+
+    function convertFragment(fragment: ReadonlyArray<SitemapEntry>, parent: Node | null): Node[] {
+        return fragment.map(e => {
+            let node: Node = {
+                label: e.caption,
+                sitemapEntry: e,
+                type: NodeType.External,
+                level: 0,
+                children: [],
+                parent,
+            };
+            node.children = convertFragment(e.children, node);
+
+            if (e === sitemap.currentEntry) {
+                // This where the original tree and the sitemap tree is connected.
+                //
+                //  - root
+                //      - external page title 1
+                //      - page title  ← this
+                //           - section 1
+                //           - section 2
+                //      - external page title 2
+                //
+                // Append child sitemap entries to the current page's local TOC
+                node = {
+                    ...node,
+                    type: NodeType.Top,
+                    children: localRoot.children.concat(node.children),
+                };
+
+                for (const child of node.children) {
+                    child.parent = node;
+                }
+
+                newLocalRoot = node;
+            }
+
+            return node;
+        });
+    }
+
+    const globalRoot: Node = {
+        type: NodeType.Root,
+        level: 0,
+        children: [],
+        parent: null,
+    };
+
+    globalRoot.children = convertFragment(sitemap.rootEntries, globalRoot);
+
+    return [globalRoot, newLocalRoot!];
+}
+
+function recalculateLevels(node: Node, level: number): void {
+    node.level = level;
+    for (const child of node.children) {
+        recalculateLevels(child, level + 1);
+    }
 }
 
 /**
@@ -436,18 +567,50 @@ const NAVIGATE_DEBOUNCER = new Debouncer();
 
 /**
  * Programmatically navigate to a node.
+ *
+ * @param strong If it's `false`, navigation to an external document is prevented.
  */
-function navigateNode(node: Node): void {
+function navigateNode(node: Node, strong: boolean, sitemap: Sitemap | null): void {
+    if (node.type === NodeType.External && strong) {
+        const href = getExternalNodeTarget(node, sitemap!);
+        if (href == null) {
+            return;
+        }
+        document.location.assign(href);
+        return;
+    }
+
+    let anchor: HTMLElement | null;
+    switch (node.type) {
+        case NodeType.Internal: anchor = node.anchor; break;
+        case NodeType.Top: anchor = null; break;
+        default: return;
+    }
     NAVIGATE_DEBOUNCER.invoke(() => {
-        window.history.replaceState(null, document.title, '#' + node.anchor!.id);
+        window.history.replaceState(null, document.title, '#' + (anchor ? anchor.id : 'top'));
     }, 500);
-    node.anchor!.scrollIntoView(true);
+    if (anchor) {
+        anchor.scrollIntoView(true);
+    } else {
+        document.body.scrollTop = 0;
+        document.getElementsByTagName('html')[0].scrollTop = 0;
+    }
+}
+
+/**
+ * Gets the link target of a node originating from a sitemap. Returns `null`
+ * if it corresponds to a disabled sitemap entry.
+ */
+function getExternalNodeTarget(node: ExternalNode, sitemap: Sitemap): string | null {
+    const canonicalPath = node.sitemapEntry!.paths[0];
+    return canonicalPath ? sitemap!.documentRoot + canonicalPath + '?toc=1' : null;
 }
 
 interface NodeViewProps {
     viewNode: ViewNode;
     onNodeClick: (viewNode: ViewNode) => void;
     tocState: TableOfContentsState;
+    sitemap: Sitemap | null;
 }
 
 interface NodeViewState {
@@ -467,8 +630,13 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
             expanded: props.viewNode.expanded,
         };
 
+        const node = props.viewNode.node;
+        if (node.type == NodeType.Root) {
+            throw new Error();
+        }
+
         // Clone the heading element to create a TOC label
-        const label = this.label = props.viewNode.node.label!.cloneNode(true) as HTMLElement;
+        const label = this.label = node.label.cloneNode(true) as HTMLElement;
         label.removeAttribute('id');
     }
 
@@ -549,13 +717,21 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
 
     @bind
     private handleClick(e: Event): void {
-        this.props.onNodeClick(this.props.viewNode);
+        const node = this.props.viewNode.node;
 
         // Intercept the link action to prevent losing a keyboard focus.
         e.stopPropagation();
         e.preventDefault();
 
-        navigateNode(this.props.viewNode.node);
+        // A disabled entry does not react normally to click
+        if (node.type === NodeType.External && node.sitemapEntry.paths.length === 0) {
+            this.handleToggle(e);
+            return;
+        }
+
+        this.props.onNodeClick(this.props.viewNode);
+
+        navigateNode(node, true, this.props.sitemap);
     }
 
     @bind
@@ -566,18 +742,34 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
     }
 
     render() {
-        const {viewNode, tocState, onNodeClick} = this.props;
+        const {viewNode, tocState, onNodeClick, sitemap} = this.props;
         const {node} = viewNode;
 
         const {isActive, isExpanded} = this;
 
         const expandable = viewNode.children.length > 0;
 
+        let href;
+        switch (node.type) {
+            case NodeType.External:
+                href = getExternalNodeTarget(node, sitemap!) || '';
+                break;
+            case NodeType.Internal:
+                href = '#' + node.anchor!.id;
+                break;
+            case NodeType.Top:
+                href = '#top';
+                break;
+            case NodeType.Root:
+                throw new Error();
+        }
+
         return <li
                 class={classnames({
                     [CN.item]: true,
                     [CN.active]: isActive,
-                    [CN['L' + node.level]]: true,
+                    [CN.external]: node.type === NodeType.External,
+                    [CN['L' + Math.min(node.level, 9)]]: true,
                 })}
                 role='treeitem'
                 aria-selected={`${isActive}`}
@@ -588,7 +780,7 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
                 tagName='a'
                 element={this.label}
                 onClick={this.handleClick}
-                href={'#' + node.anchor!.id}>
+                href={href}>
                 {
                     <button onClick={this.handleToggle} type='button'
                         className={isExpanded ? CN.expanded : CN.collapsed}
@@ -608,6 +800,7 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
                                 key={i}
                                 viewNode={child}
                                 tocState={tocState}
+                                sitemap={sitemap}
                                 onNodeClick={onNodeClick} />)}
                     </ul>
                 :

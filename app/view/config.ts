@@ -1,4 +1,5 @@
 import {BUILTIN_MEDIA_HANDLERS, MediaHandler} from './media';
+import {SitemapConfig} from './sitemap';
 import {truncateStringWithEllipsisSign} from '../utils/string';
 import {escapeXmlText} from '../utils/dom';
 
@@ -22,6 +23,23 @@ export interface ViewerConfig {
      * `null` can be assigned to a property to disable a specific media handler.
      */
     mediaHandlers: { [key: string]: MediaHandler | null; };
+
+    /**
+     * Defines a sitemap.
+     *
+     * When defined, a sitemap will be displayed inside a table of contents
+     * pane.
+     */
+    sitemap?: SitemapConfig;
+
+    /**
+     * Specifies a sitemap's document root.
+     *
+     * A slash sign at the end of the path will be ignored.
+     *
+     * See [[SitemapEntry]] for details.
+     */
+    sitemapDocumentRoot?: string;
 }
 
 /**

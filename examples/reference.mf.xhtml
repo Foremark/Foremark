@@ -1108,8 +1108,29 @@ The viewer displays a table of contents that allows quick navigation to various 
 
 A table of contents is constructed by looking for heading elements (`h1`, `h2`, ...) in a document.
 
-!!! TODO: Yet to be added...
-    Global TOC
+If a sitemap is associated with a current page, it will be displayed in the table of contents and the headings of the current page will be embedded inside the current page's sitemap entry.
+
+## Sitemap
+
+A sitemap defines a tree of documents, which usually represents the entire structure of a writing piece. A sitemap is displayed in a table of contents and by using it users can quickly navigate to other associated documents.
+
+A sitemap can be associated with a document using the configuration system. See [the auto-generated API reference][] for more details. A simple example is shown below:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JavaScript
+(window.foremarkConfig = window.foremarkConfig || []).push({
+    'sitemap.merge': {
+        'main': [
+            ['The Foremark Book', ['/examples/book.mf.xhtml']],
+            ['Media element test', ['/examples/media.mf.xhtml']],
+        ],
+    },
+});
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+!!! Tip
+    When you use a sitemap, it's recommended to define a sitemap in an external script and load it from all documents.
+
+[the auto-generated API reference]: https://foremark.github.io/Foremark/typedoc/interfaces/_view_sitemap_.sitemapconfig.html
 
 # Using Foremark as a library
 
@@ -1173,6 +1194,7 @@ expandMfText(mfText);
 
 ]]></mf-text> <!-- Foremark footer -->
 <script src="../browser/foremark.js" data-rel="foremark" async="async" />
+<script src="global.js" data-rel="foremark-config" async="async" />
 
 <style>
 mf-code[type="XML converted"] {
