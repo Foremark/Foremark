@@ -149,7 +149,8 @@ class ArrayProxy<T> {
 
 /**
  * Performs the **Merge** operations from a source object `add` to a destination
- * object `base`, returns a *new* object (the original objects are not modified).
+ * object `base` (which can be `null`-ish), returns a *new* object (the original
+ * objects are not modified).
  *
  * The **Merge** operation iterates through the source object's properties.
  * A property name specifies how the property is transferred to the destination
@@ -204,6 +205,9 @@ class ArrayProxy<T> {
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
 function mergeObjects(base: any, add: any): any {
+    if (base == null) {
+        base = {};
+    }
     if (typeof base !== 'object' || base == null || typeof add !== 'object' || add == null) {
         throw new Error("Only can merge objects");
     }
