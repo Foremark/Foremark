@@ -72,6 +72,7 @@ export async function loadViewerConfigFromWindow(): Promise<[ViewerConfig, strin
         // Replace the config receiver
         const alreadyLoadedConfigObjects: any[] | undefined = (window as any).foremarkConfig;
         const proxy = new ArrayProxy();
+        (window as any).foremarkConfig = proxy;
 
         // How many configuration objects do we expect?
         const expectedCount = document
