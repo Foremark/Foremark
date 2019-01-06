@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.0.11] - 2018-01-06
+
 - Added the WOFF2 version of every included web font. This reduces the downloaded asset size by up to 160KB.
 - Changed the way viewer configuration objects are supplied. Configuration objects now can be provided from asynchronously loaded script tags, paving the way to collectively customize the behavior of a set of documents.
 - Fixed an issue that the selection of the table of contents does not follow the scroll position.
@@ -78,7 +80,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial release.
 
-[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.10...HEAD
+[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.11...HEAD
+[0.0.11]: https://github.com/Foremark/Foremark/compare/0.0.10...0.0.11
 [0.0.10]: https://github.com/Foremark/Foremark/compare/0.0.9...0.0.10
 [0.0.9]: https://github.com/Foremark/Foremark/compare/0.0.8...0.0.9
 [0.0.8]: https://github.com/Foremark/Foremark/compare/0.0.7...0.0.8
