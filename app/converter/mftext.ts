@@ -353,11 +353,11 @@ export function expandMfText(node: Element): void {
 
     // LaTeX inline equations
     transformTextNodeWith(node, html => html.replace(
-        /((?:[^\w\d]))\$(\S(?:[^\$]*?\S(?!US|Can))??)\$(?![\w\d])/g,
+        /(^|[^\w\d])\$(\S(?:[^\$]*?\S(?!US|Can))??)\$(?![\w\d])/g,
         `$1<${TagNames.Equation}>$2</${TagNames.Equation}>`,
     ), e => e === node || isBlockquote(e), false);
     transformTextNodeWith(node, html => html.replace(
-        /((?:[^\w\d]))\$([ \t][^\$]+?[ \t])\$(?![\w\d])/g,
+        /(^|[^\w\d])\$([ \t][^\$]+?[ \t])\$(?![\w\d])/g,
         `$1<${TagNames.Equation}>$2</${TagNames.Equation}>`,
     ), e => e === node || isBlockquote(e), false);
 

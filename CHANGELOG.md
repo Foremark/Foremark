@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 - Fixed sidenotes referenced inside headings messing up the layout and the table of contents.
+- Fixed equations not being recognized when there's no preceding text.
 
 ## [0.0.11] - 2018-01-06
 
