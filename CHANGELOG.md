@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.0.12] - 2018-01-08
+
 - Fixed sidenotes referenced inside headings messing up the layout and the table of contents.
 - Fixed equations not being recognized when there's no preceding text.
 
@@ -83,7 +85,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial release.
 
-[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.11...HEAD
+[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.12...HEAD
+[0.0.12]: https://github.com/Foremark/Foremark/compare/0.0.11...0.0.12
 [0.0.11]: https://github.com/Foremark/Foremark/compare/0.0.10...0.0.11
 [0.0.10]: https://github.com/Foremark/Foremark/compare/0.0.9...0.0.10
 [0.0.9]: https://github.com/Foremark/Foremark/compare/0.0.8...0.0.9
