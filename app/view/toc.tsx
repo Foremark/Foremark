@@ -603,7 +603,7 @@ function navigateNode(node: Node, strong: boolean, sitemap: Sitemap | null): voi
  */
 function getExternalNodeTarget(node: ExternalNode, sitemap: Sitemap): string | null {
     const canonicalPath = node.sitemapEntry!.paths[0];
-    return canonicalPath ? sitemap!.documentRoot + canonicalPath + '?toc=1' : null;
+    return canonicalPath ? sitemap!.documentRoot + canonicalPath : null;
 }
 
 interface NodeViewProps {

@@ -46,10 +46,8 @@ export class App extends React.Component<AppProps, AppState> {
     constructor(props: AppProps) {
         super(props);
 
-        const forceShowToc = /(^\?|&)toc=1($|&)/.test(document.location.search);
-
         this.state = {
-            tocVisible: forceShowToc || shouldShowTocByDefault(props.foremarkDocument),
+            tocVisible: props.sitemap != null || shouldShowTocByDefault(props.foremarkDocument),
             sidebarModalVisible: false,
             loaderActivity: true,
             searchQuery: '',

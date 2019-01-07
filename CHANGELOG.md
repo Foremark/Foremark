@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 - Fixed definition lists generating a text `null` when a caption is missing between two definitions.
+- A table of contents is displayed by default if there's a sitemap attached to a current page.
 
 ## [0.0.12] - 2018-01-08
 
