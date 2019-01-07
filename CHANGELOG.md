@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.0.13] - 2018-01-08
+
 - Fixed definition lists generating a text `null` when a caption is missing between two definitions.
 - A table of contents is displayed by default if there's a sitemap attached to a current page.
 
@@ -88,7 +90,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial release.
 
-[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.12...HEAD
+[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.13...HEAD
+[0.0.13]: https://github.com/Foremark/Foremark/compare/0.0.12...0.0.13
 [0.0.12]: https://github.com/Foremark/Foremark/compare/0.0.11...0.0.12
 [0.0.11]: https://github.com/Foremark/Foremark/compare/0.0.10...0.0.11
 [0.0.10]: https://github.com/Foremark/Foremark/compare/0.0.9...0.0.10
