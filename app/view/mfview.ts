@@ -272,8 +272,18 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
             // Decide where to insert the sidenote
             let at = refs[0];
             for (let n: Element | null = at; n = n.parentElement; n) {
-                if (n.tagName === 'table' || n.tagName === 'mf-sidenote') {
-                    // We can't insert a `Sidenote` inside these elements.
+                // We can't insert a `Sidenote` inside these elements.
+                if (
+                    // A table has a `overflow: auto` wrapper.
+                    n.tagName === 'table' ||
+                    // Can't lay out a sidenote inside a sidenote.
+                    n.tagName === 'mf-sidenote' ||
+                    // Headings are cloned into the TOC.
+                    /h[1-9]/.test(n.tagName) ||
+                    // Code blocks use a special font.
+                    n.tagName === TagNames.Code || n.tagName === TagNames.CodeBlock ||
+                    n.tagName === 'pre' || n.tagName === 'code'
+                ) {
                     at = n;
                 }
             }

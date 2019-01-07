@@ -87,7 +87,7 @@ li.item {
     }
 
     > a > * {
-        // `h1`...`h6` matches here. Remove all heading-specific styles.
+        // `h1`...`h9` matches here. Remove all heading-specific styles.
         font-family: inherit;
         font-style: inherit;
         font-size: inherit;
@@ -97,6 +97,13 @@ li.item {
         padding-left: 0.2em;
         display: block;
         overflow: hidden;
+
+        a {
+            color: inherit;
+            text-decoration: inherit;
+            pointer-events: none;
+        }
+        :global(.hide-sidenote) { display: none; }
     }
     // Indentation
     .indent(@level) { padding-left: unit((0.1 + pow(@level, 0.7)), em); }

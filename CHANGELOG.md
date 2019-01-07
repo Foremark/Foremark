@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Fixed sidenotes referenced inside headings messing up the layout and the table of contents.
+
 ## [0.0.11] - 2018-01-06
 
 - Added the WOFF2 version of every included web font. This reduces the downloaded asset size by up to 160KB.
