@@ -160,7 +160,7 @@ const DefinitionList = {
     start(marker: string, caption: string | null): [BlockState, string] {
         return [
             DefinitionList,
-            `<dl><dt>${caption}</dt><dd>`,
+            `<dl>` + (caption != null ? `<dt>${caption}</dt>` : '') + `<dd>`,
         ];
     },
 
@@ -168,7 +168,7 @@ const DefinitionList = {
         return marker === ':';
     },
     continue(marker: string, caption: string | null): string {
-        return `</dd><dt>${caption}</dt><dd>`;
+        return `</dd>` + (caption != null ? `<dt>${caption}</dt>` : '') + `<dd>`;
     },
     close(): string {
         return '</dd></dl>';

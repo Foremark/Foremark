@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Fixed definition lists generating a text `null` when a caption is missing between two definitions.
+
 ## [0.0.12] - 2018-01-08
 
 - Fixed sidenotes referenced inside headings messing up the layout and the table of contents.
