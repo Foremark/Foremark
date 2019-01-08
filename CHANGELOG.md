@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-- Fixed a text inside a digram being incorrectly aligned vertically on Firefox.
+- Fixed Firefox-specific layouting issues with a text inside a digram.
 
 ## [0.0.13] - 2018-01-08
 

@@ -348,12 +348,13 @@ impl Element {
                 SvgElement::Path(svg_arc)
             }
             Element::Text(ref loc, ref string) => {
-                let sx = loc.x as f32 * settings.text_width + settings.text_width / 8.0;
+                let sx = loc.x as f32 * settings.text_width;
                 let sy = loc.y as f32 * settings.text_height + settings.text_height * 3.0 / 4.0;
                 let mut svg_text = SvgText::new()
                     .set("class","fg_fill")
                     .set("x", sx)
-                    .set("y", sy);
+                    .set("y", sy)
+                    .set("textLength", (string.width() as f32) * settings.text_width);
                 let text_node = svg::node::Text::new(string.to_string());
                 svg_text.append(text_node);
                 SvgElement::Text(svg_text)
