@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Fixed a text inside a digram being incorrectly aligned vertically on Firefox.
+
 ## [0.0.13] - 2018-01-08
 
 - Fixed definition lists generating a text `null` when a caption is missing between two definitions.
