@@ -54,6 +54,9 @@ export interface OEmbedEndpoint {
  */
 export interface OEmbedOptions {
     endpoints: { [key: string]: OEmbedEndpoint | null; };
+
+    /** The timeout duration of JSONP requests. */
+    timeout: number;
 }
 
 interface OEmbedProcessedOptions extends OEmbedOptions {
@@ -149,6 +152,7 @@ type OEmbedResponse = OEmbedResponseCommon & (
 export const OEMBED_MEDIA_HANDLER: MediaHandler = {
     options: {
         endpoints: BUILTIN_OEMBED_ENDPOINTS,
+        timeout: 30000,
     } as OEmbedOptions,
     priority: 100,
 
@@ -189,7 +193,7 @@ export const OEMBED_MEDIA_HANDLER: MediaHandler = {
                 resp = await (await fetch(url)).json();
                 break;
             case 'jsonp':
-                resp = await (await fetchJsonp(url)).json();
+                resp = await (await fetchJsonp(url, {timeout: opt.timeout})).json();
                 break;
             default:
                 throw new Error(`Unknown oEmbed response format: ${ep.format}`);
