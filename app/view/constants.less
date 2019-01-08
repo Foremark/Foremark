@@ -35,8 +35,11 @@
 @foreground-color: black;
 
 // CSS variables
+//
 // This is a relatively new addition to CSS. Make sure to have a non-variable
 // version of color specification as a fallback for old browsers.
+// It's safe to assume that the support for `prefers-color-scheme` implies
+// that for CSS variables.
 :root {
     --background-color: @background-color;
     --text-color: @text-color;

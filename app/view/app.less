@@ -404,8 +404,12 @@ main {
         }
     }
 
-    mf-diagram svg {
+    mf-diagram svg :global {
+        rect.backdrop, .bg_fill { fill: var(--background-color); }
+        .fg_fill { fill: var(--foreground-color); }
+        .fg_stroke { stroke: var(--foreground-color); }
         text {
+            fill: var(--foreground-color);
             font-family: @monospace-font-family;
             white-space: nowrap;
         }
