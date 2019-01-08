@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed Safari-specific layouting issues with a text inside a digram.
 - Version information is outputted to the browser's console.
 - Diagrams' color scheme now respects [`@media (prefers-color-scheme: dark)`](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme).
+- Updated oEmbed endpoint URLs to use HTTPS to avoid the mixed content issue when a page is served over HTTPS.
 
 ## [0.0.14] - 2018-01-08
 

@@ -1121,6 +1121,9 @@ The media handler is activated if a media URL matches any of the defined endpoin
 
 [oEmbed protocol]: https://oembed.com
 
+!!! Warning: Mixed active content issue
+    A media will fail to load if a page is served over HTTPS and the endpoint URL use HTTP. Specify an HTTPS URL whenever possible to avoid this problem.
+
 ## Table of contents
 
 The viewer displays a table of contents that allows quick navigation to various parts of a page.

@@ -14,14 +14,14 @@ export const BUILTIN_OEMBED_ENDPOINTS: {[key: string]: OEmbedEndpoint} = {
             'http://clyp.it/*',
             'http://clyp.it/playlist/*',
         ],
-        url: 'http://api.clyp.it/oembed/?format=json',
+        url: 'https://api.clyp.it/oembed/?format=json',
     },
     'codepen': {
         schemes: [
             'http://codepen.io/*',
             'https://codepen.io/*',
         ],
-        url: 'http://codepen.io/api/oembed?format=js',
+        url: 'https://codepen.io/api/oembed?format=js',
         format: 'jsonp',
     },
     'derpibooru': {
@@ -40,7 +40,7 @@ export const BUILTIN_OEMBED_ENDPOINTS: {[key: string]: OEmbedEndpoint} = {
             'http://fav.me/*',
             'http://sta.sh/*'
         ],
-        url: 'http://backend.deviantart.com/oembed?format=jsonp',
+        url: 'https://backend.deviantart.com/oembed?format=jsonp',
         format: 'jsonp',
     },
     'facebook-post': {
