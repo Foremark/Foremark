@@ -4,6 +4,19 @@ if ('あ'.charCodeAt(0) !== 0x3042) {
     throw new Error('The application was loaded with a wrong encoding.');
 }
 
+console.log(
+    `
+%cForemark%c ${process.env.VERSION} (${process.env.URL})
+
+%cRevision: %c${process.env.COMMITHASH}@${process.env.BRANCH}
+
+`,
+    'font-size: 150%; font-style: italic;',
+    '',
+    'font-size: 80%;',
+    'font-size: 80%; font-family: monospace;',
+);
+
 declare var __webpack_public_path__: string;
 
 // Guess the public path based on the script tag.

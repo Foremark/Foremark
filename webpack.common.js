@@ -99,7 +99,8 @@ module.exports = (debug, selfContained) => ({
     }),
     new webpack.DefinePlugin({
       'process.env': {
-        'VERSION': JSON.stringify(gitRevision.version()),
+        'VERSION': JSON.stringify(require('./package.json').version),
+        'URL': JSON.stringify(require('./package.json').homepage),
         'COMMITHASH': JSON.stringify(gitRevision.commithash()),
         'BRANCH': JSON.stringify(gitRevision.branch()),
         'IS_BROWSER': JSON.stringify(true),
