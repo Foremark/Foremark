@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.0.15] - 2018-01-09
+
 - Fixed Safari-specific layouting issues with a text inside a digram.
 - Version information is outputted to the browser's console.
 - Diagrams' color scheme now respects [`@media (prefers-color-scheme: dark)`](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme).
@@ -100,7 +102,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial release.
 
-[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.14...HEAD
+[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.15...HEAD
+[0.0.15]: https://github.com/Foremark/Foremark/compare/0.0.14...0.0.15
 [0.0.14]: https://github.com/Foremark/Foremark/compare/0.0.13...0.0.14
 [0.0.13]: https://github.com/Foremark/Foremark/compare/0.0.12...0.0.13
 [0.0.12]: https://github.com/Foremark/Foremark/compare/0.0.11...0.0.12
