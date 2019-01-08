@@ -5,10 +5,12 @@
 @import (less) "~../../lib/fira/fonts.css";
 
 html, body {
-    background: white;
+    background: @background-color;
+    background: var(--background-color);
+    color: @text-color;
+    color: var(--text-color);
     font-family: @font-family;
     font-size: 16px;
-    color: #444;
     line-height: 1.5;
     margin: 0;
     padding: 0;
@@ -17,13 +19,6 @@ html, body {
 
 body {
     display: block !important;
-}
-
-@media screen and (prefers-color-scheme: dark) {
-    html, body {
-        background: #222;
-        color: #eee;
-    }
 }
 
 @media screen {
@@ -53,7 +48,7 @@ body {
 @media print {
     html, body {
         font-size: 11px;
-        color: black;
+        color: inherit;
     }
 }
 
@@ -134,9 +129,9 @@ body {
             }
             &, &:before, &:after {
                 position: absolute;
-                background: black;
+                background: @foreground-color;
+                background: var(--foreground-color);
                 height: 1px;
-                @media screen and (prefers-color-scheme: dark) { background: #eee; }
             }
             &:before { top: 4px; }
             &:after { top: 8px; }
@@ -163,22 +158,21 @@ body {
 
         animation: 2000ms both infinite linear;
         animation-name: spin;
+        opacity: 0.6;
 
         &:before, &:after {
             box-sizing: border-box;
             content: "";
             position: absolute;
             left: 0; top: 0; width: 100%; height: 100%;
-            border: 1px solid #555;
+            border: 1px solid @foreground-color;
+            border: 1px solid var(--foreground-color);
             border-top-color: transparent;
             border-right-color: transparent;
             border-bottom-color: transparent;
             border-radius: 100%;
             animation: 600ms both infinite ease-in-out;
             animation-name: spin;
-            @media screen and (prefers-color-scheme: dark) {
-                border-left-color: #bbb;
-            }
         }
         &:after {
             animation-delay: 50ms;
@@ -350,8 +344,10 @@ main {
 
     // Code blocks (a set of `mf-code`s)
     mf-codeblock {
-        border-top: 1px solid black;
-        border-bottom: 1px solid black;
+        border-top: 1px solid;
+        border-bottom: 1px solid;
+        border-color: @text-color;
+        border-color: var(--text-color);
         @media print { border-width: 0.5px; }
         display: block;
         padding: 0.5em 0.25em;
@@ -361,10 +357,6 @@ main {
 
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
-
-        @media screen and (prefers-color-scheme: dark) {
-            border-color: #eee;
-        }
     }
     pre { margin: 0; }
 

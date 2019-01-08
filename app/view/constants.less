@@ -30,6 +30,25 @@
 @accent-color: #3060d0;
 @accent-color-brighter: #40d0f0;
 
+@background-color: white;
+@text-color: #444;
+@foreground-color: black;
+
+// CSS variables
+// This is a relatively new addition to CSS. Make sure to have a non-variable
+// version of color specification as a fallback for old browsers.
+:root {
+    --background-color: @background-color;
+    --text-color: @text-color;
+    --foreground-color: @foreground-color;
+
+    @media screen and (prefers-color-scheme: dark) {
+        --background-color: #222;
+        --text-color: #eee;
+        --foreground-color: white;
+    }
+}
+
 // Font families
 @font-family: 'Source Serif Pro', serif;
 @monospace-font-family: 'Source Code Pro', Menlo, Consolas, monospace;
