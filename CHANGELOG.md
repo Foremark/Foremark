@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Fixed Safari-specific layouting issues with a text inside a digram.
+
 ## [0.0.14] - 2018-01-08
 
 - Fixed Firefox-specific layouting issues with a text inside a digram.
