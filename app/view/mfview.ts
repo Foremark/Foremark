@@ -11,6 +11,12 @@ const enum ViewTagNames {
     DiagramInner = 'mf-diagram-inner',
 }
 
+const enum FloatType {
+    Note,
+    Figure,
+    Citation,
+}
+
 let nextNonce = 1;
 function makeNonce(): string {
     return 'e-' + (nextNonce++);
@@ -79,7 +85,7 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
     const nextFigureNumber = new Map<string, number>();
     let nextEndnoteNumber = 1;
 
-    const refLabelMap = new Map<string, [boolean, boolean, string]>();
+    const refLabelMap = new Map<string, [FloatType, boolean, string]>();
     const floatingContentUsageMap = new Map<string, Element[]>();
 
     forEachNodePreorder(node, node => {
@@ -138,7 +144,7 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
             }
 
             if (id) {
-                refLabelMap.set(id, [false, false, label]);
+                refLabelMap.set(id, [FloatType.Figure, false, label]);
             }
         } else if (node.tagName === TagNames.Note) {
             const id = node.getAttribute('id');
@@ -156,7 +162,25 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
             prependPhrasingContent(labelElem, node)
 
             if (id) {
-                refLabelMap.set(id, [true, false, label]);
+                refLabelMap.set(id, [FloatType.Note, false, label]);
+            }
+        } else if (node.tagName === TagNames.Cite) {
+            const id = node.getAttribute('id');
+            let label = node.getAttribute('label');
+
+            if (!label && id) {
+                label = id;
+            }
+
+            // Generate a label
+            if (label) {
+                const labelElem = document.createElement(ViewTagNames.FloatingElementLabel);
+                labelElem.textContent = `[${label}]`;
+                prependPhrasingContent(labelElem, node)
+            }
+
+            if (id && label) {
+                refLabelMap.set(id, [FloatType.Citation, false, label]);
             }
         } else if (node.tagName === TagNames.Ref) {
             const target = node.getAttribute('to') || '';
@@ -211,6 +235,33 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
         // impossible to accomplish using a purely CSS-based solution. So,
         // we basically create a copy of figures and sidenotes to be inserted
         // to a different position, which we call "surrogates".
+
+        /** Decides where to insert the sidenote. */
+        const chooseInsertionPosition = (x: Element): [Node | null, Element] => {
+            let at: [Node | null, Element] = [x, x.parentElement!];
+            for (let n: Element | null = x; n = n!.parentElement; n) {
+                // We can't insert a `Sidenote` inside these elements.
+                if (
+                    // A table has a `overflow: auto` wrapper.
+                    n.tagName === 'table' ||
+                    // Can't lay out a sidenote inside a sidenote.
+                    n.tagName === 'mf-sidenote' ||
+                    // Code blocks use a special font.
+                    n.tagName === TagNames.Code || n.tagName === TagNames.CodeBlock ||
+                    n.tagName === 'pre' || n.tagName === 'code'
+                ) {
+                    at = [n, n.parentElement!];
+                } else if (
+                    // Headings are cloned into the TOC.
+                    /h[1-9]/.test(n.tagName)
+                ) {
+                    at = [n.nextSibling, n.parentElement!];
+                }
+            }
+            return at;
+        };
+
+        // Notes and figures:
         //
         // If a floating element has `id` and sidenoting is enabled for it, then
         // clone the element and wrap it with `<ViewTagNames.Sidenote>`,
@@ -232,10 +283,7 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
         // put it in the same place whatever the screen size is. Therefore,
         // a surrogate is not necessary.
         forEachNodePreorder(node, node => {
-            if (!(node instanceof Element)) {
-                return;
-            }
-            if (node.tagName !== TagNames.Figure && node.tagName !== TagNames.Note) {
+            if (!(node instanceof Element) || (node.tagName !== TagNames.Figure && node.tagName !== TagNames.Note)) {
                 return;
             }
             const size = node.getAttribute('size');
@@ -270,28 +318,62 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
             sidenote.appendChild(cloned);
 
             // Decide where to insert the sidenote
-            let at = refs[0];
-            for (let n: Element | null = at; n = n.parentElement; n) {
-                // We can't insert a `Sidenote` inside these elements.
-                if (
-                    // A table has a `overflow: auto` wrapper.
-                    n.tagName === 'table' ||
-                    // Can't lay out a sidenote inside a sidenote.
-                    n.tagName === 'mf-sidenote' ||
-                    // Headings are cloned into the TOC.
-                    /h[1-9]/.test(n.tagName) ||
-                    // Code blocks use a special font.
-                    n.tagName === TagNames.Code || n.tagName === TagNames.CodeBlock ||
-                    n.tagName === 'pre' || n.tagName === 'code'
-                ) {
-                    at = n;
-                }
-            }
-            at.parentElement!.insertBefore(sidenote, at);
+            let at = chooseInsertionPosition(refs[0]);
+            at[1].insertBefore(sidenote, at[0]);
 
             // Hide the original element on a large screen
             node.classList.add('hide-sidenote');
 
+            refLabelMap.get(node.id)![1] = true;
+        });
+
+        // Citations:
+        //
+        // They are handled similarly to notes and figures, but multiple
+        // surrogates can be created for a single citation. Basically a
+        // surrogate is created for each reference. However, we also want to
+        // keep number of sidenotes under controls. Therefore, we limit the
+        // number of surrogates to one for every subsection.
+        const headingMap = new Map<Node, Node | null>();
+        let currentHeading: Node | null = null;
+        forEachNodePreorder(node, node => {
+            if (!(node instanceof Element)) {
+                return;
+            }
+            if (node.tagName === 'h1' || node.tagName === 'h2') {
+                currentHeading = node;
+            }
+            headingMap.set(node, currentHeading);
+        });
+        forEachNodePreorder(node, node => {
+            if (!(node instanceof Element) || node.tagName !== TagNames.Cite || !node.id) {
+                return;
+            }
+
+            const refs = floatingContentUsageMap.get(node.id);
+            if (refs == null) {
+                return;
+            }
+
+            let lastHeading: Node | null | undefined = void 0;
+            for (const ref of refs) {
+                const refHeading = headingMap.get(ref);
+                if (refHeading === lastHeading) {
+                    // This heading already has a surrogate of this citation
+                    continue;
+                }
+                const cloned = node.cloneNode(true) as Element;
+                cloned.id = '';
+                cloned.classList.add('surrogate');
+                const sidenote = node.ownerDocument!.createElement(ViewTagNames.Sidenote);
+                sidenote.appendChild(cloned);
+
+                // Decide where to insert the sidenote
+                let at = chooseInsertionPosition(ref);
+                at[1].insertBefore(sidenote, at[0]);
+            }
+
+            hasSidenote = true;
             refLabelMap.get(node.id)![1] = true;
         });
     }
@@ -311,24 +393,40 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
         }
 
         const target = node.getAttribute('to') || '';
-        const [endnote, sidenote, label] = refLabelMap.get(target) || [false, false, '?'];
+        const [floatType, sidenote, label] = refLabelMap.get(target) || [false, false, '?'];
 
         const link = document.createElement('a');
         link.href = '#' + encodeURIComponent(target);
 
-        if (endnote) {
-            const sup = document.createElement('sup');
-            sup.textContent = label;
-            link.appendChild(sup);
-        } else {
-            link.textContent = label;
+        switch (floatType) {
+            case FloatType.Note:
+                const sup = document.createElement('sup');
+                sup.textContent = label;
+                link.appendChild(sup);
+                break;
+            case FloatType.Figure:
+            case FloatType.Citation:
+                link.textContent = label;
+                break;
+            default:
+                throw new Error();
         }
 
         // Replace <TagNames.Ref>` with a link
         node.parentElement!.insertBefore(link, node);
         node.parentElement!.removeChild(node);
 
-        if (sidenote) {
+        if (floatType === FloatType.Citation) {
+            // Wrap with `[...]`
+            link.insertAdjacentText('beforebegin', '[');
+            link.insertAdjacentText('afterend', ']');
+        }
+
+        // Update the link to a surrogate if sidenoting is enabled for this
+        // element.
+        // This doesn't happen for citations because citations may have
+        // multiple surrogates thus we can't decide which one to link.
+        if (sidenote && floatType !== FloatType.Citation) {
             // Link to the sidenote version on a large screen
             const link2 = link.cloneNode(true) as HTMLAnchorElement;
             link2.href = '#' + encodeURIComponent('sidenote.' + target);

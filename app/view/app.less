@@ -297,6 +297,7 @@ main {
         margin: 1rem 0 1rem;
         font-style: italic;
         font-weight: normal;
+        clear: right; // Clear sidenotes
     }
     a:global(.anchor) {
         position: relative;
@@ -488,6 +489,26 @@ main {
             margin: 0.25em 0;
         }
     }
+    mf-cite {
+        display: block;
+        p {
+            margin: 0.25em 0;
+        }
+
+        @label-width: 7em;
+        &:not(:global(.surrogate)) {
+            padding-left: @label-width;
+            > p > mf-label {
+                display: block;
+                overflow-wrap: break-word;
+                float: left; width: (@label-width - 0.3em);
+                margin-left: -@label-width;
+            }
+
+            // Expand `mf-cite` to contain the entirety of the `mf-label` within
+            &:after { content: ""; display: block; clear: left; }
+        }
+    }
 
     mf-figure {
         text-align: center;
@@ -572,6 +593,7 @@ main {
             // The following selector selects:
             //  - `mf-sidenote > mf-figure`
             //  - `mf-sidenote > mf-note`
+            //  - `mf-sidenote > mf-cite`
             //  - `mf-figure.no-surrogate > div`
             //  - `mf-note.no-surrogate > div`
             > * {

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 - The following hyperlink syntaxes are now supported: `https://bare.url.example.com` `bare-address@example.com` `<protocol://example.com>` `<weird address@example.com>`
+- Citations (`[#citeId]`) are now supported.
 - Fixed an issue that a table is not rendered properly when there's no preceding/following text.
 
 ## [0.0.15] - 2018-01-09
