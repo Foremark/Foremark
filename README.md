@@ -87,11 +87,11 @@ Prerequisite:
 ```shell
 $ yarn install
 
-$ npm run build
+$ yarn build
 
 # Alternatively, start the Webpack development server:
-$ npm run build:wasm
-$ npm start -- --open
+$ yarn build:wasm
+$ yarn start --open
 ```
 
 ## Meta
