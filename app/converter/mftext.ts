@@ -265,6 +265,22 @@ export function expandMfText(node: Element): void {
         /`(.+?(?:\n.+?)?)`(?!\d)/g, '<code>$1</code>',
     ), e => e === node || isBlockquote(e), false);
 
+    // Wrapped URLs
+    const WRAPPED_URL_RE = new RegExp(
+        // url
+        `&lt;([a-z]+://(?:[^&<>]|&(?!gt;|lt;))+)&gt;|` +
+        // mail
+        `&lt;((?:[^&<>@]|&(?!gt;|lt;))+@(?:[^&<>@]|&(?!gt;))+)&gt;`,
+        'g',
+    );
+    transformTextNodeWith(node, html => html.replace(
+        WRAPPED_URL_RE, (_, url, mail) => {
+            const text = unescapeXmlText(url || mail);
+            const href = (mail && 'mailto:' + unescapeXmlText(mail)) || text;
+            return `<a href="${escapeXmlText(href)}"><code>${escapeXmlText(text)}</code></a>`;
+        },
+    ), e => e === node || isBlockquote(e), false);
+
     // Parse HTML comments
     transformHtmlWith(node, html => html.replace(
         /&lt;(!--\s[\s\S]*?--)&gt;/g,
@@ -615,8 +631,26 @@ export function expandMfText(node: Element): void {
         true,
     );
 
-    // TODO: Replace other types of hyperlinks
-    //       `<url>`, `http://example.com`, `USER@example.com`, `[#citeref]`
+    // Bare URLs
+    const PROTOCOL_RE = /(?:https?|ftps?|sftp|ipfs|ipns|dweb):\/\//.source;
+    const MAIL_CHR_RE = /[-0-9a-zA-Z#%+=_]/.source; // doesn't handle uncommon cases
+    const MAIL_CHR_INNER_RE = `(?:${MAIL_CHR_RE}|\\.(?!\\.))`;
+    const URL_RE = new RegExp(
+        // url
+        `(${PROTOCOL_RE}(?:[^ \n\t<>&]|&amp;)*)|` +
+        // mail
+        `(${MAIL_CHR_RE}${MAIL_CHR_INNER_RE}*@${MAIL_CHR_INNER_RE}*${MAIL_CHR_RE})`,
+        'g',
+    );
+    transformTextNodeWith(node, html => html.replace(
+        URL_RE, (_, url, mail) => {
+            const text = unescapeXmlText(url || mail);
+            const href = (mail && 'mailto:' + unescapeXmlText(mail)) || text;
+            return `<a href="${escapeXmlText(href)}"><code>${escapeXmlText(text)}</code></a>`;
+        },
+    ), isNonVerbatimElementAndNotLink, false);
+
+    // TODO: Replace other types of hyperlinks `[#citeref]`
 
     transformTextNodeWith(node, html => {
         // Arrows

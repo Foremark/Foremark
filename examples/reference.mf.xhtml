@@ -184,12 +184,29 @@ Self-closing: &lt;br&gt; (displayed as "&lt;br&gt;" unless there's <code>&lt;/br
 [This](https://www.example.com) is a normal Markdown hyperlink.
 
 [This](https://www.example.com "lo mupli" attr="value") has some attributes.
+
+https://www.example.com/ほげ test@example.com
+
+ipfs://QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco/wiki/
+
+<myproto://www.example.com/lorem ipsum> <weird address@example.com>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
 <p>
 <a href="https://www.example.com">This</a> is a normal Markdown hyperlink.
 </p>
 <p>
 <a href="https://www.example.com" title="lo mupli" attr="value">This</a> has some attributes.
+</p>
+<p>
+<a href="https://www.example.com/ほげ"><code>https://www.example.com/ほげ</code></a>
+<a href="mailto:test@example.com"><code>test@example.com</code></a>
+</p>
+<p>
+<a href="ipfs://QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco/wiki/"><code>ipfs://QmXoypizjW3WknFiJnKLwHCnL72vedxjQkDDP1mXWo6uco/wiki/</code></a>
+</p>
+<p>
+<a href="myproto://www.example.com/lorem ipsum"><code>myproto://www.example.com/lorem ipsum</code></a>
+<a href="mailto:weird address@example.com"><code>weird address@example.com</code></a>
 </p>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

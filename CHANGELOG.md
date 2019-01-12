@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- The following hyperlink syntaxes are now supported: `https://bare.url.example.com` `bare-address@example.com` `<protocol://example.com>` `<weird address@example.com>`
+
 ## [0.0.15] - 2018-01-09
 
 - Fixed Safari-specific layouting issues with a text inside a digram.
