@@ -657,8 +657,6 @@ export function expandMfText(node: Element): void {
         },
     ), isNonVerbatimElementAndNotLink, false);
 
-    // TODO: Replace other types of hyperlinks `[#citeref]`
-
     transformTextNodeWith(node, html => {
         // Arrows
         html = html.replace(
