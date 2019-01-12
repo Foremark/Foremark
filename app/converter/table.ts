@@ -1,8 +1,8 @@
 // This source code is largely based on `markdeep.js`
 
-const TABLE_ROW       = /(?:\n[ \t]*(?:(?:\|?[ \t\S]+?(?:\|[ \t\S]+?)+\|?)|\|[ \t\S]+\|)(?=\n))/.source;
-const TABLE_SEPARATOR = /\n[ \t]*(?:(?:\|? *\:?-+\:?(?: *\| *\:?-+\:?)+ *\|?|)|\|[\:-]+\|)(?=\n)/.source;
-const TABLE_CAPTION   = /\n[ \t]*\[[^\n\|]+\][ \t]*(?=\n)/.source;
+const TABLE_ROW       = /(?:(?:\n|^)[ \t]*(?:(?:\|?[ \t\S]+?(?:\|[ \t\S]+?)+\|?)|\|[ \t\S]+\|)(?=\n|$))/.source;
+const TABLE_SEPARATOR = /(?:\n|^)[ \t]*(?:(?:\|? *\:?-+\:?(?: *\| *\:?-+\:?)+ *\|?|)|\|[\:-]+\|)(?=\n|$)/.source;
+const TABLE_CAPTION   = /(?:\n|^)[ \t]*\[[^\n\|]+\][ \t]*(?=\n|$)/.source;
 const TABLE_REGEXP    = new RegExp(TABLE_ROW + TABLE_SEPARATOR + TABLE_ROW + '+(' + TABLE_CAPTION + ')?', 'g');
 
 /** Maruku ("github")-style table processing */
