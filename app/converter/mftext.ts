@@ -8,7 +8,7 @@ import {replaceTables} from './table';
 import {replaceBlocks} from './blocks';
 import {
     FIGURE_ID_RE, ENDNOTE_ID_RE, TextInternalTagNames, FLOATING_SIZE_RE,
-    MEDIA_PARAM_RE,
+    MEDIA_PARAM_RE, CITE_ID_RE,
 } from './common';
 
 const ARROWS: [string, string][] = [
@@ -411,6 +411,7 @@ export function expandMfText(node: Element): void {
             tagName === TagNames.Figure ||
             tagName === TagNames.FigureCaption ||
             tagName === TagNames.Note ||
+            tagName === TagNames.Cite ||
             tagName === TagNames.Block ||
             tagName.match(/^(?:ul|ol|dl|li|dt|dd|blockquote)$/i) != null;
     };
@@ -521,9 +522,15 @@ export function expandMfText(node: Element): void {
 
     // Reference to a figure or endnote: `[^link]`
     transformHtmlWith(node, html => html.replace(
-        new RegExp(`\\[${FLOATING_SIZE_RE.source}(${ENDNOTE_ID_RE.source}|${FIGURE_ID_RE.source})\\]`, 'g'),
-        (_, id) => {
-            id = unescapeXmlText(id);
+        new RegExp(
+            `\\[(?:` +
+            // id of endnote or figure
+            `${FLOATING_SIZE_RE.source}(${ENDNOTE_ID_RE.source}|${FIGURE_ID_RE.source})|` +
+            // id of citation
+            `#(${CITE_ID_RE.source})` +
+            `)\\]`, 'g'),
+        (_, id1, id2) => {
+            const id = unescapeXmlText(id1 || id2);
             return `<${TagNames.Ref} to="${escapeXmlText(id)}" />`;
         }
     ), isNonVerbatimElement);

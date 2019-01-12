@@ -420,9 +420,6 @@ The part surrounded by brackets is called a *label*. A label consists of the fol
 The number prefix and the base name together forms a label identifier.
 
 !!! Tip
-    The preceding `^` and `!` symbols do not constitute the label identifier. so it's technically possible to refer to a figure with a different symbol. However, it's considered a bad practice because it makes it harder to find a tag using a text editor's search functionality.
-
-!!! Tip
     Although the figure syntax described here can be used for any kinds of contents, it's better to use the media block syntax if you just intend to display a media file as a figure.
 
 !!! Note: Differences from Markdeep
@@ -431,8 +428,26 @@ The number prefix and the base name together forms a label identifier.
     - Sidenotes can contain multiple paragraphs.
 
 !!! TODO: Yet to be written about...
-    - Citations (e.g., `[#Kajiya86]`).
     - Find a way to place table captions above tables but not figure captions.
+
+And there is a syntax for citations, which is similar to that of sidenotes:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Markdown
+Here's a citation [#A2018].
+
+[#A2018]:
+    From a casual conversation with Person A in 2018.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<p>
+    Here's a citation <mf-ref to="A2018" />.
+</p>
+<mf-cite id="A2018">
+    <p>From a casual conversation with Person A in 2018.</p>
+</mf-cite>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+!!! Tip
+    The preceding `^`, `!`, and `#` symbols do not constitute the label identifier. so it's technically possible to refer to a figure with a different symbol. However, it's considered a bad practice because it makes it harder to find a tag using a text editor's search functionality.
 
 The following table summarizes all forms of labels:
 
@@ -444,6 +459,7 @@ The following table summarizes all forms of labels:
 | `[!!endnote]`     | ¹         | `<mf-note>`   | `"full"` [!full-note] | `endnote`     |
 | `[!endnote]`      | ²         | `<mf-note>`   | `"large"`             | `endnote`     |
 | `[^sidenote]`     | ³         | `<mf-note>`   |                       | `sidenote`    |
+| `[#cite]`         | [cite]    | `<mf-cite>`   |                       | `cite`        |
 | `[!!Figure fig1]` | Figure 1  | `<mf-figure>` | `"full"`              | `Figure fig1` |
 | `[!Figure fig2]`  | Figure 2  | `<mf-figure>` | `"large"`             | `Figure fig2` |
 | `[^Figure fig3]`  | Figure 3  | `<mf-figure>` |                       | `Figure fig3` |
@@ -882,6 +898,8 @@ Figures and sidenotes have the following common attributes:
 !!! Tip
     `size="full"` enables a special styling, which also enables the sidenote margin (even if there aren't actual sidenotes).
 
+The `id` attribute of citations has the same semantics as that of figures and sidenotes. They don't support `size` though.
+
 ### Figures — `<mf-figure>`
 
 ~~~~~~~~~~~~xml
@@ -918,6 +936,22 @@ If both of `counter` and `label` are omitted but `id` is specified, `counter` an
 ~~~~~~~~~~~~
 
 *Relevant Foremark Text tags*: `[^noteId]: contents` `[!noteId]: contents`
+
+### Citations — `<mf-cite>`
+
+~~~~~~~~~~~~xml
+<mf-cite id="citeId" label="Abadi2005">
+    <p>
+        Contents
+    </p>
+</mf-cite>
+~~~~~~~~~~~~
+
+- **`label`** specifies the displayed citation label. `id` is used when `label` is omitted.
+
+Unlike sidenotes, citations are always rendered where they are defined (so that document authors can make a section dedicated for references). However, copies of them may be displayed as sidenotes around their references.
+
+*Relevant Foremark Text tags*: `[#citeId]: contents`
 
 ### Figure/note references — `<mf-ref>`
 

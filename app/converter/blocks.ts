@@ -1,7 +1,7 @@
 import {TagNames} from '../foremark';
 import {
     TextInternalTagNames, ENDNOTE_ID_RE, FIGURE_ID_RE, MEDIA_PARAM_RE,
-    FLOATING_SIZE_RE, parseFloatingSize,
+    FLOATING_SIZE_RE, parseFloatingSize, CITE_ID_RE,
 } from './common';
 import {removePrefix, analyzeIndent, IndentCommand} from '../utils/string';
 import {
@@ -203,7 +203,7 @@ const Admonition = {
  */
 const LinkTargetDefinition = {
     // TODO: The content is verbatim (shouldn't be processed)
-    markerPattern: new RegExp(/\[[^!^][^\][]*?\]:/),
+    markerPattern: new RegExp(/\[[^!^#][^\][]*?\]:/),
     captionStyle: CaptionStyle.None,
 
     start(marker: string, caption: string | null, ctx: TransformHtmlWithContext): [BlockState, string] {
@@ -218,6 +218,32 @@ const LinkTargetDefinition = {
     canContinue(marker: string): boolean { return false; },
     continue(marker: string, caption: string | null): string { throw new Error(); },
     close(): string { return `</${TextInternalTagNames.LinkTarget}>`; },
+};
+
+const citationPattern = new RegExp(`\\[#(${CITE_ID_RE.source})\\]:`);
+
+/**
+ * `BlockInitiator`/`BlockState` for citations like `[#notename]: ...`.
+ */
+const Citation = {
+    markerPattern: new RegExp(citationPattern.source.replace(/([^\\]|^)\(/g, '$1(?:')),
+    captionStyle: CaptionStyle.None,
+
+    start(marker: string, caption: string | null): [BlockState, string] {
+        const [_, idRaw] = citationPattern.exec(marker)!;
+
+        let id = unescapeXmlText(idRaw);
+        id = ` id="${escapeXmlText(id)}"`;
+
+        return [
+            Citation,
+            `<${TagNames.Cite}${id}>`,
+        ];
+    },
+
+    canContinue(marker: string): boolean { return false; },
+    continue(marker: string, caption: string | null): string { throw new Error(); },
+    close(): string { return `</${TagNames.Cite}>`; },
 };
 
 const endnotePattern = new RegExp(`\\[(${FLOATING_SIZE_RE.source})(${ENDNOTE_ID_RE.source})?\\]:`);
@@ -336,6 +362,7 @@ const BLOCK_INITIATORS: ReadonlyArray<BlockInitiator> = [
     DefinitionList,
     Admonition,
     LinkTargetDefinition,
+    Citation,
     Endnote,
     Figure,
     ImageBlock,

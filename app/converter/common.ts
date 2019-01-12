@@ -18,6 +18,7 @@ export const enum TextInternalTagNames {
     LinkTarget = 'mf-link-target',
 }
 
+export const CITE_ID_RE = /[^[\]<>]+/;
 export const ENDNOTE_ID_RE = /[^[\]<> :\t]+/;
 export const FIGURE_ID_RE = /[^[\]<>\t]+[ :][^[\]<> :\t]+/;
 

@@ -18,6 +18,7 @@ export const enum TagNames {
     FigureCaption = 'mf-figure-caption',
     Ref = 'mf-ref',
     Media = 'mf-media',
+    Cite = 'mf-cite',
 }
 
 export const enum AttributeNames {
