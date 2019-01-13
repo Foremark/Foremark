@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.1.0] - 2018-01-13
+
 - The following hyperlink syntaxes are now supported: `https://bare.url.example.com` `bare-address@example.com` `<protocol://example.com>` `<weird address@example.com>`
 - Citations (`[#citeId]`) are now supported.
 - Fixed an issue that a table is not rendered properly when there's no preceding/following text.
@@ -108,7 +110,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial release.
 
-[Unreleased]: https://github.com/Foremark/Foremark/compare/0.0.15...HEAD
+[Unreleased]: https://github.com/Foremark/Foremark/compare/0.1.0...HEAD
+[0.1.0]: https://github.com/Foremark/Foremark/compare/0.0.15...0.1.0
 [0.0.15]: https://github.com/Foremark/Foremark/compare/0.0.14...0.0.15
 [0.0.14]: https://github.com/Foremark/Foremark/compare/0.0.13...0.0.14
 [0.0.13]: https://github.com/Foremark/Foremark/compare/0.0.12...0.0.13
