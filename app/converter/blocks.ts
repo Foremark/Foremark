@@ -54,6 +54,11 @@ interface BlockInitiator extends BlockMarkerTraits {
 
 interface BlockState extends BlockMarkerTraits {
     /**
+     * Prohibits the child block formation.
+     */
+    readonly verbatim?: boolean;
+
+    /**
      * Returns whether this block can assimilate a given marker as a new item.
      *
      * If this returns false, this block will be closed and a new block will be
@@ -202,9 +207,9 @@ const Admonition = {
  * `BlockInitiator`/`BlockState` for link target definitons like `[linkname]: ...`.
  */
 const LinkTargetDefinition = {
-    // TODO: The content is verbatim (shouldn't be processed)
     markerPattern: new RegExp(/\[[^!^#][^\][]*?\]:/),
     captionStyle: CaptionStyle.None,
+    verbatim: true,
 
     start(marker: string, caption: string | null, ctx: TransformHtmlWithContext): [BlockState, string] {
         const id = ctx.expand(marker.substring(1, marker.length - 2));
@@ -469,7 +474,7 @@ export function replaceBlocks(html: string, ctx: TransformHtmlWithContext): stri
         let [_2, indent, lineBody] = line.match(/^(\s*)(.*)$/)!;
 
         // Detect list marker
-        const markerMatch = lineBody.match(MARKER_LINE_PATTERN);
+        let markerMatch = lineBody.match(MARKER_LINE_PATTERN);
 
         // Detect outdent
         let indentCommand: IndentCommand;
@@ -502,6 +507,11 @@ export function replaceBlocks(html: string, ctx: TransformHtmlWithContext): stri
         // the first line of the body.
         if (levels[0].bodyIndentation == null) {
             levels[0].bodyIndentation = indent;
+        }
+
+        // Do not parse blocks inside a verbatim block.
+        if (indentCommand === IndentCommand.Indent && levels[0].state.verbatim) {
+            markerMatch = null;
         }
 
         if (!markerMatch) {

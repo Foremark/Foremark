@@ -1,0 +1,27 @@
+[1][]
+
+[2][named]
+
+[3][]
+
+[4][]
+
+[5][]
+
+[6][]
+
+[1]: https://www.example.com/target1
+
+[named]: https://www.example.com/target2
+
+[3]: https://www.example.com/
+     target3
+
+[4]: https://www.example.com/
+     -target4
+
+[5]: "https://www.example.com/
+     + target5"
+
+[6]: https://www.example.com/
+     - "title"
