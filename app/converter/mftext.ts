@@ -639,7 +639,7 @@ export function expandMfText(node: Element): void {
     );
 
     // Bare URLs
-    const PROTOCOL_RE = /(?:https?|ftps?|sftp|ipfs|ipns|dweb):\/\//.source;
+    const PROTOCOL_RE = /(?:https?|ftps?|sftp|ipfs|ipns|dweb|mailto):\/\//.source;
     const MAIL_CHR_RE = /[-0-9a-zA-Z#%+=_]/.source; // doesn't handle uncommon cases
     const MAIL_CHR_INNER_RE = `(?:${MAIL_CHR_RE}|\\.(?!\\.))`;
     const URL_RE = new RegExp(
