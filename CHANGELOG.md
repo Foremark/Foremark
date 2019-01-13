@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Citations (`[#citeId]`) are now supported.
 - Fixed an issue that a table is not rendered properly when there's no preceding/following text.
 - Fixed some instances of an issue that block-level markups are parsed inside a link target definition.
+- Specifying a `title` on a media tag using the syntax `![](url "title here")` is now supported.
 
 ## [0.0.15] - 2018-01-09
 

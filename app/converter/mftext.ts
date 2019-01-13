@@ -557,7 +557,7 @@ export function expandMfText(node: Element): void {
             const url = unescapeXmlText(urlRaw), attribs = unescapeXmlText(attribsRaw);
 
             return `<${TagNames.Media} src="${escapeXmlText(url)}" alt="${escapeXmlText(alt)}"` +
-                `${legalizeAttributes(attribs, ['src', 'alt'], m => console.warn(m))} />`;
+                `${legalizeAttributes(attribs, ['src', 'alt'], m => console.warn(m), ['title'])} />`;
         }
     ), isNonVerbatimElement);
 
@@ -601,7 +601,7 @@ export function expandMfText(node: Element): void {
                     if (match) {
                         let [_1, _2, url, attribs] = match;
                         if (isImage) {
-                            attribs = legalizeAttributes(attribs || '', ['src', 'alt'], e => console.warn(e));
+                            attribs = legalizeAttributes(attribs || '', ['src', 'alt'], e => console.warn(e), ['title']);
                             output.unshift(`<${TagNames.Media} src="${escapeXmlText(url)}" alt="${escapeXmlText(text)}"${attribs} />`);
                         } else {
                             attribs = legalizeAttributes(attribs || '', ['href'], e => console.warn(e), ['title']);
