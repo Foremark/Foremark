@@ -1021,12 +1021,19 @@ quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 consequat.
 
 ]]]><![CDATA[]></pre> <!-- Foremark footer -->
-<script src="../browser/foremark.js" data-rel="foremark" async="async" /></html>
+<script src="../browser/foremark.js" async="async" /></html>
 ~~~~~~~~~~~~
 
 - A document includes one of `html > mf`, `html > mf-text`, and `html > pre` which represent the content root.
   If `mf-text` is the content root, it will be wrapped by `<mf>` and all attributes are moved to the `<mf>`. `pre` is converted to `mf-text` first.
-- `html > script` with a `data-rel="foremark"` attribute instructs the web browser to load the viewer application. The viewer application locates this tag and uses its `src` attribute as a base path for loading other assets.
+- `html > script` instructs the web browser to load the viewer application. The viewer application locates this tag [^script-old-browser] and uses its `src` attribute as a base path for loading other assets.
+
+[^script-old-browser]:
+    The viewer uses the [`document.currentScript`][] API which is widely supported by modern web browsers. If it's unavailable, the viewer falls back to a heuristics based on the script file name.
+
+!!! Note: Overriding the asset path
+
+    The viewer determines the base path of assets using the script tag from which the viewer was loaded. This behavior can be overridden by adding another script tag with a `data-rel="foremark"` attribute. The script tag doesn't have to load an actually-executed script. For example, `type="text/plain"` attribute could be used to make a script tag that doesn't load anything at all.
 
 !!! Note: Rationale
 
@@ -1037,6 +1044,8 @@ consequat.
     The viewer application does not support HTML files for various reasons:
      - The web browser's DOM API behaves differently when displaying a HTML file. For example, XHTML preserves the original case for `HTMLElement#tagName` while HTML doesn't.
      - The behavior of `CDATA` in HTML is inconsistent between browsers.
+
+[`document.currentScript`]: https://developer.mozilla.org/en-US/docs/Web/API/Document/currentScript
 
 ## Configuration
 
@@ -1269,7 +1278,7 @@ expandMfText(mfText);
 [the `jsdom` library]: https://www.npmjs.com/package/jsdom
 
 ]]></pre> <!-- Foremark footer -->
-<script src="../browser/foremark.js" data-rel="foremark" async="async" />
+<script src="../browser/foremark.js" async="async" />
 <script src="global.js" data-rel="foremark-config" async="async" />
 
 <style>

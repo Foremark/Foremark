@@ -23,7 +23,20 @@ declare var __webpack_public_path__: string;
 //
 // Without this, late loaded resources (webpack lazy loaded chunks
 // and fonts referenced by stylesheets) will not load.
-const script = document.querySelector('script[data-rel=foremark]');
+let script = document.querySelector('script[data-rel=foremark]');
+if (!script) {
+    // `currentScript` is widely supported by modern web browsers.
+    script = document.currentScript;
+}
+if (!script) {
+    // Use heuristics to guess which script tag is ours.
+    for (let list = document.getElementsByTagName('script'), i = 0; i < list.length; ++i) {
+        const {src} = list[i];
+        if (/\/foremark(\.bundle)?\.js(\?[^#?.]*)?(#[^#?]*)?$/.test(src)) {
+            script = list[i];
+        }
+    }
+}
 const basePathMatch = script && (script as HTMLScriptElement).src.match(/^(.*?)[^\/]+$/);
 if (basePathMatch) {
     __webpack_public_path__ = basePathMatch[1];

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 - `<pre>` is now permitted as the document root and treated as `<mf-text>`. This makes text browsers a viable option for displaying Foremark documents.
+- `data-rel="foremark"` is no longer necessary except in unusual use cases.
 
 ## [0.1.0] - 2018-01-13
 
