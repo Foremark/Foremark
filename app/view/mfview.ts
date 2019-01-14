@@ -362,6 +362,8 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
                     // This heading already has a surrogate of this citation
                     continue;
                 }
+                lastHeading = refHeading;
+
                 const cloned = node.cloneNode(true) as Element;
                 cloned.id = '';
                 cloned.classList.add('surrogate');
