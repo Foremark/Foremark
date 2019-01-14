@@ -393,7 +393,7 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
         }
 
         const target = node.getAttribute('to') || '';
-        const [floatType, sidenote, label] = refLabelMap.get(target) || [false, false, '?'];
+        const [floatType, sidenote, label] = refLabelMap.get(target) || [-1, false, '?'];
 
         const link = document.createElement('a');
         link.href = '#' + encodeURIComponent(target);
@@ -406,6 +406,7 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
                 break;
             case FloatType.Figure:
             case FloatType.Citation:
+            case -1:
                 link.textContent = label;
                 break;
             default:
