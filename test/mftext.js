@@ -59,7 +59,21 @@ function scanDoctest(doctext) {
     });
 
     setWorkingDom(dom.window);
-    expandMfText(dom.window.document.body);
+
+    // Replace top-level `pre` with `mf-text`
+    const html = dom.window.document.querySelector('html');
+    let inputNode = dom.window.document.querySelector('mf-text, pre, mf');
+    {
+        if (inputNode.tagName === 'pre') {
+            const mfText = dom.window.document.createElement('mf-text');
+            while (inputNode.firstChild) {
+                mfText.appendChild(inputNode.firstChild);
+            }
+            html.appendChild(mfText);
+        }
+    }
+
+    expandMfText(html);
 
     const headings = [{
         name: 'Top level',
@@ -67,7 +81,7 @@ function scanDoctest(doctext) {
     }];
     const headingCounter = [0];
 
-    forEachNodePreorder(dom.window.document.body, node => {
+    forEachNodePreorder(html, node => {
         if (node.nodeType !== 1) {
             return;
         }
@@ -84,7 +98,7 @@ function scanDoctest(doctext) {
         } else if (node.tagName === 'mf-codeblock') {
             const code = node.getElementsByTagName('mf-code');
             if (
-                code.length !== 2 || 
+                code.length !== 2 ||
                 code[1].getAttribute('type') !== 'XML converted'
             ) {
                 return false;
