@@ -10,7 +10,7 @@ import {processSitemap} from './view/sitemap';
 
 export async function browserMain(): Promise<void> {
     // Load the input from the current document
-    let inputNode = document.querySelector(`${TagNames.Document}, ${TagNames.Text}`);
+    let inputNode = document.querySelector(`${TagNames.Document},${TagNames.Text},pre`);
     if (inputNode == null) {
         inputNode = document.createElement(TagNames.Document);
         inputNode.innerHTML = `<${TagNames.Error}>
@@ -25,8 +25,16 @@ export async function browserMain(): Promise<void> {
     const [sitemap, sitemapErrors] = processSitemap(
         viewerConfig.sitemap, viewerConfig.sitemapDocumentRoot);
 
-    // `<mf-text>` is a shorthand syntax for `<mf><mf-text>...</mf-text></mf>`
-    if (inputNode.tagName.toLowerCase() === TagNames.Text) {
+    // `<mf-text>` and `<pre>` are a shorthand syntax for `<mf><mf-text>...</mf-text></mf>`
+    if (/^pre$/i.test(inputNode.tagName)) {
+        const mf = document.createElement(TagNames.Document);
+        const mfText = document.createElement(TagNames.Text);
+        while (inputNode.firstChild) {
+            mfText.appendChild(inputNode.firstChild);
+        }
+        mf.appendChild(mfText);
+        inputNode = mf;
+    } else if (inputNode.tagName.toLowerCase() === TagNames.Text) {
         const mf = document.createElement(TagNames.Document);
         mf.appendChild(inputNode);
         inputNode = mf;

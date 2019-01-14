@@ -1,4 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><body><mf-text><![CDATA[
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><pre><![CDATA[
 
                   **Foremark Reference Manual**
 
@@ -1011,7 +1011,7 @@ Unlike sidenotes, citations are always rendered where they are defined (so that 
 A Foremark document is an XHTML file that consolidates Foremark Text/XML markups and a script tag for loading the viewer application.
 
 ~~~~~~~~~~~~ XML
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><body><mf-text><![CDATA[
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><pre><![CDATA[
 
                              **Document title**
 
@@ -1020,14 +1020,17 @@ tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
 consequat.
 
-]]]><![CDATA[]></mf-text> <!-- Foremark footer -->
-<script src="../browser/foremark.js" data-rel="foremark" async="async" />
-<style>mf-text{white-space:pre-wrap;font-family:monospace}</style></body></html>
+]]]><![CDATA[]></pre> <!-- Foremark footer -->
+<script src="../browser/foremark.js" data-rel="foremark" async="async" /></html>
 ~~~~~~~~~~~~
 
-- `html > head > mf` or `html > head > mf-text` represent the content root.
-  If `mf-text` is the content root, it will be wrapped by `<mf>` and all attributes are moved to the `<mf>`.
-- `html > head > script` with a `data-rel="foremark"` attribute instructs the web browser to load the viewer application. The viewer application locates this tag and uses its `src` attribute as a base path for loading other assets.
+- A document includes one of `html > mf`, `html > mf-text`, and `html > pre` which represent the content root.
+  If `mf-text` is the content root, it will be wrapped by `<mf>` and all attributes are moved to the `<mf>`. `pre` is converted to `mf-text` first.
+- `html > script` with a `data-rel="foremark"` attribute instructs the web browser to load the viewer application. The viewer application locates this tag and uses its `src` attribute as a base path for loading other assets.
+
+!!! Note: Rationale
+
+    Using `pre` makes it possible for text browsers (such as Lynx) to display Foremark documents to some extent.
 
 !!! Warning
 
@@ -1265,7 +1268,7 @@ expandMfText(mfText);
 
 [the `jsdom` library]: https://www.npmjs.com/package/jsdom
 
-]]></mf-text> <!-- Foremark footer -->
+]]></pre> <!-- Foremark footer -->
 <script src="../browser/foremark.js" data-rel="foremark" async="async" />
 <script src="global.js" data-rel="foremark-config" async="async" />
 
@@ -1292,4 +1295,4 @@ mf-code[type="XML converted"]:after {
 }
 </style>
 
-<style>mf-text{white-space:pre-wrap;font-family:monospace}</style></body></html>
+</html>

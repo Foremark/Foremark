@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- `<pre>` is now permitted as the document root and treated as `<mf-text>`. This makes text browsers a viable option for displaying Foremark documents.
+
 ## [0.1.0] - 2018-01-13
 
 - The following hyperlink syntaxes are now supported: `https://bare.url.example.com` `bare-address@example.com` `<protocol://example.com>` `<weird address@example.com>`
