@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.1.1] - 2018-01-14
+
 - `<pre>` is now permitted as the document root and treated as `<mf-text>`. This makes text browsers a viable option for displaying Foremark documents.
 - `data-rel="foremark"` is no longer necessary except in unusual use cases.
 
@@ -113,7 +115,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial release.
 
-[Unreleased]: https://github.com/Foremark/Foremark/compare/0.1.0...HEAD
+[Unreleased]: https://github.com/Foremark/Foremark/compare/0.1.1...HEAD
+[0.1.1]: https://github.com/Foremark/Foremark/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/Foremark/Foremark/compare/0.0.15...0.1.0
 [0.0.15]: https://github.com/Foremark/Foremark/compare/0.0.14...0.0.15
 [0.0.14]: https://github.com/Foremark/Foremark/compare/0.0.13...0.0.14
