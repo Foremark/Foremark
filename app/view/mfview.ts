@@ -245,7 +245,7 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
                     // A table has a `overflow: auto` wrapper.
                     n.tagName === 'table' ||
                     // Can't lay out a sidenote inside a sidenote.
-                    n.tagName === 'mf-sidenote' ||
+                    n.tagName === ViewTagNames.Sidenote ||
                     // Code blocks use a special font.
                     n.tagName === TagNames.Code || n.tagName === TagNames.CodeBlock ||
                     n.tagName === 'pre' || n.tagName === 'code'
