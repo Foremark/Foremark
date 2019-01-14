@@ -246,6 +246,8 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
                     n.tagName === 'table' ||
                     // Can't lay out a sidenote inside a sidenote.
                     n.tagName === ViewTagNames.Sidenote ||
+                    // `<TagNames.Cite>` has `overflow: hidden`.
+                    n.tagName === TagNames.Cite ||
                     // Code blocks use a special font.
                     n.tagName === TagNames.Code || n.tagName === TagNames.CodeBlock ||
                     n.tagName === 'pre' || n.tagName === 'code'

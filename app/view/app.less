@@ -507,6 +507,10 @@ main {
                 margin-left: -@label-width;
             }
 
+            // Prevent sidenotes from affecting the vertical position of
+            // the `mf-label` inside this `mf-cite`.
+            overflow: hidden;
+
             // Expand `mf-cite` to contain the entirety of the `mf-label` within
             &:after { content: ""; display: block; clear: left; }
         }
