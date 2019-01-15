@@ -389,7 +389,7 @@ export function expandMfText(node: Element): void {
     for (let i = 6; i >= 1; --i) {
         // ATX-style header (`## h2`)
         transformHtmlWith(node, html => html.replace(
-            new RegExp(`^\\s*#{${i},${i}}(?:[ \t])([^\n]+?)(?:#{${i},${i}})?[ \t]*$`, 'gm'),
+            new RegExp(`^[ \t]*#{${i},${i}}(?:[ \t])([^\n]+?)(?:#{${i},${i}})?[ \t]*$`, 'gm'),
             (_, inner) => `<h${i}>${inner}</h${i}>`,
         ), isBlockquote);
     }
