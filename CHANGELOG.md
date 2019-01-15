@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.1.2] - 2018-01-15
+
 - Fixed the bug that an unresolved reference causes a runtime error and prevents further processing.
 - Fixed the bug that a citation reference (`[#citeId]`) prevented a heading from being formed.
 - Fixed the bug that a citation is rendered inside the sidenote margin for multiple times in a single subsection.
@@ -130,7 +132,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial release.
 
-[Unreleased]: https://github.com/Foremark/Foremark/compare/0.1.1...HEAD
+[Unreleased]: https://github.com/Foremark/Foremark/compare/0.1.2...HEAD
+[0.1.2]: https://github.com/Foremark/Foremark/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/Foremark/Foremark/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/Foremark/Foremark/compare/0.0.15...0.1.0
 [0.0.15]: https://github.com/Foremark/Foremark/compare/0.0.14...0.0.15
