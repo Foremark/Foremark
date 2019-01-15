@@ -7,11 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-- Fixed a bug that an unresolved reference causes a runtime error and prevents further processing.
-- Fixed a bug that a citation reference (`[#citeId]`) prevented a heading from being formed.
-- Fixed a bug that a citation is rendered inside the sidenote margin for multiple times in a single subsection.
-- Fixed a bug that tables consumed adjacent lists.
-- Fixed a bug that lists consumed adjacent headings.
+- Fixed the bug that an unresolved reference causes a runtime error and prevents further processing.
+- Fixed the bug that a citation reference (`[#citeId]`) prevented a heading from being formed.
+- Fixed the bug that a citation is rendered inside the sidenote margin for multiple times in a single subsection.
+- Fixed the bug that tables consumed adjacent lists.
+- Fixed the bug that lists consumed adjacent headings.
 
 ## [0.1.1] - 2018-01-14
 
@@ -22,8 +22,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - The following hyperlink syntaxes are now supported: `https://bare.url.example.com` `bare-address@example.com` `<protocol://example.com>` `<weird address@example.com>`
 - Citations (`[#citeId]`) are now supported.
-- Fixed an issue that a table is not rendered properly when there's no preceding/following text.
-- Fixed some instances of an issue that block-level markups are parsed inside a link target definition.
+- Fixed the issue that a table is not rendered properly when there's no preceding/following text.
+- Fixed some instances of the issue that block-level markups are parsed inside a link target definition.
 - Specifying a `title` on a media tag using the syntax `![](url "title here")` is now supported.
 
 ## [0.0.15] - 2018-01-09
@@ -52,7 +52,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Added the WOFF2 version of every included web font. This reduces the downloaded asset size by up to 160KB.
 - Changed the way viewer configuration objects are supplied. Configuration objects now can be provided from asynchronously loaded script tags, paving the way to collectively customize the behavior of a set of documents.
-- Fixed an issue that the selection of the table of contents does not follow the scroll position.
+- Fixed the issue that the selection of the table of contents does not follow the scroll position.
 - A sitemap can be defined in configuration. The sitemap is displayed in the table of contents together with a current page's headings.
 
 ## [0.0.10] - 2018-01-05
@@ -60,8 +60,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Outdentation in a list caused by hard wrapping no longer closes a list.
 - Wrap `<mf-code>` with `<pre>` so that it's formatted as intended on Safari's Reader View.
 - Digrams are now rendered using a monospace font.
-- Fixed an issue that a figure label appears in a line isolated from the rest of the figure caption.
-- Fixed an issue that `<mf-ref>` generates an unnecessary whitespace (e.g., `Figure 1" "`).
+- Fixed the issue that a figure label appears in a line isolated from the rest of the figure caption.
+- Fixed the issue that `<mf-ref>` generates an unnecessary whitespace (e.g., `Figure 1" "`).
 
 ## [0.0.9] - 2018-12-31
 
