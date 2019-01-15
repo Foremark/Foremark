@@ -483,7 +483,7 @@ Unreferenced labels are omitted from the output.
 
 ## Diagrams
 
-`:::` (three colons) start a diagram (`<mf-diagram>`):
+Colon symbols create a diagram (`<mf-diagram>`):
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Foremark
 The railroad diagram of Foremark figure label:
@@ -494,10 +494,37 @@ The railroad diagram of Foremark figure label:
 :::      '---------'   ^  '---------' /   \   .---.  /    '-----------'   ^  '------------' /
 :::                     \            /     '->| : |-'                      \               /
 :::                      '----------'         '---'                         '-------------'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<p>The railroad diagram of Foremark figure label:</p>
+<mf-diagram>
+                                           .---.
+                                        .->|   |-.
+      .---------.      .---------.     /   '---'  \    .-----------.      .------------.
+ o--> |"^][>&lt;\t"| ---> |"^][>&lt;\t"| -*-+            +-> |"^][>&lt;\t :"| ---- |"^][>&lt;\t :" | -+->o
+      '---------'   ^  '---------' /   \   .---.  /    '-----------'   ^  '------------' /
+                     \            /     '->| : |-'                      \               /
+                      '----------'         '---'                         '-------------'
+</mf-diagram>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Alternative style:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Foremark
+                   ::::::::::::::::::::::::::::
+                   :: ,-----,                ​::
+                   :: |     |  le si'o kurfa ​::
+                   :: '-----'                ​::
+                   ::::::::::::::::::::::::::::
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML converted
+<mf-diagram>
+ ,-----,                ​
+ |     |  le si'o kurfa ​
+ '-----'                ​
+</mf-diagram>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 !!! Warning
-    Markdeep-style diagrams are not supported.
+    Markdeep-style diagrams are not supported. Diagram lines must not include other texts.
 
 ## Headings
 

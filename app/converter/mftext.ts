@@ -29,7 +29,7 @@ const ARROWS_REGEX = new RegExp(
 
 const FENCE_REGEX = /^((?:[ \t]|&gt;)*)(~{3,}|`{3,})\s*([-_0-9a-zA-Z\s]*)$/;
 
-const DIAGRAM_REGEX = /^((?:[ \t]|&gt;)*):::(.*)$/;
+const DIAGRAM_REGEX = /^((?:[ \t]|&gt;)*)::(.*)$/;
 
 const PHRASING_ELEMENTS = [
     InternalTagNames.Placeholder, // default placeholder for non-element nodes
@@ -183,10 +183,18 @@ export function expandMfText(node: Element): void {
 
     // Diagrams
     //
-    // This step preserves the indentation of code blocks. For example:
+    // This step preserves the indentation of code blocks. For example,
+    // the both of: (1) (the original style)
     //
     //     >  ::: code...
     //     >  ::: code...
+    //
+    // and (2) (the style newly introduced in 0.1.2)
+    //
+    //     >  :::::::::::::
+    //     >  :: code... ::
+    //     >  :: code... ::
+    //     >  :::::::::::::
     //
     // will be:
     //
@@ -197,18 +205,47 @@ export function expandMfText(node: Element): void {
         const output: string[] = [];
 
         let inDiagram = false;
+        let diagramStart = -1;
         let currentDiagramIndentation = '';
+
+        function closeDiagram(): void {
+            // Remove borders if any
+            const HORZ_BORDER_RE = /^:{4,}\s*$/;
+            if (HORZ_BORDER_RE.test(output[output.length - 2])) {
+                output.length -= 2;
+            }
+            if (diagramStart < output.length && HORZ_BORDER_RE.test(output[diagramStart])) {
+                output.splice(diagramStart, 2);
+            }
+
+            // `hasLeftBorder` handles the first example's style. (Note that
+            // `DIAGRAM_REGEX` only removes the two leftmost colons.)
+            // `hasRightBorder` handles the second example's style.
+            let hasLeftBorder = true, hasRightBorder = true;
+            for (let i = diagramStart; i < output.length; i += 2) {
+                hasLeftBorder = hasLeftBorder && output[i].startsWith(':');
+                hasRightBorder = hasRightBorder && output[i].endsWith('::');
+            }
+
+            for (let i = diagramStart; i < output.length; i += 2) {
+                const s = output[i];
+                output[i] = s.substring(hasLeftBorder ? 1 : 0, hasRightBorder ? s.length - 2 : s.length);
+            }
+
+            if (output[output.length - 1] === '\n') {
+                output.pop(); // Remove trailing newline
+            }
+
+            output.push(`</${TagNames.Diagram}>\n`);
+            inDiagram = false;
+        }
 
         for (const line of lines) {
             const matches = line.match(DIAGRAM_REGEX);
 
             if (inDiagram) {
                 if (!matches || matches[1] !== currentDiagramIndentation) {
-                    if (output[output.length - 1] === '\n') {
-                        output.pop(); // Remove trailing newline
-                    }
-                    output.push(`</${TagNames.Diagram}>\n`);
-                    inDiagram = false;
+                    closeDiagram();
                 } else {
                     output.push(matches[2]);
                     output.push('\n');
@@ -219,6 +256,7 @@ export function expandMfText(node: Element): void {
                 if (matches) {
                     output.push(matches[1]); // Preserve indentation
                     output.push(`<${TagNames.Diagram}>`);
+                    diagramStart = output.length;
                     output.push(matches[2]);
                     output.push('\n');
                     inDiagram = true;
@@ -231,10 +269,7 @@ export function expandMfText(node: Element): void {
         }
 
         if (inDiagram) {
-            if (output[output.length - 1] === '\n') {
-                output.pop(); // Remove trailing newline
-            }
-            output.push(`</${TagNames.Diagram}>`);
+            closeDiagram();
         } else {
             output.pop(); // Remove trailing newline
         }

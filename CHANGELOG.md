@@ -12,6 +12,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed the bug that a citation is rendered inside the sidenote margin for multiple times in a single subsection.
 - Fixed the bug that tables consumed adjacent lists.
 - Fixed the bug that lists consumed adjacent headings.
+- The following style of a diagram is now supported:
+
+```
+    ::::::::::::::::::::::::::::
+    :: ,-----,                ​::
+    :: |     |  le si'o kurfa ​::
+    :: '-----'                ​::
+    ::::::::::::::::::::::::::::
+```
 
 ## [0.1.1] - 2018-01-14
 
