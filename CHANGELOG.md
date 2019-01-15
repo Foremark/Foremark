@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed a bug that an unresolved reference causes a runtime error and prevents further processing.
 - Fixed a bug that a citation reference (`[#citeId]`) prevented a heading from being formed.
 - Fixed a bug that a citation is rendered inside the sidenote margin for multiple times in a single subsection.
+- Fixed a bug that tables consumed adjacent lists.
 
 ## [0.1.1] - 2018-01-14
 

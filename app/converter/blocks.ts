@@ -436,6 +436,7 @@ export function replaceBlocks(html: string, ctx: TransformHtmlWithContext): stri
 
         lastOutputIsText = false;
         output.push(levels[0].state.close());
+        output.push('\n');
 
         levels.shift();
 
