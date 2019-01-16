@@ -2,6 +2,25 @@
 
 Foremark is a technology for writing semi-plain text documents that extends upon the concept of [Markdeep](http://casual-effects.com/markdeep/).
 
+![](http://ipfs.io/ipfs/QmZiJk9yrnzrA3zoUqhUa5h3XqSxFjZ57SP9tMxpxSKaRV)
+
+```XML
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><pre><![CDATA[
+
+                            **Title**
+
+Welcome to Foremark. It's a way to write a _stylized_ text document without a fuss.
+
+                :::::::::::::::::::::::::::::::::::::::::::::
+                ::            .----------.                 ::
+                ::  Write --> | Document | --> Web Browser ::
+                ::            '----------'                 ::
+                :::::::::::::::::::::::::::::::::::::::::::::
+
+]]></pre> <!-- Foremark footer -->
+<script src="https://unpkg.com/foremark/browser/foremark.js" async="async"/></html>
+```
+
 ## Features
 
 - Lazy loading — Foremark's code is broken into multiple modules and they are loaded as needed. This is implemented using Webpack's [code splitting feature](https://webpack.js.org/guides/code-splitting/).

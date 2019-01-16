@@ -825,8 +825,6 @@ The following HTML elements are supported and styled appropriately.
 </mf>
 ~~~~~~~~~~~~
 
-- `class="no-sidenotes"` disables sidenotes. All `[^note]` are treated like `[!note]`.
-
 ## Header — `<mf-title>`
 
 ~~~~~~~~~~~~xml
@@ -1091,6 +1089,38 @@ The viewer receives configuration objects through `window.foremarkConfig`. Each 
 The signature of a configuration object is defined using the `ViewerConfig` interface. The viewer has the default configuration object and the user-specified configuration is merged into that. See [the auto-generated API reference][] for more details.
 
 [the auto-generated API reference]: https://foremark.github.io/Foremark/typedoc/interfaces/_view_config_.viewerconfig.html
+
+## Styling
+
+Built atop of HTML, the viewer allows customization via custom stylesheets.
+
+The following CSS class of the content root element (`mf, mf-text, pre`) modifies the behavior of the viewer:
+
+- `class="no-sidenotes"` disables sidenotes. This means all `[^note]` are treated like `[!note]`.
+
+The `type` attribute of a `mf-code` element is preserved. Because only the first word in `type` is considered for determining the syntax for syntax highlighting, the rest of the value can be used to pass extra information:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML
+<mf-text>
+ ​~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Shell
+ $ yes hello world
+ ​~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ None output
+ hello world
+ hello world
+ ...
+ ​~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+</mf-text>
+<style>
+mf-code[type*="output"] {
+    display: block;
+    font-style: italic;
+}
+</style>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Items in an unordered list are given CSS class names according to the marker symbols used to define them (e.g., `minus` for `-`). Read [Lists][] for details.
+
+[Lists]: #foremarktext/lists
 
 ## Media handlers
 
