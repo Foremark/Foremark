@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.1.3] - 2018-01-16
+
 - Enabled word-wrapping in code blocks.
 - Line break markers are displayed in code blocks.
 - Some symbols (e.g., `+` in `C++`) are now allowed in a fenced code block's language code.
@@ -137,7 +139,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial release.
 
-[Unreleased]: https://github.com/Foremark/Foremark/compare/0.1.2...HEAD
+[Unreleased]: https://github.com/Foremark/Foremark/compare/0.1.3...HEAD
+[0.1.3]: https://github.com/Foremark/Foremark/compare/0.1.2...0.1.3
 [0.1.2]: https://github.com/Foremark/Foremark/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/Foremark/Foremark/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/Foremark/Foremark/compare/0.0.15...0.1.0
