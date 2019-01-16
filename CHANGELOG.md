@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Fixed the width calculation of a text fragment inside a diagram that includes an XML-escaped character.
+
 ## [0.1.3] - 2018-01-16
 
 - Enabled word-wrapping in code blocks.
