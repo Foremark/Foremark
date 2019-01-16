@@ -1,5 +1,5 @@
 import {lazyModules} from './loader';
-import {forEachNodePreorder} from '../utils/dom';
+import {forEachNodePreorder, transformTextNodeWith} from '../utils/dom';
 import {TagNames, AttributeNames, FIGURE_STANDARD_ID_RE} from '../foremark';
 import {ViewerConfig} from './config';
 import {processMediaElement} from './media';
@@ -9,6 +9,7 @@ const enum ViewTagNames {
     FloatingElementLabel = 'mf-label',
     Sidenote = 'mf-sidenote',
     DiagramInner = 'mf-diagram-inner',
+    CodeLineHead = 'mf-code-line',
 }
 
 const enum FloatType {
@@ -615,14 +616,30 @@ const HANDLERS: { [tagName: string]: (node: Element, vc: ViewerConfig) => void |
 
         const type = (node.getAttribute(AttributeNames.CodeType) || '').split(' ');
         const lang = type[0];
-        if (lang === '') {
-            return;
+        if (lang !== '') {
+            const hljs = await lazyModules.highlightJS();
+
+            const highlighted = hljs.highlightAuto(node.textContent || '', [lang]);
+            node.innerHTML = highlighted.value;
         }
 
-        const hljs = await lazyModules.highlightJS();
+        // Insert line markers to accomplish various things
+        node.insertAdjacentHTML('afterbegin', `<${ViewTagNames.CodeLineHead}/>`);
+        transformTextNodeWith(
+            node,
+            html => html.replace(/\n/g, `\n<${ViewTagNames.CodeLineHead}/>`),
+            e => true,
+            false,
+        );
 
-        const highlighted = hljs.highlightAuto(node.textContent || '', [lang]);
-        node.innerHTML = highlighted.value;
+        // Wrap entire the content with a `span`. With `box-decoration-break: clone`,
+        // `span` is chop into physical lines, allowing us to display a line break
+        // marker on each physical line.
+        const spanWrap = node.ownerDocument!.createElement('span');
+        while (node.firstChild) {
+            spanWrap.appendChild(node.firstChild);
+        }
+        node.appendChild(spanWrap);
 
         // TODO: line numbers
     },

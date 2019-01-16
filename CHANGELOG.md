@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-- Enabled word-wrapping in code blocks when printing.
+- Enabled word-wrapping in code blocks.
+- Line break markers are displayed in code blocks.
 
 ## [0.1.2] - 2018-01-15
 

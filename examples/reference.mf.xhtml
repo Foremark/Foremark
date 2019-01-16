@@ -1112,7 +1112,6 @@ The `type` attribute of a `mf-code` element is preserved. Because only the first
 </mf-text>
 <style>
 mf-code[type*="output"] {
-    display: block;
     font-style: italic;
 }
 </style>
@@ -1121,6 +1120,17 @@ mf-code[type*="output"] {
 Items in an unordered list are given CSS class names according to the marker symbols used to define them (e.g., `minus` for `-`). Read [Lists][] for details.
 
 [Lists]: #foremarktext/lists
+
+The following example disables word-wrapping in fenced code blocks:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ XML
+<style>
+@media screen { mf-code {
+    white-space: pre;
+    overflow-wrap: normal;
+} }
+</style>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Media handlers
 
@@ -1342,7 +1352,7 @@ expandMfText(mfText);
 mf-code[type="XML converted"] {
     position: relative;
     display: block;
-    padding-left: 16px;
+    margin-left: 16px;
     margin-top: 0.5em;
     opacity: 0.9;
     font-size: 80%;
@@ -1353,10 +1363,12 @@ mf-code[type="XML converted"]:before {
     font-size: 90%;
     text-transform: uppercase;
     color: rgba(128, 128, 128, 0.8);
+    position: relative;
+    left: -2em;
 }
 mf-code[type="XML converted"]:after {
     position: absolute; content: "";
-    left: 4px; top: 0.2em; width: 4px; bottom: 0;
+    left: -13px; top: 0.2em; width: 4px; bottom: 0;
     background: rgba(128, 128, 128, 0.2);
 }
 </style>

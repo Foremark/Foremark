@@ -352,6 +352,10 @@ main {
         border-color: @text-color;
         border-color: var(--text-color);
         @media print { border-width: 0.5px; }
+
+        background: @background-color;
+        background: var(--background-color);
+
         display: block;
         padding: 0.5em 0.25em;
         margin: 0.25em;
@@ -374,19 +378,21 @@ main {
     }
 
     // Code (inline/block)
-    code, mf-code {
+    @code-line-height: 1.5em;
+    @pre-style: {
+        white-space: pre-wrap;
         font-size: 90%;
         font-family: @monospace-font-family;
         letter-spacing: -0.02em;
         tab-size:4; -moz-tab-size:4; -o-tab-size:4;
+    };
+    code, mf-code {
+        @pre-style();
     }
     mf-code {
-        white-space: pre;
-        overflow-wrap: normal;
-        @media print {
-            overflow-wrap: break-word;
-            white-space: pre-wrap;
-        }
+        line-height: @code-line-height;
+        display: block;
+        overflow-wrap: break-word;
     }
     code {
         background: rgba(128, 128, 128, 0.08);
@@ -397,10 +403,49 @@ main {
         white-space: pre-wrap;
     }
 
+    // Indent lines after a soft word wrap. What we are trying to accomplish is
+    // similar to the behavior of `hanging` in `text-indent`, whose browser
+    // support is completely non-existent.
+    @line-break-indent: 2em;
+    mf-code {
+        padding-left: @line-break-indent;
+        mf-code-line { margin-right: -@line-break-indent; }
+        mf-code-line:before { content: ""; }
+
+        position: relative;
+    }
+
+    // Display line break symbols
+    @supports (box-decoration-break: clone) or (-webkit-box-decoration-break: clone) {
+        mf-code {
+            // Draw a line break symbol on every line
+            > span {
+                // Chop up the border box of this `span` into physical lines
+                box-decoration-break: clone;
+                -webkit-box-decoration-break: clone;
+
+                margin-left: -@line-break-indent;
+                padding-left: @line-break-indent;
+                background: url(./assets/line-break.svg) (@code-line-height * 0.1) 50% no-repeat;
+                background-size: @code-line-height @code-line-height;
+            }
+
+            // And then hide it on the first line
+            mf-code-line:before {
+                border-left: @line-break-indent solid;
+                margin-left: -@line-break-indent;
+                border-color: @background-color;
+                border-color: var(--background-color);
+            }
+        }
+    }
+
     // Diagram fallback
     mf-diagram {
-        &:extend(main mf-code);
-        line-height: 1.0;
+        @pre-style();
+        display: inline-block;
+        text-align: left;
+        line-height: 1.3;
     }
 
     mf-diagram-inner {
