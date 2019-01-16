@@ -40,6 +40,14 @@ export interface ViewerConfig {
      * See [[SitemapEntry]] for details.
      */
     sitemapDocumentRoot?: string;
+
+    /**
+     * Enables or disables automatic heading numbering.
+     *
+     * Defaults to `false`. Set this to `true` to enable automatic heading
+     * numbering.
+     */
+    headingNumbers: boolean;
 }
 
 /**
@@ -47,6 +55,7 @@ export interface ViewerConfig {
  */
 export const DEFAULT_VIEWER_CONFIG: ViewerConfig = {
     mediaHandlers: BUILTIN_MEDIA_HANDLERS,
+    headingNumbers: false,
 };
 
 const CONFIG_TIMEOUT = 10000;

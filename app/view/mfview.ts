@@ -36,10 +36,14 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
         }
         const match = node.tagName.match(/^h([1-9])$/i);
         if (match) {
+            const assignNumber = config.headingNumbers;
             const level = parseInt(match[1], 10);
-            counter[level] += 1;
-            for (let i = level + 1; i < counter.length; ++i) {
-                counter[i] = 0;
+
+            if (assignNumber) {
+                counter[level] += 1;
+                for (let i = level + 1; i < counter.length; ++i) {
+                    counter[i] = 0;
+                }
             }
 
             // Section number in `1.2.3` style
@@ -73,8 +77,10 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
             a.className = 'anchor';
             node.parentElement!.insertBefore(a, node);
 
-            // Display the section number
-            node.insertAdjacentHTML('afterbegin', `<span class="section-number">${number}</span> `);
+            if (assignNumber) {
+                // Display the section number
+                node.insertAdjacentHTML('afterbegin', `<span class="section-number">${number}</span> `);
+            }
         }
     });
 
