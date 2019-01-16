@@ -318,8 +318,8 @@ export function expandMfText(node: Element): void {
 
     // Parse HTML comments
     transformHtmlWith(node, html => html.replace(
-        /&lt;(!--\s[\s\S]*?--)&gt;/g,
-        (_, inner) => `<${inner}>`,
+        /&lt;!--(\s[\s\S]*?)--&gt;/g,
+        (_, inner) => `<!--${inner.replace(/--/g, '&#45;&#45;')}-->`,
     ), e => e === node || isBlockquote(e));
 
     // Replace well-formed HTML tags

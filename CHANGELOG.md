@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Enabled word-wrapping in code blocks.
 - Line break markers are displayed in code blocks.
 - Some symbols (e.g., `+` in `C++`) are now allowed in a fenced code block's language code.
+- Double hyphens in HTML comments no longer crash the converter.
 
 ## [0.1.2] - 2018-01-15
 
