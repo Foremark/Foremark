@@ -1,6 +1,6 @@
 # Foremark
 
-Foremark is a technology for writing semi-plain text documents that extends upon the concept of [Markdeep](http://casual-effects.com/markdeep/).
+Foremark is a tool for writing stylized plain text documents that can be managed and shared easily. Foremark extends upon the concept of [Markdeep](http://casual-effects.com/markdeep/).
 
 ![](http://ipfs.io/ipfs/QmZiJk9yrnzrA3zoUqhUa5h3XqSxFjZ57SP9tMxpxSKaRV)
 
@@ -21,45 +21,64 @@ Welcome to Foremark. It's a way to write a _stylized_ text document without a fu
 <script src="https://unpkg.com/foremark/browser/foremark.js" async="async"/></html>
 ```
 
+Save the above text as [`hello.fm.xhtml`](https://foremark.github.io/hello.fm.xhtml) and open it with a web browser.
+
 ## Features
 
-- Lazy loading — Foremark's code is broken into multiple modules and they are loaded as needed. This is implemented using Webpack's [code splitting feature](https://webpack.js.org/guides/code-splitting/).
-- The optional self-contained bundle (`foremark.bundle.js`) includes every required asset in a single `.js` file and does not require an internet connection.
-- TODO
+- Rich syntax based on **Markdown**.
+- **LaTeX Equations**, rendered via [KaTeX](https://katex.org).
+- **ASCII diagrams**, converted to SVG via [Svgbob](https://github.com/ivanceras/svgbob).
+- **Sidenotes** and other stylings inspired by Edward Tufte's handouts.
+- **Syntax highlighting** via [highlight.js](https://highlightjs.org).
+- **Responsive** — Documents can be displayed on a desktop screen, tablet and smartphone and printed on paper. 
+- **Media handlers** allow embedding various media contents including images, video files, audio files, and oEmbed URLs.
+- **Lazy loading** — Foremark's code is broken into multiple modules and they are loaded as needed. This is implemented using Webpack's [code splitting feature](https://webpack.js.org/guides/code-splitting/).
+- **Self-contained (offline) bundle** — `foremark.bundle.js` is the special build of Foremark Viewer that includes every required asset in a single `.js` file and does not require an internet connection.
 
-## Differences from Markdeep
+### Differences from Markdeep
 
 - Improved internal design — The rendering process is broken into multiple meaningful passes.
 - Better browsing experience.
 - Built based on modern web technologies. The source code is written in TypeScript and organized into modules.
 - Supports flexible input formats ranging from Markdeep-like annotated plain text to explicit markups to meet various needs. In other words, you can write as explicitly as you want to!
-- Less unreliable tricks mean less corner cases.
-- The recommended file format uses the `.xhtml` extension. Most source tree browsing softwares display XHTML files in the raw code. This is more preferrable to the situation with Markdeep's HTML, which is likely to be inadequately "parsed" and mangled by less-functional viewers such as GitHub and GitLab.
-- The true offline experience — the self-contained bundle *really* includes every dependent library like KaTeX for LaTeX typesetting.
+- Svgbob calculates character widths correctly based on [East Asian Width]. This means wide characters such as `漢字` and `🚀` can be used inside an ASCII diagram with no problem.
+- Foremark documents use the `.xhtml` file extension.
+    - Most source browsing softwares display XHTML files in the raw code. This is more preferrable to the situation with HTML, which is likely to be unintentionally "parsed" and mangled by less-functional viewers such as GitHub and GitLab.
+    - XHTML defaults to UTF-8 when the encoding is not specified. Thus `<meta charset="utf-8">` is not needed in XHTML.
+    - On a text browser (e.g., Lynx), Foremark gracefully falls back to plain-text rendering.
+- The true offline experience — the self-contained bundle *really* includes every dependent library like KaTeX.
 
-## How does it work?
+[East Asian Width]: http://www.unicode.org/reports/tr11/
 
-### Step 1 - Expand `<mf-text>` (`mftext.ts`)
+## Development
+
+### How does it work?
+
+#### Step 1 - Load input (`browser-stage0.ts`, `browser-stage1.tsx`)
+
+An input document tree is loaded from the currently open document. The script tag is inspected to determine the base path for lazy-loaded assets.
+
+#### Step 2 - Expand `<mf-text>` (`mftext.ts`)
 
 Annotations in the text contents of `mf-text` elements are parsed and converted into explicit markups. Non-textual parts are simply passed through, so you can write any part of a text using markups if you want to for some reasons.
 
 The output of this step is a mixture of XHTML and custom elements, which we call Foremark XML. At this point, most constructs are represented using semantic markups, thus the document is ready to be styled using CSS. On the other hand, a few complex constructs are preserved in their original plain text form. Thus, the raw code of the format is still human-read/writable. The next step will further process complex constructs for optimal browser viewing.
 
-### Step 2 - Complex styling (`mfview.ts`)
+#### Step 3 - Complex styling (`mfview.ts`)
 
 This step processes custom elements of Foremark XML. The result looks pretty when viewed via a web browser, but the raw code might not no longer retain human-readability.
 
-This step may involve:
+This step involves:
 
 - LaTeX equation processing
 - Diagrams to SVG conversion
 - Footnote/sidenote layouting
 
-### Step 3 - Add user interface (`view.tsx`)
+#### Step 4 - User interface (`view.tsx`)
 
-The final HTML is displayed by a web-based viewer application embedded in `foremark.js`, which provides rich functionalities such as a table of contents.
+The final HTML is displayed by a web-based viewer application embedded in `foremark.js`, which provides stylesheets as well as rich functionalities such as a table of contents.
 
-## Directory structure
+### Directory structure
 
 - `app/` — The source code of this program.
     - `converter/` — Foremark processor.
@@ -91,7 +110,7 @@ The final HTML is displayed by a web-based viewer application embedded in `forem
 - `dist/` — Provides a Foremark processor library.
     - `index.js` — The entry point of the library.
 
-## Building
+### Building
 
 Prerequisite:
 
