@@ -25,21 +25,21 @@
  */
 @font-face {
   font-family: "et-book";
-  src: url("./et-book-roman-line-figures.woff") format("woff");
+  src: url("./et-book-roman-line-figures.woff2") format("woff2"), url("./et-book-roman-line-figures.woff") format("woff");
   font-weight: normal;
   font-style: normal
 }
 
 @font-face {
   font-family: "et-book";
-  src: url("./et-book-display-italic-old-style-figures.woff") format("woff");
+  src: url("./et-book-display-italic-old-style-figures.woff2") format("woff2"), url("./et-book-display-italic-old-style-figures.woff") format("woff");
   font-weight: normal;
   font-style: italic
 }
 
 @font-face {
   font-family: "et-book";
-  src: url("./et-book-bold-line-figures.woff") format("woff");
+  src: url("./et-book-bold-line-figures.woff2") format("woff2"), url("./et-book-bold-line-figures.woff") format("woff");
   font-weight: bold;
   font-style: normal
 }

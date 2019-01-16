@@ -1,6 +1,7 @@
 @import "~./constants.less";
 @import "~./utils.less";
 
+@import (less) "~../../lib/et-book/fonts.css";
 @import (less) "~../../lib/source/fonts.css";
 @import (less) "~../../lib/fira/fonts.css";
 
@@ -10,7 +11,7 @@ html, body {
     color: @text-color;
     color: var(--text-color);
     font-family: @font-family;
-    font-size: 16px;
+    font-size: 17px;
     line-height: 1.5;
     margin: 0;
     padding: 0;
@@ -47,7 +48,7 @@ body {
 
 @media print {
     html, body {
-        font-size: 11px;
+        font-size: 12px;
         color: inherit;
     }
 }
@@ -288,14 +289,14 @@ main {
 
     // Headings
     h1 {
-        font-size: 1.8rem;
-        margin: 2rem 0 1.5rem;
+        font-size: 2.0rem;
+        margin: 2.3rem 0 1.5rem;
         font-style: italic;
         font-weight: normal;
         clear: right; // Clear sidenotes
     }
     h2 {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         margin: 1rem 0 1rem;
         font-style: italic;
         font-weight: normal;
@@ -375,7 +376,7 @@ main {
     @code-line-height: 1.5em;
     @pre-style: {
         white-space: pre-wrap;
-        font-size: 90%;
+        font-size: 80%;
         font-family: @monospace-font-family;
         letter-spacing: -0.02em;
         tab-size:4; -moz-tab-size:4; -o-tab-size:4;
@@ -592,8 +593,8 @@ main {
             position: relative;
             width: @sidenote-width;
             top: (-@sidenote-vertical-adjustment);
-            font-size: 80%;
-            line-height: 1.4;
+            font-size: 0.9rem;
+            line-height: 1.2;
             text-align: left;
         };
 
