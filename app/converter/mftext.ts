@@ -27,7 +27,7 @@ const ARROWS_REGEX = new RegExp(
     'g',
 );
 
-const FENCE_REGEX = /^((?:[ \t]|&gt;)*)(~{3,}|`{3,})\s*([-_0-9a-zA-Z\s]*)$/;
+const FENCE_REGEX = /^((?:[ \t]|&gt;)*)(~{3,}|`{3,})\s*([-_0-9a-zA-Z+/\s]*)$/;
 
 const DIAGRAM_REGEX = /^((?:[ \t]|&gt;)*)::(.*)$/;
 
