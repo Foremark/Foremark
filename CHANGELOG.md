@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Enabled word-wrapping in code blocks when printing.
+
 ## [0.1.2] - 2018-01-15
 
 - Fixed the bug that an unresolved reference causes a runtime error and prevents further processing.

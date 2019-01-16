@@ -383,6 +383,10 @@ main {
     mf-code {
         white-space: pre;
         overflow-wrap: normal;
+        @media print {
+            overflow-wrap: break-word;
+            white-space: pre-wrap;
+        }
     }
     code {
         background: rgba(128, 128, 128, 0.08);
