@@ -334,7 +334,9 @@ body {
 }
 
 /* .toolbar2 */ .operateTOCGlobally {
-    @icon-enlarge2();
+    &.expandAll { @icon-enlarge2(); }
+    &.collapseAll { @icon-shrink(); }
+    &.clearSearch { @icon-cancel-circle(); }
     &:before { margin-right: 7px; }
 
     float: left;

@@ -39,6 +39,12 @@ interface AppState {
     helpVisible: boolean;
 }
 
+const enum GlobalTocOperationButtonState {
+    ExpandAll,
+    CollapseAll,
+    ClearSearch,
+}
+
 export class App extends React.Component<AppProps, AppState> {
     refs: any;
 
@@ -175,8 +181,28 @@ export class App extends React.Component<AppProps, AppState> {
     @bind
     private handleDismissHelpPopup(): void { this.setState({ helpVisible: false }); }
 
+    private get globalTocOperationButtonState(): GlobalTocOperationButtonState {
+        const {state} = this;
+        if (state.searchQuery.length > 0) {
+            return GlobalTocOperationButtonState.ClearSearch;
+        }
+
+        // TODO
+        return GlobalTocOperationButtonState.ExpandAll;
+    }
+
+    @bind
+    private handleGlobalTocOperationButton(): void {
+        switch (this.globalTocOperationButtonState) {
+            case GlobalTocOperationButtonState.ClearSearch:
+                this.setState({searchQuery: ''});
+                break;
+        }
+    }
+
     render() {
-        const {state, isModelessSidebarVisible} = this;
+        const {state, isModelessSidebarVisible, globalTocOperationButtonState} = this;
+
         return <div className={classnames({
                     [CN.root]: true,
                     [CN.sidebarModalVisible]: state.sidebarModalVisible,
@@ -235,8 +261,6 @@ export class App extends React.Component<AppProps, AppState> {
                             placeholder="Click or hit '/' to search" />
                         <span />
                     </span>
-                    {/* TODO: "clear" button */}
-                    {/* TODO: hotkeys: ESC, '/' */}
 
                     <nav>
                         <TableOfContents
@@ -249,9 +273,26 @@ export class App extends React.Component<AppProps, AppState> {
 
                     <span className={CN.toolbar2}>
                         <button
-                            className={CN.operateTOCGlobally}
+                            className={classnames({
+                                [CN.operateTOCGlobally]: true,
+                                [CN.expandAll]: globalTocOperationButtonState ==
+                                    GlobalTocOperationButtonState.ExpandAll,
+                                [CN.collapseAll]: globalTocOperationButtonState ==
+                                    GlobalTocOperationButtonState.CollapseAll,
+                                [CN.clearSearch]: globalTocOperationButtonState ==
+                                    GlobalTocOperationButtonState.ClearSearch,
+                            })}
+                            onClick={this.handleGlobalTocOperationButton}
                             type='button'>
-                            Expand all
+                            {
+                                globalTocOperationButtonState == GlobalTocOperationButtonState.ClearSearch ?
+                                    'Clear search' :
+                                globalTocOperationButtonState == GlobalTocOperationButtonState.ExpandAll ?
+                                    'Expand all' :
+                                globalTocOperationButtonState == GlobalTocOperationButtonState.CollapseAll ?
+                                    'Collapse all' :
+                                    (() => { throw new Error() })
+                            }
                         </button>
 
                         <input
