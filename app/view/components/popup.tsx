@@ -74,6 +74,8 @@ export class PopupFrame extends React.Component<PopupFrameProps, {}>
     {
         const {props} = this;
         return <div
+            role='dialog'
+            aria-hidden={props.active ? void 0 : 'true'}
             className={(props.className || '') + (props.active ? ' act' : '')}
             style={props.style}
             onTouchStart={this.handleForegroundInput}

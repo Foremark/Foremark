@@ -300,7 +300,12 @@ export class App extends React.Component<AppProps, AppState> {
                             type='checkbox'
                             onChange={this.handleShowHelpPopup}
                             checked={state.helpVisible} />
-                        <label for='toolbar-help' className={CN.helpButton}>
+                        <label
+                            for='toolbar-help'
+                            role='button'
+                            aria-haspopup='dialog'
+                            aria-expanded={`${state.helpVisible}`}
+                            className={CN.helpButton}>
                             <i />
                             <span>About</span>
                         </label>
