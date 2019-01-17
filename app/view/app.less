@@ -211,21 +211,30 @@ body {
 
     > span.search {
         position: absolute;
-        left: 7px;
+        left: 7px; right: 7px;
         top: 5px;
+
+        @icon-search();
+        &:before {
+            opacity: 0.7;
+            font-size: 70%;
+            position: absolute;
+            left: 0.3em; top: 0.6em;
+        }
 
         > input {
             @ui-font-family();
             font-size: 0.8rem;
             -webkit-appearance: none;
-            width: calc(@sidebar-width - 14px);
+            box-sizing: border-box;
+            width: 100%;
             height: calc(1em + 12px);
 
             box-sizing: border-box;
 
             background: transparent;
             color: inherit;
-            padding: 4px 4px;
+            padding: 4px 4px 4px calc(4px + 1.2em);
             margin: 0;
             border-radius: 0;
             border: none;

@@ -258,7 +258,7 @@ export class App extends React.Component<AppProps, AppState> {
                             ref={e => this.searchQueryElement = e}
                             onKeyDown={this.handleSearchQueryKeyDown}
                             aria-label='Search'
-                            placeholder="Click or hit '/' to search" />
+                            placeholder='Search' />
                         <span />
                     </span>
 
