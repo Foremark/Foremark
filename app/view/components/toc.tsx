@@ -11,7 +11,9 @@ import {SitemapEntry, Sitemap} from '../sitemap';
 const CN = require('./toc.less');
 
 export interface TableOfContentsProps {
+    /** A document. Assumed to be immutable. */
     foremarkDocument: HTMLElement;
+    /** A sitemap. Assumed to be immutable. */
     sitemap: Sitemap | null;
 
     /**
@@ -19,6 +21,7 @@ export interface TableOfContentsProps {
      */
     searchQuery?: string;
 
+    /** Assumed to be immutable. */
     onNavigate: () => void;
 }
 
@@ -72,6 +75,12 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
         this.mainRoot.expanded = true;
 
         setTimeout(() => this.recalculateAndSetActiveNode(), 0);
+    }
+
+    shouldComponentUpdate(nextProps: TableOfContentsProps, nextState: TableOfContentsState): boolean {
+        const {props, state} = this;
+        return state.activeNodePath !== nextState.activeNodePath ||
+            props.searchQuery !== nextProps.searchQuery;
     }
 
     componentWillReceiveProps(
@@ -313,6 +322,12 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
 
     render() {
         const root = this.rootViewNode;
+        const context: TocContext = {
+            tocState: this.state,
+            sitemap: this.props.sitemap,
+            onNodeClick: this.handleNodeClick,
+        };
+
         return <ul
             className={CN.root}
             role='tree'
@@ -324,12 +339,7 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
             <EventHook target={window} resize={this.handleResize} />
 
             {root.children.map((child, i) =>
-                <NodeView
-                    key={child.id}
-                    viewNode={child}
-                    tocState={this.state}
-                    sitemap={this.props.sitemap}
-                    onNodeClick={this.handleNodeClick} />)}
+                <NodeView key={child.id} viewNode={child} context={context} />)}
         </ul>;
     }
 }
@@ -606,11 +616,19 @@ function getExternalNodeTarget(node: ExternalNode, sitemap: Sitemap): string | n
     return canonicalPath ? sitemap!.documentRoot + canonicalPath : null;
 }
 
+interface TocContext {
+    /** An event handler for node click event. Assumed to be immutable. */
+    onNodeClick: (viewNode: ViewNode) => void;
+
+    tocState: TableOfContentsState;
+
+    /** A sitemap. Assumed to be immutable. */
+    sitemap: Sitemap | null;
+}
+
 interface NodeViewProps {
     viewNode: ViewNode;
-    onNodeClick: (viewNode: ViewNode) => void;
-    tocState: TableOfContentsState;
-    sitemap: Sitemap | null;
+    context: TocContext;
 }
 
 interface NodeViewState {
@@ -641,7 +659,8 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
     }
 
     private get shouldExpandByDefault(): boolean {
-        const {viewNode, tocState} = this.props;
+        const {viewNode, context} = this.props;
+        const {tocState} = context;
 
         // Expand by default if the active node is `node` or
         // a descendant of `node`
@@ -667,7 +686,8 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
     }
 
     private get isActive(): boolean {
-        const {viewNode, tocState} = this.props;
+        const {viewNode, context} = this.props;
+        const {tocState} = context;
 
         const nextLevel = tocState.activeNodePath[viewNode.node.level + 1];
 
@@ -683,6 +703,13 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
         }
 
         return viewNode.node === tocState.activeNodePath[viewNode.node.level];
+    }
+
+    shouldComponentUpdate(nextProps: NodeViewProps, nextState: NodeViewState): boolean {
+        const {props, state} = this;
+        return state.expanded !== nextState.expanded ||
+            props.viewNode !== nextProps.viewNode ||
+            props.context.tocState.activeNodePath !== nextProps.context.tocState.activeNodePath;
     }
 
     componentDidMount(): void {
@@ -717,6 +744,7 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
 
     @bind
     private handleClick(e: Event): void {
+        const {sitemap} = this.props.context;
         const node = this.props.viewNode.node;
 
         // Intercept the link action to prevent losing a keyboard focus.
@@ -729,9 +757,9 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
             return;
         }
 
-        this.props.onNodeClick(this.props.viewNode);
+        this.props.context.onNodeClick(this.props.viewNode);
 
-        navigateNode(node, true, this.props.sitemap);
+        navigateNode(node, true, sitemap);
     }
 
     @bind
@@ -742,7 +770,8 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
     }
 
     render() {
-        const {viewNode, tocState, onNodeClick, sitemap} = this.props;
+        const {viewNode, context} = this.props;
+        const {tocState, onNodeClick, sitemap} = context;
         const {node} = viewNode;
 
         const {isActive, isExpanded} = this;
@@ -799,9 +828,7 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
                             <NodeView
                                 key={i}
                                 viewNode={child}
-                                tocState={tocState}
-                                sitemap={sitemap}
-                                onNodeClick={onNodeClick} />)}
+                                context={context} />)}
                     </ul>
                 :
                     null
