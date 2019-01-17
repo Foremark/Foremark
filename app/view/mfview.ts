@@ -139,7 +139,7 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
             const caption = node.getElementsByTagName(TagNames.FigureCaption)[0];
             if (caption) {
                 const labelElem = document.createElement(ViewTagNames.FloatingElementLabel);
-                labelElem.textContent = label + ' ';
+                labelElem.textContent = label;
                 prependPhrasingContent(labelElem, caption)
 
                 node.setAttribute('aria-labelledby', labelElem.id);
