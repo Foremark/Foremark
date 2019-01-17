@@ -12,12 +12,13 @@
 //    TOC is displayed in a full-screen modal window.
 //    Sidenotes are replaced with footnotes. (TODO: implement this)
 //
-@screen-medium-max: 1000px;
+@screen-medium-max: 900px;
 @screen-small-max: 600px;
 
 // Since range expressions (e.g., `@media (width > 400px)`) are not commonly
 // supported...
 @screen-large-min: (@screen-medium-max + 0.00001px);
+@screen-medium-min: (@screen-small-max + 0.00001px);
 
 @sidebar-width: 11rem;
 
