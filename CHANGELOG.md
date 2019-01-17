@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Fixed the behavior of the table of contents.
+
 ## [0.2.0] - 2018-01-17
 
 - Fixed the width calculation of a text fragment inside a diagram that includes an XML-escaped character.

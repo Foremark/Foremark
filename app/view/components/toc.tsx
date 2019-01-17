@@ -828,7 +828,10 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
 
     @bind
     private handleToggle(e: Event): void {
-        this.isExpanded = !this.isExpanded;
+        const newExpanded = this.isExpanded = !this.isExpanded;
+        if (!newExpanded) {
+            this.props.context.onNodeCollapse();
+        }
         e.stopPropagation();
         e.preventDefault();
     }
