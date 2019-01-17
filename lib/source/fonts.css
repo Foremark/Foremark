@@ -28,6 +28,7 @@
  *  This license is copied below, and is also available with a FAQ at:
  *  http://scripts.sil.org/OFL
  */
+/*
 @font-face {
     font-family: 'Source Serif Pro';
     font-style: normal;
@@ -46,6 +47,7 @@
     font-weight: 700;
     src: local('Source Serif Pro Bold'), url("./SourceSerifPro-Bold.woff2") format('woff2'), url("./SourceSerifPro-Bold.woff") format('woff');
 }
+*/
 @font-face {
     font-family: 'Source Code Pro';
     font-style: normal;
