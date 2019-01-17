@@ -1,6 +1,7 @@
 @import "~./constants.less";
 @import "~./utils.less";
 
+@import (less) "~../../lib/et-book/fonts.css";
 @import (less) "~../../lib/source/fonts.css";
 @import (less) "~../../lib/fira/fonts.css";
 
@@ -9,8 +10,8 @@ html, body {
     background: var(--background-color);
     color: @text-color;
     color: var(--text-color);
-    font-family: @font-family;
-    font-size: 16px;
+    @font-family();
+    font-size: 17px;
     line-height: 1.5;
     margin: 0;
     padding: 0;
@@ -47,7 +48,7 @@ body {
 
 @media print {
     html, body {
-        font-size: 11px;
+        font-size: 12px;
         color: inherit;
     }
 }
@@ -210,7 +211,7 @@ body {
         top: 5px;
 
         > input {
-            font-family: @ui-font-family;
+            @ui-font-family();
             font-size: 0.8rem;
             -webkit-appearance: none;
             width: calc(@sidebar-width - 14px);
@@ -288,19 +289,22 @@ main {
 
     // Headings
     h1 {
-        font-size: 1.8rem;
-        margin: 2rem 0 1.5rem;
+        font-size: 2.0rem;
+        margin: 2.3rem 0 1.5rem;
         font-style: italic;
         font-weight: normal;
         clear: right; // Clear sidenotes
+        [xml|lang=ja] & { font-style: normal; }
     }
     h2 {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         margin: 1rem 0 1rem;
         font-style: italic;
         font-weight: normal;
         clear: right; // Clear sidenotes
+        [xml|lang=ja] & { font-style: normal; }
     }
+    h3, h4, h5, h6, h7, h8, h9 { @bold-font-family(); }
     a:global(.anchor) {
         position: relative;
         display: block;
@@ -315,11 +319,19 @@ main {
     }
 
     a[href] {
-        color: @accent-color;
-        text-decoration: none;
+        color: inherit;
+        text-decoration: underline;
         &:hover {
             text-decoration: underline;
         }
+    }
+
+    b { @bold-font-family(); }
+
+    hr {
+        border: none;
+        border-top: 1px solid rgba(128, 128, 128, 0.3);
+        margin: 4em 4em;
     }
 
     // Lists
@@ -347,18 +359,12 @@ main {
 
     // Code blocks (a set of `mf-code`s)
     mf-codeblock {
-        border-top: 1px solid;
-        border-bottom: 1px solid;
-        border-color: @text-color;
-        border-color: var(--text-color);
-        @media print { border-width: 0.5px; }
-
         background: @background-color;
         background: var(--background-color);
 
         display: block;
-        padding: 0.5em 0.25em;
-        margin: 0.25em;
+        padding: 0.5em 0.5em;
+        margin: 0.5em 0.5em 0.5em 1.3em;
 
         text-align: left;
 
@@ -381,8 +387,8 @@ main {
     @code-line-height: 1.5em;
     @pre-style: {
         white-space: pre-wrap;
-        font-size: 90%;
-        font-family: @monospace-font-family;
+        font-size: 80%;
+        @monospace-font-family();
         letter-spacing: -0.02em;
         tab-size:4; -moz-tab-size:4; -o-tab-size:4;
     };
@@ -462,7 +468,7 @@ main {
         .fg_stroke { stroke: var(--foreground-color); }
         text {
             fill: var(--foreground-color);
-            font-family: @monospace-font-family;
+            @monospace-font-family();
             white-space: nowrap;
         }
     }
@@ -524,6 +530,7 @@ main {
         @media print { border-width: 0.5px; }
         padding: 0.4em 0.6em;
     }
+    th { @bold-font-family(); }
 
     img, video, audio, iframe {
         max-width: 100%;
@@ -593,13 +600,13 @@ main {
 
     :global(.only-sidenote) { display: none; }
 
-    @media (min-width: @screen-large-min), print {
+    @media (min-width: @screen-medium-min), print {
         @sidenote: {
             position: relative;
             width: @sidenote-width;
             top: (-@sidenote-vertical-adjustment);
-            font-size: 80%;
-            line-height: 1.4;
+            font-size: 0.9rem;
+            line-height: 1.2;
             text-align: left;
         };
 

@@ -1,5 +1,7 @@
 // Synchronize these with `constants.ts`
 
+@namespace xml url(http://www.w3.org/XML/1998/namespace);
+
 // Media queries breakpoints
 //
 //  - large -- desktop
@@ -18,11 +20,12 @@
 // Since range expressions (e.g., `@media (width > 400px)`) are not commonly
 // supported...
 @screen-large-min: (@screen-medium-max + 0.00001px);
+@screen-medium-min: (@screen-small-max + 0.00001px);
 
-@sidebar-width: 12rem;
+@sidebar-width: 11rem;
 
 @sidenote-width: 11rem;
-@sidenote-body-separation: 10px;
+@sidenote-body-separation: 20px;
 @sidenote-margin: 15px;
 @sidenote-vertical-adjustment: 20px;
 
@@ -53,6 +56,17 @@
 }
 
 // Font families
-@font-family: 'Source Serif Pro', serif;
-@monospace-font-family: 'Source Code Pro', Menlo, Consolas, monospace;
-@ui-font-family: "Fira Sans", sans-serif;
+@font-family: {
+    font-family: 'et-book', 'Palatino', serif;
+    [xml|lang=ja] & { font-family: 'et-book', 'YuMincho', 'Yu Mincho', 'Hiragino Mincho ProN', 'Hiragino Mincho Std', serif; }
+};
+@bold-font-family: {
+    font-weight: bold;
+    [xml|lang=ja] & { font-family: 'et-book', 'YuGothic', 'Yu Gothic', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Hiragino Kaku Gothic Pro', 'Hiragino Kaku Gothic Std', serif; }
+};
+@monospace-font-family: {
+    font-family: 'Source Code Pro', Menlo, Consolas, monospace;
+};
+@ui-font-family: {
+    font-family: 'Fira Sans', 'Meiryo UI', sans-serif;
+};
