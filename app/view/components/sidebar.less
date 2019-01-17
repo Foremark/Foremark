@@ -186,7 +186,7 @@
 
         @bg-color();
         border-radius: 6px;
-        padding: 10px 20px;
+        padding: 10px 10px;
 
         border: 1px solid @border-color;
 
@@ -226,5 +226,49 @@
             opacity: 1;
             transition: none;
         }
+    }
+}
+
+/* .toolbar2 .helpPopup */ .help {
+    p, h1, h2, h3 { margin: 0.2em 0; }
+    h1 {
+        font-size: 120%;
+        font-weight: normal;
+        > small {
+            font-size: 90%;
+        }
+    }
+    h2, h3 {
+        font-size: 80%;
+        font-weight: normal;
+        color: rgba(128, 128, 128, 0.9);
+        text-transform: uppercase;
+    }
+
+    code {
+        font-size: 80%;
+        letter-spacing: -0.04em;
+    }
+    a { color: inherit; }
+    kbd {
+        border: 1px solid rgba(128, 128, 128, 0.4);
+        padding: 0.2em 0.4em 0.1em;
+        margin-right: 0.4em;
+        border-radius: 3px;
+        font-family: inherit;
+        font-size: 90%;
+        vertical-align: 0.1em;
+    }
+
+    hr {
+        margin: 1em -10px;
+        border: none;
+        border-top: 1px solid rgba(128, 128, 128, 0.2);
+    }
+
+    ul {
+        list-style: none;
+        line-height: 1.5;
+        margin: 0.5em 0; padding: 0;
     }
 }

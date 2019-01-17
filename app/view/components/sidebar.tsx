@@ -63,21 +63,27 @@ export class Sidebar extends React.Component<SidebarProps, State> {
 
     @bind
     private handleWindowKeyDown(e: KeyboardEvent): void {
+        if (e.target === this.searchQueryElement) {
+            return;
+        }
         if (e.key === '/') {
-            if (e.target === this.searchQueryElement) {
-                return;
-            }
             this.props.onShowSidebar();
             this.searchQueryElement!.focus();
             e.preventDefault();
             e.stopPropagation();
         } else if (e.key === 'Escape') {
-            if (e.target === this.searchQueryElement) {
+            if (this.state.helpVisible) {
+                this.setState({helpVisible: false});
                 return;
             }
 
             // Clear the search field
             this.setState({searchQuery: ''});
+        } else if (e.key === '?') {
+            if (!this.state.helpVisible) {
+                this.props.onShowSidebar();
+            }
+            this.setState({helpVisible: !this.state.helpVisible});
         }
     }
 
@@ -218,10 +224,37 @@ export class Sidebar extends React.Component<SidebarProps, State> {
                     <PopupFrame
                         active={state.helpVisible}
                         onDismiss={this.handleDismissHelpPopup}>
-                        Foremark blah blah
+                        <Help />
                     </PopupFrame>
                 </div>
             </span>
         </div>;
     }
 }
+
+const Help = () => (
+    <div className={CN.help}>
+        <h1>
+            <a href={process.env.URL}>Foremark</a> <small>{process.env.VERSION}</small>
+        </h1>
+        <p>
+            <code>{process.env.COMMITHASH}@{process.env.BRANCH}</code>
+        </p>
+        <hr />
+        <h2>Keyboard shortcuts</h2>
+        <ul>
+            <li><kbd>?</kbd>Show this help dialog</li>
+            <li><kbd>/</kbd>Focus the search field</li>
+        </ul>
+        <h3>While searching...</h3>
+        <ul>
+            <li><kbd>Esc</kbd>Clear the search field</li>
+        </ul>
+        <h3>When the table of contents is focused...</h3>
+        <ul>
+            <li><kbd>↑</kbd><kbd>↓</kbd>Jump to the previous/next section</li>
+            <li><kbd>←</kbd><kbd>→</kbd>Expand/collapse a section</li>
+            <li><kbd>⏎</kbd>Navigate to an external document</li>
+        </ul>
+    </div>
+);
