@@ -4,9 +4,9 @@ import * as classnames from 'classnames';
 
 import {Port} from './components/port';
 import {EventHook} from './components/eventhook';
+import {Sidebar} from './components/sidebar';
 import {StyleConstants} from './constants';
 import {Sitemap} from './sitemap';
-import {Sidebar} from './sidebar';
 
 const CN = require('./app.less');
 document.getElementsByTagName('html')[0].classList.add('mf-processed');

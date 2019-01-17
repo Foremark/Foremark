@@ -2,10 +2,10 @@ import * as React from 'preact';
 import {bind} from 'bind-decorator';
 import * as classnames from 'classnames';
 
-import {EventHook} from './components/eventhook';
-import {PopupFrame} from './components/popup';
+import {EventHook} from './eventhook';
+import {PopupFrame} from './popup';
 import {TableOfContents} from './toc';
-import {Sitemap} from './sitemap';
+import {Sitemap} from '../sitemap';
 
 const CN = require('./sidebar.less');
 

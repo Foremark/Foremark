@@ -2,11 +2,11 @@ import * as React from 'preact';
 import {bind} from 'bind-decorator';
 import * as classnames from 'classnames';
 
-import {Port} from './components/port';
-import {EventHook} from './components/eventhook';
-import {forEachNodePreorder} from '../utils/dom';
-import {Debouncer} from '../utils/debouncer';
-import {SitemapEntry, Sitemap} from './sitemap';
+import {Port} from './port';
+import {EventHook} from './eventhook';
+import {forEachNodePreorder} from '../../utils/dom';
+import {Debouncer} from '../../utils/debouncer';
+import {SitemapEntry, Sitemap} from '../sitemap';
 
 const CN = require('./toc.less');
 
