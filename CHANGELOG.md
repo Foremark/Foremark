@@ -7,8 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.2.0] - 2018-01-17
+
 - Fixed the width calculation of a text fragment inside a diagram that includes an XML-escaped character.
-- Disabled automatic heading numbering by default. Use the `headingNumbers` option to re-enable it.
+- **Breaking**: Disabled automatic heading numbering by default. Use the `headingNumbers` option to re-enable it.
 - Updated the styling.
 - Fixed the bug that diagrams were displayed too small.
 - Added the "Expand all"/"Collapse all"/"Clear search" button.
