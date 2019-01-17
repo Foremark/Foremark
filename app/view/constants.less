@@ -1,5 +1,7 @@
 // Synchronize these with `constants.ts`
 
+@namespace xml url(http://www.w3.org/XML/1998/namespace);
+
 // Media queries breakpoints
 //
 //  - large -- desktop
@@ -54,6 +56,17 @@
 }
 
 // Font families
-@font-family: 'et-book', 'Palatino', serif;
-@monospace-font-family: 'Source Code Pro', Menlo, Consolas, monospace;
-@ui-font-family: "Fira Sans", sans-serif;
+@font-family: {
+    font-family: 'et-book', 'Palatino', serif;
+    [xml|lang=ja] & { font-family: 'et-book', 'YuMincho', 'Yu Mincho', 'Hiragino Mincho ProN', 'Hiragino Mincho Std', serif; }
+};
+@bold-font-family: {
+    font-weight: bold;
+    [xml|lang=ja] & { font-family: 'et-book', 'YuGothic', 'Yu Gothic', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Hiragino Kaku Gothic Pro', 'Hiragino Kaku Gothic Std', serif; }
+};
+@monospace-font-family: {
+    font-family: 'Source Code Pro', Menlo, Consolas, monospace;
+};
+@ui-font-family: {
+    font-family: 'Fira Sans', 'Meiryo UI', sans-serif;
+};

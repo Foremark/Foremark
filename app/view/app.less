@@ -10,7 +10,7 @@ html, body {
     background: var(--background-color);
     color: @text-color;
     color: var(--text-color);
-    font-family: @font-family;
+    @font-family();
     font-size: 17px;
     line-height: 1.5;
     margin: 0;
@@ -211,7 +211,7 @@ body {
         top: 5px;
 
         > input {
-            font-family: @ui-font-family;
+            @ui-font-family();
             font-size: 0.8rem;
             -webkit-appearance: none;
             width: calc(@sidebar-width - 14px);
@@ -294,6 +294,7 @@ main {
         font-style: italic;
         font-weight: normal;
         clear: right; // Clear sidenotes
+        [xml|lang=ja] & { font-style: normal; }
     }
     h2 {
         font-size: 1.4rem;
@@ -301,7 +302,9 @@ main {
         font-style: italic;
         font-weight: normal;
         clear: right; // Clear sidenotes
+        [xml|lang=ja] & { font-style: normal; }
     }
+    h3, h4, h5, h6, h7, h8, h9 { @bold-font-family(); }
     a:global(.anchor) {
         position: relative;
         display: block;
@@ -322,6 +325,8 @@ main {
             text-decoration: underline;
         }
     }
+
+    b { @bold-font-family(); }
 
     // Lists
     li, dt, dd {
@@ -377,7 +382,7 @@ main {
     @pre-style: {
         white-space: pre-wrap;
         font-size: 80%;
-        font-family: @monospace-font-family;
+        @monospace-font-family();
         letter-spacing: -0.02em;
         tab-size:4; -moz-tab-size:4; -o-tab-size:4;
     };
@@ -457,7 +462,7 @@ main {
         .fg_stroke { stroke: var(--foreground-color); }
         text {
             fill: var(--foreground-color);
-            font-family: @monospace-font-family;
+            @monospace-font-family();
             white-space: nowrap;
         }
     }
@@ -519,6 +524,7 @@ main {
         @media print { border-width: 0.5px; }
         padding: 0.4em 0.6em;
     }
+    th { @bold-font-family(); }
 
     img, video, audio, iframe {
         max-width: 100%;
