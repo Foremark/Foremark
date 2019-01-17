@@ -4,6 +4,7 @@ import * as classnames from 'classnames';
 
 import {Port} from './components/port';
 import {EventHook} from './components/eventhook';
+import {PopupFrame} from './components/popup';
 import {TableOfContents} from './toc';
 import {StyleConstants} from './constants';
 import {Sitemap} from './sitemap';
@@ -35,6 +36,7 @@ interface AppState {
     sidebarModalVisible: boolean;
     loaderActivity: boolean;
     searchQuery: string;
+    helpVisible: boolean;
 }
 
 export class App extends React.Component<AppProps, AppState> {
@@ -51,6 +53,7 @@ export class App extends React.Component<AppProps, AppState> {
             sidebarModalVisible: false,
             loaderActivity: true,
             searchQuery: '',
+            helpVisible: false,
         };
 
         props.renderPromise.then(() => {
@@ -81,7 +84,10 @@ export class App extends React.Component<AppProps, AppState> {
 
     @bind
     private handleModalBackgroundClick(): void {
-        this.setState({ sidebarModalVisible: false });
+        this.setState({
+            sidebarModalVisible: false,
+            helpVisible: false,
+        });
     }
 
     private get isModelessSidebarVisible(): boolean {
@@ -91,7 +97,10 @@ export class App extends React.Component<AppProps, AppState> {
 
     @bind
     private handleHideModalSidebar(): void {
-        this.setState({sidebarModalVisible: false});
+        this.setState({
+            sidebarModalVisible: false,
+            helpVisible: false,
+        });
     }
 
     @bind
@@ -152,7 +161,19 @@ export class App extends React.Component<AppProps, AppState> {
                 this.setState({sidebarModalVisible: false});
             }
         }
+
+        if (this.state.helpVisible) {
+            this.setState({helpVisible: false});
+        }
     }
+
+    @bind
+    private handleShowHelpPopup(e: Event): void {
+        this.setState({helpVisible: (e.target as HTMLInputElement).checked});
+    }
+
+    @bind
+    private handleDismissHelpPopup(): void { this.setState({ helpVisible: false }); }
 
     render() {
         const {state, isModelessSidebarVisible} = this;
@@ -225,6 +246,31 @@ export class App extends React.Component<AppProps, AppState> {
                             onNavigate={this.handleHideModalSidebar}
                             searchQuery={state.searchQuery} />
                     </nav>
+
+                    <span className={CN.toolbar2}>
+                        <button
+                            className={CN.operateTOCGlobally}
+                            type='button'>
+                            Expand all
+                        </button>
+
+                        <input
+                            id='toolbar-help'
+                            type='checkbox'
+                            onChange={this.handleShowHelpPopup}
+                            checked={state.helpVisible} />
+                        <label for='toolbar-help' className={CN.helpButton}>
+                            <i />
+                            <span>About</span>
+                        </label>
+                        <div className={CN.helpPopup}>
+                            <PopupFrame
+                                active={state.helpVisible}
+                                onDismiss={this.handleDismissHelpPopup}>
+                                Foremark blah blah
+                            </PopupFrame>
+                        </div>
+                    </span>
                 </div>
             </aside>
 

@@ -4,6 +4,7 @@
 @import (less) "~../../lib/et-book/fonts.css";
 @import (less) "~../../lib/source/fonts.css";
 @import (less) "~../../lib/fira/fonts.css";
+@import (less) "~../../lib/icomoon/style.less";
 
 html, body {
     background: @background-color;
@@ -181,6 +182,9 @@ body {
     }
 }
 
+@sidebar-toolbar2-line-height: 1.8rem;
+@sidebar-toolbar2-height: @sidebar-toolbar2-line-height + 1px;
+
 .sidebar {
     position: fixed;
     left: 0; top: 0; bottom: 0; width: @sidebar-width;
@@ -254,10 +258,164 @@ body {
     > nav {
         display: block;
         position: absolute;
-        left: 0; top: calc(1em + 16px); right: 0; bottom: 0;
+        left: 0; top: calc(1em + 16px); right: 0; bottom: calc(@sidebar-toolbar2-height);
         overflow: auto;
         pointer-events: auto;
         -webkit-overflow-scrolling: touch;
+    }
+}
+
+// A bar displayed below the TOC
+.toolbar2 {
+    position: absolute;
+    left: 7px; right: 7px; bottom: 0; height: calc(@sidebar-toolbar2-height);
+    box-sizing: border-box;
+
+    border-top: 1px solid rgba(128, 128, 128, 0.1);
+
+    @ui-font-family();
+    font-size: 0.8rem;
+    line-height: 1;
+
+    > button {
+        border: none;
+        background: none;
+        padding: 0 0.7em;
+        margin: 0;
+        height: calc(@sidebar-toolbar2-height);
+        font-family: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+        line-height: 1;
+        outline: none;
+        color: inherit;
+
+        display: flex;
+        align-items: center;
+
+        opacity: 0.5;
+        &:hover { opacity: 0.8; }
+
+        cursor: pointer;
+    }
+
+    // Popup buttons
+    > input { display: none; }
+
+    > label {
+        @margin-v: 4px;
+        box-sizing: border-box;
+        height: calc(@sidebar-toolbar2-height - (@margin-v * 2));
+        border-radius: 4em;
+        margin: @margin-v 2px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        opacity: 0.5;
+        &:hover { opacity: 0.8; }
+
+        border: 1px solid rgba(128, 128, 128, 0.2);
+    }
+    > input:checked + label {
+        opacity: 1;
+        background: #888;
+        border-color: #888;
+        color: #eee;
+    }
+
+    // Popup wrappers
+    > div {
+        position: relative;
+        // width: 0;
+        height: calc(@sidebar-toolbar2-line-height);
+    }
+}
+
+/* .toolbar2 */ .operateTOCGlobally {
+    @icon-enlarge2();
+    &:before { margin-right: 7px; }
+
+    float: left;
+}
+
+/* .toolbar2 */ .helpButton {
+    @icon-info();
+    & > span { @text-hidden(); }
+
+    float: right;
+    text-align: center;
+    width: 3em;
+
+    position: relative;
+    top: -1px;
+    cursor: pointer;
+
+    // Popup wrapper
+    & + div { float: right; }
+}
+
+/* .toolbar2 */ .helpPopup {
+    cursor: default;
+
+    // balloon
+    > div {
+        @bg-color: {
+            background: #fafafa;
+            @media (prefers-color-scheme: dark) { background: #444; }
+        };
+        @border-color: rgba(128, 128, 128, 0.4);
+
+        position: absolute;
+        left: calc(3em + @arrow-size / 2 / sqrt(2) + 12px);
+        bottom: 4px;
+        z-index: 10;
+
+        white-space: nowrap;
+
+        @bg-color();
+        border-radius: 6px;
+        padding: 10px 20px;
+
+        border: 1px solid @border-color;
+
+        // arrow
+        @arrow-size: 8px;
+        &:before {
+            content: "";
+            display: block;
+            position: absolute;
+            left: (-@arrow-size / 2 - 1px);
+            top: calc(100% - @arrow-size / 2 + 4px - (@sidebar-toolbar2-line-height) / 2);
+            width: @arrow-size; height: @arrow-size;
+            border: 1px solid;
+            border-color: transparent;
+            border-bottom-color: @border-color;
+            border-left-color: @border-color;
+            @bg-color();
+            transform: rotate(45deg);
+        }
+
+        @media screen and (max-width: @screen-small-max) {
+            // Display the balloon above the button
+            @x-pos: 70%;
+            left: 1.5em; bottom: calc(100% + @arrow-size / 2 / sqrt(2) + 4px);
+            transform: translateX(-@x-pos);
+            &:before {
+                left: calc(@x-pos - @arrow-size / 2); top: auto;
+                bottom: (-@arrow-size / 2 - 1px);
+                transform: rotate(-45deg);
+            }
+        }
+
+        transition: 200ms opacity;
+        opacity: 0;
+        &:global(.act) {
+            pointer-events: initial;
+            opacity: 1;
+            transition: none;
+        }
     }
 }
 
