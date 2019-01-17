@@ -26,6 +26,10 @@ export interface SidebarProps {
 interface State {
     searchQuery: string;
     helpVisible: boolean;
+
+    /** `true` if all nodes in TOC are expanded because the user hit the
+     * "expand all" button. */
+    tocExpanded: boolean;
 }
 
 export class Sidebar extends React.Component<SidebarProps, State> {
@@ -40,6 +44,7 @@ export class Sidebar extends React.Component<SidebarProps, State> {
         this.state = {
             searchQuery: '',
             helpVisible: false,
+            tocExpanded: false,
         };
     }
 
@@ -107,8 +112,9 @@ export class Sidebar extends React.Component<SidebarProps, State> {
             return GlobalTocOperationButtonState.ClearSearch;
         }
 
-        // TODO
-        return GlobalTocOperationButtonState.ExpandAll;
+        return state.tocExpanded ?
+            GlobalTocOperationButtonState.CollapseAll :
+            GlobalTocOperationButtonState.ExpandAll;
     }
 
     @bind
@@ -117,7 +123,20 @@ export class Sidebar extends React.Component<SidebarProps, State> {
             case GlobalTocOperationButtonState.ClearSearch:
                 this.setState({searchQuery: ''});
                 break;
+            case GlobalTocOperationButtonState.CollapseAll:
+                this.tocComponent!.collapseAll();
+                this.setState({tocExpanded: false});
+                break;
+            case GlobalTocOperationButtonState.ExpandAll:
+                this.tocComponent!.expandAll();
+                this.setState({tocExpanded: true});
+                break;
         }
+    }
+
+    @bind
+    private handleTocNodeCollapse(): void {
+        this.setState({tocExpanded: false});
     }
 
     @bind
@@ -153,6 +172,7 @@ export class Sidebar extends React.Component<SidebarProps, State> {
                     foremarkDocument={props.foremarkDocument}
                     sitemap={props.sitemap}
                     onNavigate={props.onNavigate}
+                    onNodeCollapse={this.handleTocNodeCollapse}
                     searchQuery={state.searchQuery} />
             </nav>
 

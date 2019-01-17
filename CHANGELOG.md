@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Disabled automatic heading numbering by default. Use the `headingNumbers` option to re-enable it.
 - Updated various styles.
 - Fixed the bug that diagrams were displayed too small.
+- Added the "Expand all"/"Collapse all"/"Clear search" button.
 
 ## [0.1.3] - 2018-01-16
 

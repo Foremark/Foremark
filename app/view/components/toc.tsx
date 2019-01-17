@@ -23,6 +23,9 @@ export interface TableOfContentsProps {
 
     /** Assumed to be immutable. */
     onNavigate: () => void;
+
+    /** Called when some node was collapsed. Assumed to be immutable. */
+    onNodeCollapse: () => void;
 }
 
 interface TableOfContentsState {
@@ -296,6 +299,9 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
                 } else if (viewNode.nodeView) {
                     // Expand/collapse the currently highlighted node
                     viewNode.nodeView.isExpanded = expand;
+                    if (!expand) {
+                        this.props.onNodeCollapse();
+                    }
                 }
                 e.preventDefault();
             }
@@ -320,12 +326,54 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
         }
     }
 
+    private scrollHighlightedViewNodeIntoView(): void {
+        const node = this.highlightedViewNode;
+        if (node && node.nodeView) {
+            node.nodeView.scrollIntoView();
+        }
+    }
+
+    /**
+     * Expands all nodes.
+     * Doesn't work if the filter feature is active.
+     */
+    expandAll(): void {
+        forEachViewNodePreorder(this.mainRoot, node => {
+            if (node.expanded !== true && node.children.length > 0) {
+                if (node.nodeView) {
+                    node.nodeView.isExpanded = true;
+                } else {
+                    node.expanded = true;
+                }
+            }
+        });
+        setTimeout(() => this.scrollHighlightedViewNodeIntoView(), 0);
+    }
+
+    /**
+     * Resets the expansion state of all nodes.
+     * Doesn't work if the filter feature is active.
+     */
+    collapseAll(): void {
+        forEachViewNodePreorder(this.mainRoot, node => {
+            if (node.expanded !== null) {
+                if (node.nodeView) {
+                    node.nodeView.setExpanded(null);
+                } else {
+                    node.expanded = null;
+                }
+            }
+        });
+        setTimeout(() => this.scrollHighlightedViewNodeIntoView(), 0);
+    }
+
     render() {
         const root = this.rootViewNode;
         const context: TocContext = {
             tocState: this.state,
             sitemap: this.props.sitemap,
             onNodeClick: this.handleNodeClick,
+            onNodeCollapse: this.props.onNodeCollapse,
         };
 
         return <ul
@@ -573,6 +621,15 @@ function applyFilterOnViewNode(viewNode: ViewNode, query: (node: Node) => boolea
     return viewNode.children.length > 0 || query(viewNode.node);
 }
 
+function forEachViewNodePreorder(node: ViewNode, f: (node: ViewNode) => boolean | void) {
+    if (f(node) === false) {
+        return;
+    }
+    for (const n of node.unfilteredChildren) {
+        forEachViewNodePreorder(n, f);
+    }
+}
+
 const NAVIGATE_DEBOUNCER = new Debouncer();
 
 /**
@@ -619,6 +676,9 @@ function getExternalNodeTarget(node: ExternalNode, sitemap: Sitemap): string | n
 interface TocContext {
     /** An event handler for node click event. Assumed to be immutable. */
     onNodeClick: (viewNode: ViewNode) => void;
+
+    /** Called when some node was collapsed. Assumed to be immutable. */
+    onNodeCollapse: () => void;
 
     tocState: TableOfContentsState;
 
@@ -677,6 +737,10 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
     }
 
     set isExpanded(expanded: boolean) {
+        this.setExpanded(expanded);
+    }
+
+    setExpanded(expanded: boolean | null) {
         if (this.props.viewNode.children.length === 0) {
             return;
         }
