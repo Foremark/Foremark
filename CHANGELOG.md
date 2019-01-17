@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed the bug that diagrams were displayed too small.
 - Added the "Expand all"/"Collapse all"/"Clear search" button.
 - Added the help dialog.
+- Improved the Japanese typography.
 
 ## [0.1.3] - 2018-01-16
 
