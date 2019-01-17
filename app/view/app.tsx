@@ -4,10 +4,9 @@ import * as classnames from 'classnames';
 
 import {Port} from './components/port';
 import {EventHook} from './components/eventhook';
-import {PopupFrame} from './components/popup';
-import {TableOfContents} from './toc';
 import {StyleConstants} from './constants';
 import {Sitemap} from './sitemap';
+import {Sidebar} from './sidebar';
 
 const CN = require('./app.less');
 document.getElementsByTagName('html')[0].classList.add('mf-processed');
@@ -35,21 +34,12 @@ interface AppState {
      */
     sidebarModalVisible: boolean;
     loaderActivity: boolean;
-    searchQuery: string;
-    helpVisible: boolean;
-}
-
-const enum GlobalTocOperationButtonState {
-    ExpandAll,
-    CollapseAll,
-    ClearSearch,
 }
 
 export class App extends React.Component<AppProps, AppState> {
     refs: any;
 
-    private searchQueryElement?: HTMLInputElement;
-    private tocComponent?: TableOfContents;
+    private sidebar?: Sidebar;
 
     constructor(props: AppProps) {
         super(props);
@@ -58,8 +48,6 @@ export class App extends React.Component<AppProps, AppState> {
             tocVisible: props.sitemap != null || shouldShowTocByDefault(props.foremarkDocument),
             sidebarModalVisible: false,
             loaderActivity: true,
-            searchQuery: '',
-            helpVisible: false,
         };
 
         props.renderPromise.then(() => {
@@ -70,9 +58,7 @@ export class App extends React.Component<AppProps, AppState> {
     @bind
     private handleSidebarToggle(e: Event): void {
         const tocVisible = (e.target as HTMLInputElement).checked;
-        this.setState({
-            tocVisible,
-        });
+        this.setState({ tocVisible });
     }
 
     @bind
@@ -82,18 +68,13 @@ export class App extends React.Component<AppProps, AppState> {
     }
 
     @bind
-    private handleSearchQuery(e: Event): void {
-        this.setState({
-            searchQuery: (e.target as HTMLInputElement).value,
-        });
-    }
-
-    @bind
     private handleModalBackgroundClick(): void {
         this.setState({
             sidebarModalVisible: false,
-            helpVisible: false,
         });
+        if (this.sidebar) {
+            this.sidebar.hidePopups();
+        }
     }
 
     private get isModelessSidebarVisible(): boolean {
@@ -105,48 +86,18 @@ export class App extends React.Component<AppProps, AppState> {
     private handleHideModalSidebar(): void {
         this.setState({
             sidebarModalVisible: false,
-            helpVisible: false,
         });
-    }
-
-    @bind
-    private handleWindowKeyDown(e: KeyboardEvent): void {
-        if (e.key === '/') {
-            if (e.target === this.searchQueryElement) {
-                return;
-            }
-            if (window.matchMedia(`screen and (max-width: ${StyleConstants.ScreenMediumMax}px)`).matches) {
-                this.setState({sidebarModalVisible: true});
-            } else {
-                this.setState({tocVisible: true});
-            }
-            this.searchQueryElement!.focus();
-            e.preventDefault();
-            e.stopPropagation();
-        } else if (e.key === 'Escape') {
-            if (e.target === this.searchQueryElement) {
-                return;
-            }
-
-            // Clear the search field
-            this.setState({searchQuery: ''});
+        if (this.sidebar) {
+            this.sidebar.hidePopups();
         }
     }
 
     @bind
-    private handleSearchQueryKeyDown(e: KeyboardEvent): void {
-        if (e.key === 'Escape') {
-            // Lose focus
-            this.searchQueryElement!.blur();
-
-            // Clear the search field
-            this.setState({searchQuery: ''});
-
-            e.preventDefault();
-            e.stopPropagation();
-        } else if (e.key === 'ArrowDown') {
-            // Select the first row in the TOC
-            this.tocComponent!.selectFirstNode();
+    private handleShowSidebar(): void {
+        if (window.matchMedia(`screen and (max-width: ${StyleConstants.ScreenMediumMax}px)`).matches) {
+            this.setState({sidebarModalVisible: true});
+        } else {
+            this.setState({tocVisible: true});
         }
     }
 
@@ -167,41 +118,10 @@ export class App extends React.Component<AppProps, AppState> {
                 this.setState({sidebarModalVisible: false});
             }
         }
-
-        if (this.state.helpVisible) {
-            this.setState({helpVisible: false});
-        }
-    }
-
-    @bind
-    private handleShowHelpPopup(e: Event): void {
-        this.setState({helpVisible: (e.target as HTMLInputElement).checked});
-    }
-
-    @bind
-    private handleDismissHelpPopup(): void { this.setState({ helpVisible: false }); }
-
-    private get globalTocOperationButtonState(): GlobalTocOperationButtonState {
-        const {state} = this;
-        if (state.searchQuery.length > 0) {
-            return GlobalTocOperationButtonState.ClearSearch;
-        }
-
-        // TODO
-        return GlobalTocOperationButtonState.ExpandAll;
-    }
-
-    @bind
-    private handleGlobalTocOperationButton(): void {
-        switch (this.globalTocOperationButtonState) {
-            case GlobalTocOperationButtonState.ClearSearch:
-                this.setState({searchQuery: ''});
-                break;
-        }
     }
 
     render() {
-        const {state, isModelessSidebarVisible, globalTocOperationButtonState} = this;
+        const {props, state, isModelessSidebarVisible} = this;
 
         return <div className={classnames({
                     [CN.root]: true,
@@ -209,9 +129,7 @@ export class App extends React.Component<AppProps, AppState> {
                     [CN.sidebarVisible]: isModelessSidebarVisible,
                 })}>
 
-            <EventHook target={window}
-                keydown={this.handleWindowKeyDown}
-                resize={this.handleWindowResize} />
+            <EventHook target={window} resize={this.handleWindowResize} />
 
             <aside>
                 <div className={CN.modalBackground}
@@ -247,76 +165,15 @@ export class App extends React.Component<AppProps, AppState> {
                     {/* Activity indicator */}
                     { state.loaderActivity && <span className={CN.spinner} role='progressbar' /> }
                 </div>
+
                 <div className={CN.sidebar}>
-                    {/* Search field */}
-                    <span className={CN.search}>
-                        <input
-                            onChange={this.handleSearchQuery}
-                            onInput={this.handleSearchQuery}
-                            value={state.searchQuery}
-                            type='search'
-                            ref={e => this.searchQueryElement = e}
-                            onKeyDown={this.handleSearchQueryKeyDown}
-                            aria-label='Search'
-                            placeholder='Search' />
-                        <span />
-                    </span>
-
-                    <nav>
-                        <TableOfContents
-                            ref={e => this.tocComponent = e}
-                            foremarkDocument={this.props.foremarkDocument}
-                            sitemap={this.props.sitemap}
-                            onNavigate={this.handleHideModalSidebar}
-                            searchQuery={state.searchQuery} />
-                    </nav>
-
-                    <span className={CN.toolbar2}>
-                        <button
-                            className={classnames({
-                                [CN.operateTOCGlobally]: true,
-                                [CN.expandAll]: globalTocOperationButtonState ==
-                                    GlobalTocOperationButtonState.ExpandAll,
-                                [CN.collapseAll]: globalTocOperationButtonState ==
-                                    GlobalTocOperationButtonState.CollapseAll,
-                                [CN.clearSearch]: globalTocOperationButtonState ==
-                                    GlobalTocOperationButtonState.ClearSearch,
-                            })}
-                            onClick={this.handleGlobalTocOperationButton}
-                            type='button'>
-                            {
-                                globalTocOperationButtonState == GlobalTocOperationButtonState.ClearSearch ?
-                                    'Clear search' :
-                                globalTocOperationButtonState == GlobalTocOperationButtonState.ExpandAll ?
-                                    'Expand all' :
-                                globalTocOperationButtonState == GlobalTocOperationButtonState.CollapseAll ?
-                                    'Collapse all' :
-                                    (() => { throw new Error() })
-                            }
-                        </button>
-
-                        <input
-                            id='toolbar-help'
-                            type='checkbox'
-                            onChange={this.handleShowHelpPopup}
-                            checked={state.helpVisible} />
-                        <label
-                            for='toolbar-help'
-                            role='button'
-                            aria-haspopup='dialog'
-                            aria-expanded={`${state.helpVisible}`}
-                            className={CN.helpButton}>
-                            <i />
-                            <span>About</span>
-                        </label>
-                        <div className={CN.helpPopup}>
-                            <PopupFrame
-                                active={state.helpVisible}
-                                onDismiss={this.handleDismissHelpPopup}>
-                                Foremark blah blah
-                            </PopupFrame>
-                        </div>
-                    </span>
+                    <Sidebar
+                        ref={e => this.sidebar = e}
+                        foremarkDocument={props.foremarkDocument}
+                        sitemap={props.sitemap}
+                        onShowSidebar={this.handleShowSidebar}
+                        onNavigate={this.handleHideModalSidebar}
+                        />
                 </div>
             </aside>
 
