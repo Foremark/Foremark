@@ -667,6 +667,8 @@ const HANDLERS: { [tagName: string]: (node: Element, vc: ViewerConfig) => void |
         inner.appendChild(svg);
         node.appendChild(inner);
 
+        node.classList.add('loaded');
+
         inner.style.maxWidth = `${width}px`;
     },
     [TagNames.Media]: (node, config) => processMediaElement(node, config),

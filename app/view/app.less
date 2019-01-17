@@ -447,10 +447,9 @@ main {
     }
 
     // Diagram fallback
-    mf-diagram {
+    mf-diagram:not(:global(.loaded)) {
         @pre-style();
         display: inline-block;
-        width: 100%;
         text-align: left;
         line-height: 1.3;
     }
