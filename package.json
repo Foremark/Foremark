@@ -1,6 +1,6 @@
 {
   "name": "foremark",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A technology for writing semi-plain text documents that extends upon the concept of Markdeep.",
   "main": "dist/index.js",
   "unpkg": "browser/",
