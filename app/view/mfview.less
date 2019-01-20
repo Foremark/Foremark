@@ -40,6 +40,11 @@ a:global(.anchor) {
     top: calc(-25px - 1em); // Move slightly so it won't overlap with the toolbar
 }
 
+// OpenType features
+mf-title, h1, h2, h3, h4, h5, h6, h7, h8, h9 {
+    font-feature-settings: 'palt';
+}
+
 // Section number
 mf-title, h1, h2, h3, h4, h5, h6, h7, h8, h9 {
     > :global(span.section-number) {

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Improved the Japanese typography.
+
 ## [0.2.1] - 2018-01-17
 
 - Fixed the behavior of the table of contents.
