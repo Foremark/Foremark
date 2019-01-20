@@ -23,19 +23,22 @@ body {
 
 @media screen {
     .root {
-        padding: 0;
-        &.sidebarVisible { padding-left: @sidebar-width; }
-        @media (max-width: @screen-medium-max) { padding-left: 0 !important; }
+        padding: 0 (@sidebar-width / 2);
+        @media (max-width: @screen-medium-max) {
+            padding: 0 !important;
+            margin: 0 auto;
+
+            // Bound the text width by the minimum text width of the "large" state.
+            max-width: calc(@screen-medium-max - @sidebar-width - 2em);
+        }
     }
 
     main {
         // Animate the left position when the sidebar visibility is toggled
         position: relative;
-        left: 0;
-        .sidebarVisible & { left: -@sidebar-width; }
 
         transition: 200ms transform;
-        .sidebarVisible & { transform: translateX(@sidebar-width); }
+        .sidebarVisible & { transform: translateX((@sidebar-width / 2)); }
 
         // But not in screen sizes where the sidebar is displayed in a modal window.
         @media (max-width: @screen-medium-max) {

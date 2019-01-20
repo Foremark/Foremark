@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 - Improved the Japanese typography.
+- The text width no longer changes depending on the sidebar's visibility. This mimics mdBook's behaviour.
 
 ## [0.2.1] - 2018-01-17
 
