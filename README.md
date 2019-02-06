@@ -115,13 +115,14 @@ The final HTML is displayed by a web-based viewer application embedded in `forem
 Prerequisite:
 
 - [Node.js](https://nodejs.org) ≥ 10
-- Yarn (`npm install -g yarn`)
-- Rust, a nightly toolchain, which can be installed through [rustup](https://rustup.rs)
-- `cargo install` [`wasm-bindgen-cli`](https://rustwasm.github.io/wasm-bindgen/whirlwind-tour/basic-usage.html)
+- `npm install -g yarn`
+- [`rustup`](https://rustup.rs) `toolchain add nightly-2019-01-20`
+- `rustup target add wasm32-unknown-unknown --toolchain nightly-2019-01-20`
+- `cargo install` [`wasm-bindgen-cli`](https://rustwasm.github.io/wasm-bindgen/whirlwind-tour/basic-usage.html) `--version 0.2.33`
 - `cargo install` [`wasm-snip`](https://github.com/rustwasm/wasm-snip)
 - [Binaryen](https://github.com/WebAssembly/binaryen) (`brew install binaryen` on Homebrew) including: `wasm-opt`
 - `cargo install` [`cargo-license`](https://github.com/onur/cargo-license)
-    
+
 ```shell
 $ yarn install
 

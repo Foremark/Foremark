@@ -9,3 +9,4 @@ lto = true
 debug = true        # required by wasm-snip
 opt-level = "z"     # Optimize for code size, hard
 panic = "abort"
+incremental = false # can't be used with ThinLTO
