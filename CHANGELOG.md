@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.2.3] - 2018-03-22
+
 - Adjusted the typography.
 - Some elements including equations are now processed inside a table.
 - Fixed an issue with U+2028 (LINE SEPARATOR) character.
@@ -166,7 +168,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial release.
 
-[Unreleased]: https://github.com/Foremark/Foremark/compare/0.2.2...HEAD
+[Unreleased]: https://github.com/Foremark/Foremark/compare/0.2.3...HEAD
+[0.2.3]: https://github.com/Foremark/Foremark/compare/0.2.2...0.2.3
 [0.2.2]: https://github.com/Foremark/Foremark/compare/0.2.1...0.2.2
 [0.2.1]: https://github.com/Foremark/Foremark/compare/0.2.0...0.2.1
 [0.2.0]: https://github.com/Foremark/Foremark/compare/0.1.3...0.2.0
