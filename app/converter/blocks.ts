@@ -377,7 +377,7 @@ const MARKER_LINE_PATTERN = new RegExp(
     '^(' +
     BLOCK_INITIATORS.map(i => i.markerPattern.source).join('|') +
     ')' +
-    /([ \t]+|$)(\S.*|$)/.source
+    /([ \t]+|$)([^ \t][^]*|$)/.source
 );
 
 const EXACT_MARKER_PATTERNS = BLOCK_INITIATORS
@@ -472,7 +472,7 @@ export function replaceBlocks(html: string, ctx: TransformHtmlWithContext): stri
             continue;
         }
 
-        let [_2, indent, lineBody] = line.match(/^(\s*)(.*)$/)!;
+        let [_2, indent, lineBody] = line.match(/^([ \t]*)([^]*)$/)!;
 
         // Detect list marker
         let markerMatch = lineBody.match(MARKER_LINE_PATTERN);
