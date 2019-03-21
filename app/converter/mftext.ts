@@ -288,7 +288,7 @@ export function expandMfText(node: Element): void {
         .replace(
             BLOCKQUOTE_RE,
             bq => '<blockquote>' + replaceSingleLevelBlockquote(
-                bq.replace(/^[ \t]*&gt;[ \t]*/gm, '')
+                bq.replace(/^[ \t]*&gt; ?/gm, '')
             ) + '</blockquote>',
         ).substr(1);
     transformHtmlWith(node, replaceSingleLevelBlockquote);
