@@ -528,6 +528,18 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
     });
     node.setAttribute('role', 'document');
 
+    // Wrap `<table>` with a `<div>` to display a horizontal scrollbar
+    // as needed
+    forEachNodePreorder(node, node => {
+        if (node instanceof Element && node.tagName === 'table') {
+            const wrapper = node.ownerDocument!.createElement('div');
+            wrapper.className = 'tableWrapper';
+            node.parentElement!.insertBefore(wrapper, node);
+            wrapper.appendChild(node);
+        }
+        return true;
+    });
+
     // Render complex elements
     const promises: PromiseLike<void>[] = [];
     forEachNodePreorder(node, node => {
@@ -672,12 +684,4 @@ const HANDLERS: { [tagName: string]: (node: Element, vc: ViewerConfig) => void |
         inner.style.maxWidth = `${width}px`;
     },
     [TagNames.Media]: (node, config) => processMediaElement(node, config),
-    'table': (node) => {
-        // Wrap `<table>` with a `<div>` to display a horizontal scrollbar
-        // as needed
-        const wrapper = node.ownerDocument!.createElement('div');
-        wrapper.className = 'tableWrapper';
-        node.parentElement!.insertBefore(wrapper, node);
-        wrapper.appendChild(node);
-    },
 };
