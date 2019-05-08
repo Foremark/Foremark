@@ -9,6 +9,7 @@
 /Cargo.toml
 /tools
 /test
+/rust-toolchain
 
 # Build configurations
 /tsconfig.json
