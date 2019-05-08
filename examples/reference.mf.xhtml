@@ -822,12 +822,12 @@ The following HTML elements are supported and styled appropriately.
 - `<dl>`, `<dt>`, `<dd>`
 - `<br>`
 
-## Document — `<mf>`
+## Document — `<mf-document>`
 
 ~~~~~~~~~~~~xml
-<mf>
+<mf-document>
 <mf-title>Document title</mf-title>
-</mf>
+</mf-document>
 ~~~~~~~~~~~~
 
 ## Header — `<mf-title>`
@@ -1061,7 +1061,7 @@ consequat.
 ~~~~~~~~~~~~
 
 - A document includes one of `html > mf`, `html > mf-text`, and `html > pre` which represent the content root.
-  If `mf-text` is the content root, it will be wrapped by `<mf>` and all attributes are moved to the `<mf>`. `pre` is converted to `mf-text` first.
+  If `mf-text` is the content root, it will be wrapped by `<mf-document>` and all attributes are moved to the `<mf-document>`. `pre` is converted to `mf-text` first.
 - `html > script` instructs the web browser to load the viewer application. The viewer application locates this tag [^script-old-browser] and uses its `src` attribute as a base path for loading other assets.
 
 [^script-old-browser]:

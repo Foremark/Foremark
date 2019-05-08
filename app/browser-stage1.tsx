@@ -25,7 +25,8 @@ export async function browserMain(): Promise<void> {
     const [sitemap, sitemapErrors] = processSitemap(
         viewerConfig.sitemap, viewerConfig.sitemapDocumentRoot);
 
-    // `<mf-text>` and `<pre>` are a shorthand syntax for `<mf><mf-text>...</mf-text></mf>`
+    // `<mf-text>` and `<pre>` are a shorthand syntax for
+    // `<mf-document><mf-text>...</mf-text></mf-document>`
     if (/^pre$/i.test(inputNode.tagName)) {
         const mf = document.createElement(TagNames.Document);
         const mfText = document.createElement(TagNames.Text);

@@ -5,7 +5,7 @@ line-height: 1.5;
     @media screen { font-size: 95%; }
 }
 
-mf {
+mf-document {
     display: block;
     overflow-wrap: break-word;
 }
@@ -356,7 +356,7 @@ mf-sidenote { display: none; }
         text-align: left;
     };
 
-    mf:global(.has-sidenotes) {
+    mf-document:global(.has-sidenotes) {
         margin-right: calc(@sidenote-width + @sidenote-body-separation);
 
         // "full" styling of figures

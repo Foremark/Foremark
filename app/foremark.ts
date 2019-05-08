@@ -1,6 +1,6 @@
 // This source file defines constant strings for the Foremark XML format.
 export const enum TagNames {
-    Document = 'mf',
+    Document = 'mf-document',
     Text = 'mf-text',
     Equation = 'mf-eq',
     DisplayEquation = 'mf-eq-display',
