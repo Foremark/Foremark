@@ -262,7 +262,9 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
                     at = [n, n.parentElement!];
                 } else if (
                     // Headings are cloned into the TOC.
-                    /h[1-9]/.test(n.tagName)
+                    /h[1-9]/.test(n.tagName) ||
+                    // `<TagNames.Admonition>` has `overflow: hidden`.
+                    n.tagName === TagNames.Admonition
                 ) {
                     at = [n.nextSibling, n.parentElement!];
                 }
