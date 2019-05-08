@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.3.0] - 2019-05-08
+
 - Fixed sidenotes not working inside admonition blocks.
 - Fixed the uses of certain kinds of whitespaces (e.g., `\,`) breaking KaTeX equations.
 - **Breaking**: Renamed `<mf>` to `<mf-document>` because custom elements must have a hyphen in their name.
@@ -172,7 +174,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial release.
 
-[Unreleased]: https://github.com/Foremark/Foremark/compare/0.2.3...HEAD
+[Unreleased]: https://github.com/Foremark/Foremark/compare/0.3.0...HEAD
+[0.3.0]: https://github.com/Foremark/Foremark/compare/0.2.3...0.3.0
 [0.2.3]: https://github.com/Foremark/Foremark/compare/0.2.2...0.2.3
 [0.2.2]: https://github.com/Foremark/Foremark/compare/0.2.1...0.2.2
 [0.2.1]: https://github.com/Foremark/Foremark/compare/0.2.0...0.2.1
