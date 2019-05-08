@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 - Fixed sidenotes not working inside admonition blocks.
+- Fixed the uses of certain kinds of whitespaces (e.g., `\,`) breaking KaTeX equations.
 
 ## [0.2.3] - 2018-03-22
 

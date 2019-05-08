@@ -618,14 +618,38 @@ const katexDisplayOptions: katex.KatexOptions = {
     ... katexInlineOptions,
 };
 
+const KATEX_ENTITY_TABLE: ReadonlyArray<[string, string]> = [
+    ['VeryThinSpace', '\u200a'],
+    ['ThinSpace', '\u2009'],
+    ['MediumSpace', '\u205f'],
+    ['ThickSpace', '\u205f\u200a'],
+    ['NegativeVeryThinSpace', '\u200b'],
+    ['NegativeThinSpace', '\u200b'],
+    ['NegativeMediumSpace', '\u200b'],
+    ['NegativeThickSpace', '\u200b'],
+];
+const KATEX_ENTITY_TABLE_MAP = new Map(KATEX_ENTITY_TABLE);
+const KATEX_ENTITY_REGEX = new RegExp(
+    '&(' + KATEX_ENTITY_TABLE.map(pair => pair[0]).join('|') + ');', 'g');
+
+/**
+ * KaTeX generates entity references defined in HTML but not in XHTML.
+ * This function replaces such entity references.
+ */
+function xhtmlifyKatexOutput(html: string): string {
+    return html.replace(KATEX_ENTITY_REGEX, (_, name) => KATEX_ENTITY_TABLE_MAP.get(name)!);
+}
+
 const HANDLERS: { [tagName: string]: (node: Element, vc: ViewerConfig) => void | PromiseLike<void> } & Object = {
     [TagNames.Equation]: async (node) => {
         const katex = await lazyModules.katex();
-        node.innerHTML = katex.renderToString(node.textContent || '', katexInlineOptions);
+        node.innerHTML = xhtmlifyKatexOutput(
+            katex.renderToString(node.textContent || '', katexInlineOptions));
     },
     [TagNames.DisplayEquation]: async (node) => {
         const katex = await lazyModules.katex();
-        node.innerHTML = katex.renderToString(node.textContent || '', katexDisplayOptions);
+        node.innerHTML = xhtmlifyKatexOutput(
+            katex.renderToString(node.textContent || '', katexDisplayOptions));
     },
     [TagNames.Code]: async (node) => {
         // Wrap it with `<pre>` so that it's formatted properly on Safari's
