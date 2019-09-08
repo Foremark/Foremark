@@ -9,7 +9,6 @@ import {StyleConstants} from './constants';
 import {Sitemap} from './sitemap';
 
 const CN = require('./app.less');
-document.getElementsByTagName('html')[0].classList.add('mf-processed');
 
 function shouldShowTocByDefault(document: HTMLElement): boolean {
     return document.querySelectorAll('h1, h2, h3, h4, h5, h6, h7, h8, h9')
