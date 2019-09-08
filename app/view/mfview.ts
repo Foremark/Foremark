@@ -23,15 +23,25 @@ function makeNonce(): string {
     return 'e-' + (nextNonce++);
 }
 
+function isElement(x: Node | null | undefined): x is Element {
+    return x != null && x.nodeType === 1;
+}
+
+function isText(x: Node | null | undefined): x is Text {
+    return x != null && x.nodeType === 3;
+}
+
 /**
  * Transforms Foremark XML for viewing.
  */
 export function prepareForemarkForViewing(node: Element, config: ViewerConfig): Promise<void> {
+    const document = node.ownerDocument!;
+
     // Modify headings
     const counter = new Float64Array(10);
     const names: string[] = ['', '', '', '', '', '', '', '', '', ''];
     forEachNodePreorder(node, node => {
-        if (!(node instanceof Element)) {
+        if (!isElement(node)) {
             return;
         }
         const match = node.tagName.match(/^h([1-9])$/i);
@@ -96,7 +106,7 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
     const floatingContentUsageMap = new Map<string, Element[]>();
 
     forEachNodePreorder(node, node => {
-        if (!(node instanceof Element)) {
+        if (!isElement(node)) {
             return;
         }
 
@@ -217,7 +227,7 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
     // at least two wrappers. So, in such cases, an extra wrapper is necessary
     // for proper styling.
     forEachNodePreorder(node, node => {
-        if (!(node instanceof Element) ||
+        if (!isElement(node) ||
             (node.tagName !== TagNames.Figure && node.tagName !== TagNames.Note)) {
             return;
         }
@@ -294,7 +304,7 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
         // put it in the same place whatever the screen size is. Therefore,
         // a surrogate is not necessary.
         forEachNodePreorder(node, node => {
-            if (!(node instanceof Element) || (node.tagName !== TagNames.Figure && node.tagName !== TagNames.Note)) {
+            if (!isElement(node) || (node.tagName !== TagNames.Figure && node.tagName !== TagNames.Note)) {
                 return;
             }
             const size = node.getAttribute('size');
@@ -348,7 +358,7 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
         const headingMap = new Map<Node, Node | null>();
         let currentHeading: Node | null = null;
         forEachNodePreorder(node, node => {
-            if (!(node instanceof Element)) {
+            if (!isElement(node)) {
                 return;
             }
             if (node.tagName === 'h1' || node.tagName === 'h2') {
@@ -357,7 +367,7 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
             headingMap.set(node, currentHeading);
         });
         forEachNodePreorder(node, node => {
-            if (!(node instanceof Element) || node.tagName !== TagNames.Cite || !node.id) {
+            if (!isElement(node) || node.tagName !== TagNames.Cite || !node.id) {
                 return;
             }
 
@@ -398,7 +408,7 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
 
     // Resolve `<TagNames.Ref>`s using `refLabelMap` created by the previous step
     forEachNodePreorder(node, node => {
-        if (!(node instanceof Element)) {
+        if (!isElement(node)) {
             return;
         }
         if (node.tagName !== TagNames.Ref) {
@@ -455,7 +465,7 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
 
     // Add ARIA attributes
     forEachNodePreorder(node, n => {
-        if (!(n instanceof Element)) {
+        if (!isElement(n)) {
             return;
         }
         switch (n.tagName) {
@@ -533,7 +543,7 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
     // Wrap `<table>` with a `<div>` to display a horizontal scrollbar
     // as needed
     forEachNodePreorder(node, node => {
-        if (node instanceof Element && node.tagName === 'table') {
+        if (isElement(node) && node.tagName === 'table') {
             const wrapper = node.ownerDocument!.createElement('div');
             wrapper.className = 'tableWrapper';
             node.parentElement!.insertBefore(wrapper, node);
@@ -545,7 +555,7 @@ export function prepareForemarkForViewing(node: Element, config: ViewerConfig): 
     // Render complex elements
     const promises: PromiseLike<void>[] = [];
     forEachNodePreorder(node, node => {
-        if (node instanceof Element) {
+        if (isElement(node)) {
             const tagName = node.tagName.toLowerCase();
             if (HANDLERS.hasOwnProperty(tagName)) {
                 const promise = HANDLERS[tagName](node, config);
@@ -577,12 +587,12 @@ function prependPhrasingContent(e: Element, container: Element): void {
     let child: Node | null = container.firstChild;
 
     // Skip whitespaces
-    while (child && child instanceof Text && /^\s*$/.test(child.textContent!)) {
+    while (child && isText(child) && /^\s*$/.test(child.textContent!)) {
         child = child.nextSibling;
     }
 
     // Descend into a `<p>`?
-    if (child instanceof HTMLParagraphElement) {
+    if (isElement(child) && child.tagName === 'p') {
         return prependPhrasingContent(e, child);
     }
 
