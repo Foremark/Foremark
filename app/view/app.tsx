@@ -19,6 +19,8 @@ export interface AppProps {
     foremarkDocument: HTMLElement;
     sitemap: Sitemap | null;
     renderPromise: Promise<void>;
+    /** Disables the spinner. Only used when doing server-side rendering.  */
+    hideSpinner?: boolean;
 }
 
 interface AppState {
@@ -46,7 +48,7 @@ export class App extends React.Component<AppProps, AppState> {
         this.state = {
             tocVisible: props.sitemap != null || shouldShowTocByDefault(props.foremarkDocument),
             sidebarModalVisible: false,
-            loaderActivity: true,
+            loaderActivity: !props.hideSpinner,
         };
 
         props.renderPromise.then(() => {
