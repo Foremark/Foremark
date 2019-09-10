@@ -7,8 +7,12 @@ import {loadViewerConfigFromWindow} from './view/config';
 import {expandMfText} from './converter/mftext';
 import {prepareForemarkForViewing} from './view/mfview';
 import {processSitemap} from './view/sitemap';
+import {checkXhtml} from './utils/dom';
 
 export async function browserMain(): Promise<void> {
+    // Fail if not XHTML
+    checkXhtml();
+
     // Load the input from the current document
     let inputNode = document.querySelector(`${TagNames.Document},${TagNames.Text},pre`);
     if (inputNode == null) {

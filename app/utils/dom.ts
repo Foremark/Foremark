@@ -66,13 +66,26 @@ export function setWorkingDom(window: Dom) {
     if (e.tagName !== 'i') {
         throw new Error("Sanity check failed - maybe the document is not XML?");
     }
+    setWorkingDomUnchecked(window);
+}
 
-    testElement = e;
+function setWorkingDomUnchecked(window: Dom) {
+    testElement = window.document.createElement('i');
     DomTypes = window;
 }
 
+/**
+ * Assuming `setWorkingDomUnchecked` already has been called, performs the
+ * sanity check that would be done by `setWorkingDom`.
+ */
+export function checkXhtml(): void {
+    if (testElement.tagName !== 'i') {
+        throw new Error("Sanity check failed - maybe the document is not XML?");
+    }
+}
+
 if (typeof window !== 'undefined') {
-    setWorkingDom(window as any);
+    setWorkingDomUnchecked(window as any);
 }
 
 export interface TransformHtmlWithContext {
