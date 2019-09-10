@@ -8,7 +8,7 @@ import {Sidebar} from './components/sidebar';
 import {StyleConstants} from './constants';
 import {Sitemap} from './sitemap';
 
-const CN = require('./app.less');
+const CN = require('./app.module.less');
 
 function shouldShowTocByDefault(document: HTMLElement): boolean {
     return document.querySelectorAll('h1, h2, h3, h4, h5, h6, h7, h8, h9')

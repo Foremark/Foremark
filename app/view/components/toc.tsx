@@ -8,7 +8,7 @@ import {forEachNodePreorder} from '../../utils/dom';
 import {Debouncer} from '../../utils/debouncer';
 import {SitemapEntry, Sitemap} from '../sitemap';
 
-const CN = require('./toc.less');
+const CN = require('./toc.module.less');
 
 export interface TableOfContentsProps {
     /** A document. Assumed to be immutable. */

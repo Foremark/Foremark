@@ -7,7 +7,7 @@ import {PopupFrame} from './popup';
 import {TableOfContents} from './toc';
 import {Sitemap} from '../sitemap';
 
-const CN = require('./sidebar.less');
+const CN = require('./sidebar.module.less');
 
 const enum GlobalTocOperationButtonState {
     ExpandAll,
