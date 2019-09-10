@@ -97,12 +97,12 @@ export interface TransformHtmlWithContext {
     expand(html: string): string;
 }
 
-function isElement(node: Node): node is HTMLElement {
-    return node.nodeType === 1;
+export function isElement(node: Node | null | undefined): node is HTMLElement {
+    return node != null && node.nodeType === 1;
 }
 
-function isText(node: Node): node is Text {
-    return node.nodeType === 3;
+export function isText(node: Node | null | undefined): node is Text {
+    return node != null && node.nodeType === 3;
 }
 
 /**

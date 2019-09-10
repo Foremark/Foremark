@@ -1,5 +1,5 @@
 import {lazyModules} from './loader';
-import {forEachNodePreorder, transformTextNodeWith} from '../utils/dom';
+import {forEachNodePreorder, transformTextNodeWith, isElement, isText} from '../utils/dom';
 import {TagNames, AttributeNames, FIGURE_STANDARD_ID_RE} from '../foremark';
 import {ViewerConfig} from './config';
 import {processMediaElement} from './media';
@@ -21,14 +21,6 @@ const enum FloatType {
 let nextNonce = 1;
 function makeNonce(): string {
     return 'e-' + (nextNonce++);
-}
-
-function isElement(x: Node | null | undefined): x is Element {
-    return x != null && x.nodeType === 1;
-}
-
-function isText(x: Node | null | undefined): x is Text {
-    return x != null && x.nodeType === 3;
 }
 
 /**

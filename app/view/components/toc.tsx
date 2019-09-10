@@ -7,6 +7,7 @@ import {EventHook} from './eventhook';
 import {forEachNodePreorder} from '../../utils/dom';
 import {Debouncer} from '../../utils/debouncer';
 import {SitemapEntry, Sitemap} from '../sitemap';
+import {isElement} from '../../utils/dom';
 
 const CN = require('./toc.module.less');
 
@@ -450,10 +451,6 @@ interface ExternalNode extends BaseNode {
 }
 
 type TocNode = RootNode | InternalNode | TopNode | ExternalNode;
-
-function isElement(node: Node): node is HTMLElement {
-    return node.nodeType === 1;
-}
 
 function enumerateNodes(document: HTMLElement): InternalNode[] {
     const nodes: InternalNode[] = [];
