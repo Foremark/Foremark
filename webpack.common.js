@@ -106,6 +106,8 @@ module.exports = (debug, selfContained) => ({
         'BRANCH': JSON.stringify(gitRevision.branch()),
         'IS_BROWSER': JSON.stringify(true),
         'LAZY_LOADING': JSON.stringify(!selfContained),
+        // Strip all code related to server-side rendering.
+        'FOREMARK_STRIP_SSR': JSON.stringify(true),
       },
     }),
   ],
