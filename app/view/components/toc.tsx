@@ -36,7 +36,7 @@ interface TableOfContentsState {
      * store the full path in order to determine the active state of a collapsed
      * `NodeView` quickly.
      */
-    activeNodePath: ReadonlyArray<Node>;
+    activeNodePath: ReadonlyArray<TocNode>;
 }
 
 export class TableOfContents extends React.Component<TableOfContentsProps, TableOfContentsState> {
@@ -44,10 +44,10 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
 
     private readonly allNodes: InternalNode[];
     /** The root node of the TOC. The root itself is not displayed. */
-    private readonly root: Node;
+    private readonly root: TocNode;
     /** The root node of the current page's TOC tree. When a sitemap is disabled,
      * this is identical to `root`. */
-    private readonly localRoot: Node;
+    private readonly localRoot: TocNode;
 
     private readonly mainRoot: ViewNode;
     private searchRoot?: ViewNode;
@@ -116,11 +116,16 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
             return;
         }
 
+        if (typeof document === 'undefined') {
+            // In server-side rendering, a scroll position is unavailable
+            return;
+        }
+
         const {body} = document;
         const html = document.getElementsByTagName('html')[0];
         const refY = (body.scrollTop || html.scrollTop) + 40;
 
-        let activeNode: Node | null = null;
+        let activeNode: TocNode | null = null;
 
         if (this.localRoot.type !== NodeType.Root) {
             activeNode = this.localRoot;
@@ -140,14 +145,14 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
         this.setActiveNode(activeNode);
     }
 
-    private setActiveNode(newActiveNode: Node | null): void {
+    private setActiveNode(newActiveNode: TocNode | null): void {
         const {activeNodePath} = this.state;
         const activeNode = activeNodePath.length ?
             activeNodePath[activeNodePath.length - 1] : null;
 
         if (activeNode !== newActiveNode) {
             const path = [];
-            for (let n: Node | null = newActiveNode; n; n = n.parent) {
+            for (let n: TocNode | null = newActiveNode; n; n = n.parent) {
                 path.unshift(n);
             }
             this.setState({
@@ -165,7 +170,7 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
     /**
      * Should be called after a node is navigated.
      */
-    private didNavigateNode(node: Node): void {
+    private didNavigateNode(node: TocNode): void {
         // If a user clicks a node near the end of the document, the scroll
         // position is limited by the bottom edge of the document. As a result,
         // the active node determined by `recalculateAndSetActiveNode` might not
@@ -383,8 +388,15 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
             ref={e => this.domRoot = e}
             onKeyDown={this.handleKey}
         >
-            <EventHook target={document} scroll={this.handleScroll} />
-            <EventHook target={window} resize={this.handleResize} />
+            {
+                // Do not register an event handler if we are doing SSR.
+                typeof document !== 'undefined' &&
+                <EventHook target={document} scroll={this.handleScroll} />
+            }
+            {
+                typeof window !== 'undefined' &&
+                <EventHook target={window} resize={this.handleResize} />
+            }
 
             {root.children.map((child, i) =>
                 <NodeView key={child.id} viewNode={child} context={context} />)}
@@ -406,8 +418,8 @@ const enum NodeType {
 interface BaseNode {
     type: NodeType;
     level: number;
-    children: Node[];
-    parent: Node | null;
+    children: TocNode[];
+    parent: TocNode | null;
 }
 
 interface RootNode extends BaseNode {
@@ -437,14 +449,18 @@ interface ExternalNode extends BaseNode {
     sitemapEntry: SitemapEntry;
 }
 
-type Node = RootNode | InternalNode | TopNode | ExternalNode;
+type TocNode = RootNode | InternalNode | TopNode | ExternalNode;
+
+function isElement(node: Node): node is HTMLElement {
+    return node.nodeType === 1;
+}
 
 function enumerateNodes(document: HTMLElement): InternalNode[] {
     const nodes: InternalNode[] = [];
 
     const idMap = new Map<string, HTMLElement>();
     forEachNodePreorder(document, node => {
-        if (!(node instanceof HTMLElement)) {
+        if (!isElement(node)) {
             return;
         }
         const {id} = node;
@@ -455,7 +471,7 @@ function enumerateNodes(document: HTMLElement): InternalNode[] {
     });
 
     forEachNodePreorder(document, node => {
-        if (!(node instanceof HTMLElement)) {
+        if (!isElement(node)) {
             return;
         }
         if (node.tagName.match(/blockquote|details|fieldset|figure|td/i)) {
@@ -485,14 +501,14 @@ function enumerateNodes(document: HTMLElement): InternalNode[] {
 /**
  * Construct a tree from a flat list of nodes.
  */
-function buildNodeTree(nodes: Node[]): Node {
-    const root: Node = {
+function buildNodeTree(nodes: TocNode[]): TocNode {
+    const root: TocNode = {
         type: NodeType.Root,
         level: 0,
         children: [],
         parent: null,
     };
-    const levels: Node[] = [];
+    const levels: TocNode[] = [];
     for (let i = 0; i < 10; ++i) {
         levels.push(root);
     }
@@ -512,12 +528,12 @@ function buildNodeTree(nodes: Node[]): Node {
  * Construct a node tree from a sitemap and a node tree for the current page's
  * headings. The original tree is destroyed.
  */
-function incorporateSitemapIntoNodeTree(localRoot: Node, sitemap: Sitemap): [Node, Node] {
-    let newLocalRoot: Node | null = null;
+function incorporateSitemapIntoNodeTree(localRoot: TocNode, sitemap: Sitemap): [TocNode, TocNode] {
+    let newLocalRoot: TocNode | null = null;
 
-    function convertFragment(fragment: ReadonlyArray<SitemapEntry>, parent: Node | null): Node[] {
+    function convertFragment(fragment: ReadonlyArray<SitemapEntry>, parent: TocNode | null): TocNode[] {
         return fragment.map(e => {
-            let node: Node = {
+            let node: TocNode = {
                 label: e.caption,
                 sitemapEntry: e,
                 type: NodeType.External,
@@ -555,7 +571,7 @@ function incorporateSitemapIntoNodeTree(localRoot: Node, sitemap: Sitemap): [Nod
         });
     }
 
-    const globalRoot: Node = {
+    const globalRoot: TocNode = {
         type: NodeType.Root,
         level: 0,
         children: [],
@@ -567,7 +583,7 @@ function incorporateSitemapIntoNodeTree(localRoot: Node, sitemap: Sitemap): [Nod
     return [globalRoot, newLocalRoot!];
 }
 
-function recalculateLevels(node: Node, level: number): void {
+function recalculateLevels(node: TocNode, level: number): void {
     node.level = level;
     for (const child of node.children) {
         recalculateLevels(child, level + 1);
@@ -579,7 +595,7 @@ function recalculateLevels(node: Node, level: number): void {
  */
 interface ViewNode {
     id: number;
-    node: Node;
+    node: TocNode;
     children: ViewNode[];
     unfilteredChildren: ViewNode[];
     parent: ViewNode | null;
@@ -592,7 +608,7 @@ let nextViewNodeId = 1;
 /**
  * Creates a `ViewNode` tree.
  */
-function createViewNode(node: Node, parent: ViewNode | null): ViewNode {
+function createViewNode(node: TocNode, parent: ViewNode | null): ViewNode {
     const viewNode: ViewNode = {
         node,
         id: nextViewNodeId++,
@@ -612,7 +628,7 @@ function createViewNode(node: Node, parent: ViewNode | null): ViewNode {
  * Applies a filter on a `ViewNode` tree. Returns `true` if there's a
  * descendant node matching the filtering criteria.
  */
-function applyFilterOnViewNode(viewNode: ViewNode, query: (node: Node) => boolean): boolean {
+function applyFilterOnViewNode(viewNode: ViewNode, query: (node: TocNode) => boolean): boolean {
     viewNode.expanded = true;
 
     viewNode.children = viewNode.unfilteredChildren
@@ -637,7 +653,7 @@ const NAVIGATE_DEBOUNCER = new Debouncer();
  *
  * @param strong If it's `false`, navigation to an external document is prevented.
  */
-function navigateNode(node: Node, strong: boolean, sitemap: Sitemap | null): void {
+function navigateNode(node: TocNode, strong: boolean, sitemap: Sitemap | null): void {
     if (node.type === NodeType.External && strong) {
         const href = getExternalNodeTarget(node, sitemap!);
         if (href == null) {

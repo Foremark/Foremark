@@ -128,7 +128,11 @@ export class App extends React.Component<AppProps, AppState> {
                     [CN.sidebarVisible]: isModelessSidebarVisible,
                 })}>
 
-            <EventHook target={window} resize={this.handleWindowResize} />
+            {
+                // Do not register an event handler if we are doing SSR.
+                typeof window !== 'undefined' &&
+                <EventHook target={window} resize={this.handleWindowResize} />
+            }
 
             <aside>
                 <div className={CN.modalBackground}

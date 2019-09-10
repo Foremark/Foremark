@@ -84,6 +84,14 @@ export interface TransformHtmlWithContext {
     expand(html: string): string;
 }
 
+function isElement(node: Node): node is HTMLElement {
+    return node.nodeType === 1;
+}
+
+function isText(node: Node): node is Text {
+    return node.nodeType === 3;
+}
+
 /**
  * Transforms the HTML markup of a given node's contents using a supplied
  * function.
@@ -107,7 +115,7 @@ export function transformHtmlWith(
     if (reverse) {
         for (let n: Node | null = node.lastChild; n; ) {
             const next = n.previousSibling;
-            if (n instanceof DomTypes.Element && recursionFilter && recursionFilter(n)) {
+            if (isElement(n) && recursionFilter && recursionFilter(n)) {
                 transformHtmlWith(n, tx, recursionFilter);
             }
             n = next;
@@ -115,7 +123,7 @@ export function transformHtmlWith(
     } else {
         for (let n: Node | null = node.firstChild; n; ) {
             const next = n.nextSibling;
-            if (n instanceof DomTypes.Element && recursionFilter && recursionFilter(n)) {
+            if (isElement(n) && recursionFilter && recursionFilter(n)) {
                 transformHtmlWith(n, tx, recursionFilter);
             }
             n = next;
@@ -126,12 +134,12 @@ export function transformHtmlWith(
     const placeholders = new Map<string, Node>();
     let html = '';
     for (let n: Node | null = node.firstChild; n; n = n.nextSibling) {
-        if (n instanceof DomTypes.Text) {
+        if (isText(n)) {
             html += n.textContent!
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;');
-        } else if (n instanceof DomTypes.Element) {
+        } else if (isElement(n)) {
             if (recursionFilter && recursionFilter(n)) {
                 transformHtmlWith(n, tx, recursionFilter);
             }
@@ -152,7 +160,7 @@ export function transformHtmlWith(
                 PLACEHOLDER_REGEX,
                 (match, id) => {
                     const original = placeholders.get(id);
-                    if (original instanceof DomTypes.HTMLElement) {
+                    if (original && isElement(original)) {
                         return original.outerHTML;
                     } else {
                         return match;
@@ -195,7 +203,7 @@ export function transformHtmlWith(
 
         for (let child: Node | null = e.firstChild; child; ) {
             const next = child.nextSibling;
-            if (child instanceof DomTypes.Element) {
+            if (isElement(child)) {
                 fillPlaceholders(child);
             }
             child = next;
@@ -232,9 +240,9 @@ export function transformTextNodeWith(
     reverse: boolean,
 ) {
     (reverse ? forEachNodeReversePreorder : forEachNodePreorder)(node, node => {
-        if (node instanceof DomTypes.Element) {
+        if (isElement(node)) {
             return recursionFilter(node);
-        } else if (node instanceof DomTypes.Text) {
+        } else if (isText(node)) {
             let html = node.textContent!
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
@@ -269,7 +277,7 @@ export function forEachNodePreorder(node: Node, f: (node: Node) => boolean | voi
     if (f(node) === false) {
         return;
     }
-    if (node instanceof DomTypes.Element) {
+    if (isElement(node)) {
         for (let n: Node | null = node.firstChild; n; ) {
             const next = n.nextSibling;
             forEachNodePreorder(n, f);
@@ -288,7 +296,7 @@ export function forEachNodeReversePreorder(node: Node, f: (node: Node) => boolea
     if (f(node) === false) {
         return;
     }
-    if (node instanceof DomTypes.Element) {
+    if (isElement(node)) {
         for (let n: Node | null = node.lastChild; n; ) {
             const next = n.previousSibling;
             forEachNodePreorder(n, f);

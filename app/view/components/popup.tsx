@@ -1,7 +1,7 @@
 import * as React from 'preact';
 import bind from 'bind-decorator';
 
-const root = document.body;
+const root = typeof document !== 'undefined' && document.body || null;
 
 export interface PopupFrameProps
 {
@@ -46,26 +46,26 @@ export class PopupFrame extends React.Component<PopupFrameProps, {}>
     componentDidMount(): void
     {
         if (this.props.active) {
-            root.addEventListener('mousedown', this.handleBackgroundInput);
-            root.addEventListener('touchstart', this.handleBackgroundInput);
+            root!.addEventListener('mousedown', this.handleBackgroundInput);
+            root!.addEventListener('touchstart', this.handleBackgroundInput);
         }
     }
 
     componentWillUnmount(): void
     {
-        root.removeEventListener('mousedown', this.handleBackgroundInput);
-        root.removeEventListener('touchstart', this.handleBackgroundInput);
+        root!.removeEventListener('mousedown', this.handleBackgroundInput);
+        root!.removeEventListener('touchstart', this.handleBackgroundInput);
     }
 
     componentDidUpdate(prevProps: PopupFrameProps, prevState: {}): void
     {
         if (this.props.active != prevProps.active) {
             if (this.props.active) {
-                root.addEventListener('mousedown', this.handleBackgroundInput);
-                root.addEventListener('touchstart', this.handleBackgroundInput);
+                root!.addEventListener('mousedown', this.handleBackgroundInput);
+                root!.addEventListener('touchstart', this.handleBackgroundInput);
             } else {
-                root.removeEventListener('mousedown', this.handleBackgroundInput);
-                root.removeEventListener('touchstart', this.handleBackgroundInput);
+                root!.removeEventListener('mousedown', this.handleBackgroundInput);
+                root!.removeEventListener('touchstart', this.handleBackgroundInput);
             }
         }
     }

@@ -154,9 +154,13 @@ export class Sidebar extends React.Component<SidebarProps, State> {
         const {state, props, globalTocOperationButtonState} = this;
 
         return <div className={CN.sidebar}>
-            <EventHook target={window}
-                keydown={this.handleWindowKeyDown}
-                resize={this.handleWindowResize} />
+            {
+                // Do not register an event handler if we are doing SSR.
+                typeof window !== 'undefined' &&
+                <EventHook target={window}
+                    keydown={this.handleWindowKeyDown}
+                    resize={this.handleWindowResize} />
+            }
 
             {/* Search field */}
             <span className={CN.search}>
