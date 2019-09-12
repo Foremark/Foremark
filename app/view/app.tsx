@@ -17,6 +17,15 @@ function shouldShowTocByDefault(document: HTMLElement): boolean {
 
 export interface AppProps {
     foremarkDocument: HTMLElement;
+    /**
+     * Inject `foremarkDocument` into the document by converting it to HTML and
+     * using a `dangerouslySetInnerHTML` prop. Only used when doing server-side
+     * rendering.
+     *
+     * This is useful when doing a server-side rendering because injecting a
+     * DOM node using `Port` won't work under this condition.
+     */
+    injectDocumentAsHtml?: boolean;
     sitemap: Sitemap | null;
     renderPromise: Promise<void>;
     /** Disables the spinner. Only used when doing server-side rendering.  */
@@ -182,9 +191,12 @@ export class App extends React.Component<AppProps, AppState> {
                 </div>
             </aside>
 
-            <Port
-                tagName='main'
-                element={this.props.foremarkDocument} />
+            {
+                <Port
+                    tagName='main'
+                    injectAsHtml={this.props.injectDocumentAsHtml}
+                    element={this.props.foremarkDocument} />
+            }
         </div>;
     }
 }

@@ -885,11 +885,7 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
                 aria-expanded={viewNode.children.length > 0 && `${isExpanded}`}
                 ref={e => this.element = e}
             >
-            <Port
-                tagName='a'
-                element={this.label}
-                onClick={this.handleClick}
-                href={href}>
+            <a onClick={this.handleClick} href={href}>
                 {
                     <button onClick={this.handleToggle} type='button'
                         className={isExpanded ? CN.expanded : CN.collapsed}
@@ -900,7 +896,8 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
                         }
                     </button>
                 }
-            </Port>
+                <Port tagName='div' element={this.label} injectAsHtml={true} />
+            </a>
             {
                 isExpanded && viewNode.children.length > 0 ?
                     <ul role='group'>
