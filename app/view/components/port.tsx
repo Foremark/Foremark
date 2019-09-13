@@ -74,7 +74,10 @@ export class Port extends React.Component<PortProps, State> {
     render() {
         const {element, tagName, children, injectAsHtml, ...rest} = this.props;
 
-        const Tag = tagName || 'div';
+        // Ignore the false type error “Type '{ dangerouslySetInnerHTML: { __html:
+        // string | undefined; }; }' is not assignable to type '{}'.” by erasing
+        // the type
+        const Tag: any = tagName || 'div';
 
         if (!process.env.FOREMARK_STRIP_SSR && injectAsHtml) {
             return <Tag dangerouslySetInnerHTML={{__html: this.state.html}} />;
