@@ -199,7 +199,7 @@ function forEachEntry(list: ReadonlyArray<SitemapEntry>, cb: (e: SitemapEntry) =
     }
 }
 
-function expandSitemap(config: SitemapConfig, errors: string[]): ReadonlyArray<SitemapEntry> {
+export function expandSitemap(config: SitemapConfig, errors: string[]): ReadonlyArray<SitemapEntry> {
     const activeFragments: string[] = [];
 
     function scanFragment(
