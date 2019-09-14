@@ -27,6 +27,9 @@ export interface TableOfContentsProps {
 
     /** Called when some node was collapsed. Assumed to be immutable. */
     onNodeCollapse: () => void;
+
+    /** If specified, this function will be used for navigating external pages.*/
+    assignLocation?: (url: string) => void;
 }
 
 interface TableOfContentsState {
@@ -220,7 +223,7 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
      * TOC's view.
      */
     private selectViewNode(viewNode: ViewNode): void {
-        navigateNode(viewNode.node, false, this.props.sitemap);
+        navigateNode(viewNode.node, false, this.props.sitemap, this.props.assignLocation);
         this.didNavigateNode(viewNode.node);
 
         if (viewNode.nodeView) {
@@ -315,7 +318,7 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
             // Navigate to the node - even if it's external
             const viewNode = this.highlightedViewNode;
             if (viewNode) {
-                navigateNode(viewNode.node, true, this.props.sitemap);
+                navigateNode(viewNode.node, true, this.props.sitemap, this.props.assignLocation);
                 this.props.onNavigate();
             }
         }
@@ -380,6 +383,7 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
             sitemap: this.props.sitemap,
             onNodeClick: this.handleNodeClick,
             onNodeCollapse: this.props.onNodeCollapse,
+            assignLocation: this.props.assignLocation,
         };
 
         return <ul
@@ -650,13 +654,22 @@ const NAVIGATE_DEBOUNCER = new Debouncer();
  *
  * @param strong If it's `false`, navigation to an external document is prevented.
  */
-function navigateNode(node: TocNode, strong: boolean, sitemap: Sitemap | null): void {
+function navigateNode(
+    node: TocNode,
+    strong: boolean,
+    sitemap: Sitemap | null,
+    assignLocation?: (url: string) => void,
+): void {
     if (node.type === NodeType.External && strong) {
         const href = getExternalNodeTarget(node, sitemap!);
         if (href == null) {
             return;
         }
-        document.location.assign(href);
+        if (assignLocation) {
+            assignLocation(href);
+        } else {
+            document.location.assign(href);
+        }
         return;
     }
 
@@ -697,6 +710,8 @@ interface TocContext {
 
     /** A sitemap. Assumed to be immutable. */
     sitemap: Sitemap | null;
+
+    assignLocation?: (url: string) => void;
 }
 
 interface NodeViewProps {
@@ -836,7 +851,7 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
 
         this.props.context.onNodeClick(this.props.viewNode);
 
-        navigateNode(node, true, sitemap);
+        navigateNode(node, true, sitemap, this.props.context.assignLocation);
     }
 
     @bind

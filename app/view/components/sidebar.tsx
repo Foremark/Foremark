@@ -21,6 +21,9 @@ export interface SidebarProps {
 
     onShowSidebar: () => void;
     onNavigate: () => void;
+
+    /** If specified, this function will be used for navigating external pages.*/
+    assignLocation?: (url: string) => void;
 }
 
 interface State {
@@ -183,7 +186,8 @@ export class Sidebar extends React.Component<SidebarProps, State> {
                     sitemap={props.sitemap}
                     onNavigate={props.onNavigate}
                     onNodeCollapse={this.handleTocNodeCollapse}
-                    searchQuery={state.searchQuery} />
+                    searchQuery={state.searchQuery}
+                    assignLocation={props.assignLocation} />
             </nav>
 
             <span className={CN.toolbar2}>

@@ -30,6 +30,11 @@ export interface AppProps {
     renderPromise: Promise<void>;
     /** Disables the spinner. Only used when doing server-side rendering.  */
     hideSpinner?: boolean;
+    /**
+     * If specified, this function will be used for navigating external pages.
+     * Defaults to `document.location.assign`.
+     */
+    assignLocation?: (url: string) => void;
 }
 
 interface AppState {
@@ -187,6 +192,7 @@ export class App extends React.Component<AppProps, AppState> {
                         sitemap={props.sitemap}
                         onShowSidebar={this.handleShowSidebar}
                         onNavigate={this.handleHideModalSidebar}
+                        assignLocation={this.props.assignLocation}
                         />
                 </div>
             </aside>
