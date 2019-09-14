@@ -137,7 +137,7 @@ export function processSitemap(config?: SitemapConfig, documentRoot?: string): [
 
     const errors: string[] = [];
 
-    const rootEntries = expandSitemap(config, errors);
+    const rootEntries = expandSitemap(config, errors, document);
     let currentEntry: SitemapEntry | null = null;
 
     const docPath = /^[^?#]*/.exec(`${document.location}`)![0]
@@ -199,7 +199,7 @@ function forEachEntry(list: ReadonlyArray<SitemapEntry>, cb: (e: SitemapEntry) =
     }
 }
 
-export function expandSitemap(config: SitemapConfig, errors: string[]): ReadonlyArray<SitemapEntry> {
+export function expandSitemap(config: SitemapConfig, errors: string[], document: HTMLDocument): ReadonlyArray<SitemapEntry> {
     const activeFragments: string[] = [];
 
     function scanFragment(
@@ -257,7 +257,7 @@ export function expandSitemap(config: SitemapConfig, errors: string[]): Readonly
                     entry.paths.map(p => resolvePath(errors, p));
 
                 return {
-                    caption: createCaption(entry.caption, errors),
+                    caption: createCaption(entry.caption, errors, document),
                     paths,
                     children: scanFragment(entry.children, paths[0] || originPath),
                 } as SitemapEntry;
@@ -273,7 +273,7 @@ export function expandSitemap(config: SitemapConfig, errors: string[]): Readonly
     return scanFragment(config.main);
 }
 
-function createCaption(caption: string, errors: string[]): HTMLDivElement {
+function createCaption(caption: string, errors: string[], document: HTMLDocument): HTMLDivElement {
     if (typeof caption !== 'string') {
         errors.push(`<code>captio</code> is not a string: ` +
             `<code>${escapeXmlText(JSON.stringify(caption))}</code>`);
