@@ -232,7 +232,7 @@ class ArrayProxy<T> {
  * }
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
-function mergeObjects(base: any, add: any): any {
+export function mergeObjects(base: any, add: any): any {
     if (base == null) {
         base = {};
     }
