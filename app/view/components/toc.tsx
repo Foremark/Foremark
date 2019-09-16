@@ -81,6 +81,12 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
         this.mainRoot = createViewNode(root, null);
         this.mainRoot.expanded = true;
 
+        // Calculate the initial `activeNodePath`. It must be initialized in
+        // the constructor for server-side rendering.
+        this.recalculateAndSetActiveNode(true);
+
+        // Recalculate the active node again when the scroll position is set by
+        // the browser
         setTimeout(() => this.recalculateAndSetActiveNode(), 0);
     }
 
@@ -115,13 +121,21 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
         this.recalculateAndSetActiveNode();
     }
 
-    private recalculateAndSetActiveNode(): void {
+    /**
+     * Recalculate and set the active node. If `init` is `true`,
+     * `this.state` is updated directly (this mode should only be used in the
+     * constructor).
+     */
+    private recalculateAndSetActiveNode(init?: boolean): void {
         if (this.suspendActiveNodeUpdate) {
             return;
         }
 
-        if (typeof document === 'undefined') {
+        if (typeof document === 'undefined' || init) {
             // In server-side rendering, a scroll position is unavailable
+            if (this.localRoot.type !== NodeType.Root) {
+                this.setActiveNode(this.localRoot, init);
+            }
             return;
         }
 
@@ -149,7 +163,11 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
         this.setActiveNode(activeNode);
     }
 
-    private setActiveNode(newActiveNode: TocNode | null): void {
+    /**
+     * Set the active node. If `init` is `true`, `this.state` is updated
+     * directly (this mode should only be used in the constructor).
+     */
+    private setActiveNode(newActiveNode: TocNode | null, init?: boolean): void {
         const {activeNodePath} = this.state;
         const activeNode = activeNodePath.length ?
             activeNodePath[activeNodePath.length - 1] : null;
@@ -159,9 +177,16 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
             for (let n: TocNode | null = newActiveNode; n; n = n.parent) {
                 path.unshift(n);
             }
-            this.setState({
-                activeNodePath: path,
-            });
+            if (init) {
+                this.state = {
+                    ...this.state,
+                    activeNodePath: path,
+                };
+            } else {
+                this.setState({
+                    activeNodePath: path,
+                });
+            }
         }
     }
 
