@@ -37,7 +37,7 @@
     "preact": "^10.0.0",
     "string-replace-loader": "^2.1.1",
     "style-loader": "^0.23.1",
-    "taskfile": "^0.8.5",
+    "taskfile": "^0.10.0",
     "terser-webpack-plugin": "^2.3.2",
     "ts-loader": "^6.2.1",
     "typedoc": "^0.14.0",
