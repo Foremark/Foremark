@@ -133,6 +133,9 @@
 .katex * {
   -ms-high-contrast-adjust: none !important;
 }
+.katex .katex-version::after {
+  content: "0.11.1";
+}
 .katex .katex-mathml {
   position: absolute;
   clip: rect(1px, 1px, 1px, 1px);
@@ -334,10 +337,6 @@
 .katex .sqrt > .root {
   margin-left: 0.27777778em;
   margin-right: -0.55555556em;
-}
-.katex .sizing,
-.katex .fontsize-ensurer {
-  display: inline-block;
 }
 .katex .sizing.reset-size1.size1,
 .katex .fontsize-ensurer.reset-size1.size1 {
@@ -874,12 +873,7 @@
 }
 .katex .mtable .vertical-separator {
   display: inline-block;
-  margin: 0 -0.025em;
-  border-right: 0.05em solid;
   min-width: 1px;
-}
-.katex .mtable .vs-dashed {
-  border-right: 0.05em dashed;
 }
 .katex .mtable .arraycolsep {
   display: inline-block;
@@ -915,6 +909,13 @@
 }
 .katex svg path {
   stroke: none;
+}
+.katex img {
+  border-style: none;
+  min-width: 0;
+  min-height: 0;
+  max-width: none;
+  max-height: none;
 }
 .katex .stretchy {
   width: 100%;
@@ -972,10 +973,7 @@
 .katex .boxpad {
   padding: 0 0.3em 0 0.3em;
 }
-.katex .fbox {
-  box-sizing: border-box;
-  border: 0.04em solid black;
-}
+.katex .fbox,
 .katex .fcolorbox {
   box-sizing: border-box;
   border: 0.04em solid;
@@ -1008,5 +1006,12 @@
 .katex-display > .katex > .katex-html > .tag {
   position: absolute;
   right: 0;
+}
+.katex-display.leqno > .katex > .katex-html > .tag {
+  left: 0;
+  right: auto;
+}
+.katex-display.fleqn > .katex {
+  text-align: left;
 }
 }
