@@ -1,6 +1,6 @@
 import * as React from 'preact';
 
-export interface PortProps extends JSX.HTMLAttributes {
+export interface PortProps extends React.JSX.HTMLAttributes {
     element: HTMLElement;
     tagName?: string;
     /**

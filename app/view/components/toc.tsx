@@ -58,7 +58,7 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
 
     private suspendActiveNodeUpdate = false;
 
-    private domRoot?: HTMLDivElement;
+    private domRoot?: HTMLUListElement | null;
 
     constructor(props: TableOfContentsProps) {
         super(props);
@@ -752,7 +752,7 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
     refs: any;
 
     private label: HTMLElement;
-    private element?: HTMLElement;
+    private element?: HTMLElement | null;
 
     constructor(props: NodeViewProps) {
         super(props);

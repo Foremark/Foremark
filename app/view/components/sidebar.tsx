@@ -38,7 +38,7 @@ interface State {
 export class Sidebar extends React.Component<SidebarProps, State> {
     refs: any;
 
-    private searchQueryElement?: HTMLInputElement;
+    private searchQueryElement?: HTMLInputElement | null;
     private tocComponent?: TableOfContents;
 
     constructor(props: SidebarProps) {
