@@ -102,7 +102,8 @@ export function isElement(node: Node | null | undefined): node is HTMLElement {
 }
 
 export function isText(node: Node | null | undefined): node is Text {
-    return node != null && node.nodeType === NodeType.TEXT_NODE;
+    return node != null && (node.nodeType === NodeType.TEXT_NODE ||
+        node.nodeType === NodeType.CDATA_SECTION_NODE);
 }
 
 /**
