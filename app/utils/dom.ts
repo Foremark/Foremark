@@ -98,11 +98,11 @@ export interface TransformHtmlWithContext {
 }
 
 export function isElement(node: Node | null | undefined): node is HTMLElement {
-    return node != null && node.nodeType === 1;
+    return node != null && node.nodeType === NodeType.ELEMENT_NODE;
 }
 
 export function isText(node: Node | null | undefined): node is Text {
-    return node != null && node.nodeType === 3;
+    return node != null && node.nodeType === NodeType.TEXT_NODE;
 }
 
 /**
