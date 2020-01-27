@@ -176,7 +176,6 @@ export class Sidebar extends React.Component<SidebarProps, State> {
                     onKeyDown={this.handleSearchQueryKeyDown}
                     aria-label='Search'
                     placeholder='Search' />
-                <span />
             </span>
 
             <nav>

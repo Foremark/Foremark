@@ -10,7 +10,7 @@
 .sidebar {
     > span.search {
         position: absolute;
-        left: 7px; right: 7px;
+        left: 5px; right: 5px;
         top: 5px;
 
         @icon-search();
@@ -18,7 +18,7 @@
             opacity: 0.7;
             font-size: 70%;
             position: absolute;
-            left: 0.3em; top: 0.6em;
+            left: 0.5em; top: 0.6em;
         }
 
         > input {
@@ -33,33 +33,22 @@
 
             background: transparent;
             color: inherit;
-            padding: 4px 4px 4px calc(4px + 1.2em);
+            padding: 4px 4px 4px calc(4px + 1.4em);
             margin: 0;
-            border-radius: 0;
+            border-radius: 3px;
             border: none;
 
+            @shadow-color: #a0a0a0;
+            box-shadow: 0px 0px 0px fade(@shadow-color, 0%);
+
             &::-webkit-search-decoration { -webkit-appearance: none; }
-        }
-
-        // Underline like Material UI
-        border-bottom: 1px solid rgba(128, 128, 128, 0.1);
-        &:hover {
-            border-bottom-color: rgba(128, 128, 128, 0.2);
-        }
-
-        > input {
-            & + span {
-                position: absolute; content: "";
-                left: 0; bottom: -1px; height: 2px; width: 100%;
-                background: @accent-color;
-                transform: scaleX(0);
-                transform-origin: 0% 50%;
-                transition: 200ms transform;
-            }
             &:focus {
                 outline: none;
-                & + span { transform: none; }
+                box-shadow: 0px 0px 10px fade(@shadow-color, 15%);
+                background: @background-color;
+                background: var(--background-color);
             }
+            transition: 200ms background, 200ms box-shadow;
         }
     }
 
