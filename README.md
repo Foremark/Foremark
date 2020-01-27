@@ -2,20 +2,21 @@
 
 Foremark is a tool for writing stylized plain text documents that can be managed and shared easily. Foremark extends upon the concept of [Markdeep](http://casual-effects.com/markdeep/).
 
-![](http://ipfs.io/ipfs/QmZiJk9yrnzrA3zoUqhUa5h3XqSxFjZ57SP9tMxpxSKaRV)
+![](http://ipfs.io/ipfs/QmTuLVV4pbE4Dfy1MEofSDNLeTkfR2XSUifJQSXx4FtLGr)
 
 ```XML
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><pre><![CDATA[
 
                             **Title**
 
-Welcome to Foremark. It's a way to write a _stylized_ text document without a fuss.
+Welcome to Foremark, a technology for writing a shareable, _stylized_
+text document.
 
-                :::::::::::::::::::::::::::::::::::::::::::::
-                ::            .----------.                 ::
-                ::  Write --> | Document | --> Web Browser ::
-                ::            '----------'                 ::
-                :::::::::::::::::::::::::::::::::::::::::::::
+            :::::::::::::::::::::::::::::::::::::::::::::
+            ::            .----------.                 ::
+            ::  Write --> | Document | --> Web Browser ::
+            ::            '----------'                 ::
+            :::::::::::::::::::::::::::::::::::::::::::::
 
 ]]></pre> <!-- Foremark footer -->
 <script src="https://unpkg.com/foremark/browser/foremark.js" async="async"/></html>
@@ -30,7 +31,7 @@ Save the above text as [`hello.fm.xhtml`](https://foremark.github.io/hello.fm.xh
 - **ASCII diagrams**, converted to SVG via [Svgbob](https://github.com/ivanceras/svgbob).
 - **Sidenotes** and other stylings inspired by Edward Tufte's handouts.
 - **Syntax highlighting** via [highlight.js](https://highlightjs.org).
-- **Responsive** — Documents can be displayed on a desktop screen, tablet and smartphone and printed on paper. 
+- **Responsive** — Documents can be displayed on a desktop screen, tablet and smartphone and printed on paper.
 - **Media handlers** allow embedding various media contents including images, video files, audio files, and oEmbed URLs.
 - **Lazy loading** — Foremark's code is broken into multiple modules and they are loaded as needed. This is implemented using Webpack's [code splitting feature](https://webpack.js.org/guides/code-splitting/).
 - **Self-contained (offline) bundle** — `foremark.bundle.js` is the special build of Foremark Viewer that includes every required asset in a single `.js` file and does not require an internet connection.
