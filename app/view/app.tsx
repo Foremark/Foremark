@@ -162,7 +162,8 @@ export class App extends React.Component<AppProps, AppState> {
                         type='checkbox'
                         onChange={this.handleSidebarToggle}
                         checked={isModelessSidebarVisible} />
-                    <label for='sidebarToggle' className={CN.sidebarToggle}>
+                    <label for='sidebarToggle' className={CN.sidebarToggle}
+                            title={isModelessSidebarVisible ? 'Hide sidebar' : 'Show sidebar'}>
                         <span />
                         {isModelessSidebarVisible ? 'Hide sidebar' : 'Show sidebar'}
                     </label>
@@ -176,7 +177,8 @@ export class App extends React.Component<AppProps, AppState> {
                         type='checkbox'
                         onChange={this.handleSidebarModalToggle}
                         checked={state.sidebarModalVisible} />
-                    <label for='sidebarToggleModal' className={CN.sidebarToggleModal}>
+                    <label for='sidebarToggleModal' className={CN.sidebarToggleModal}
+                            title={state.sidebarModalVisible ? 'Hide sidebar' : 'Show sidebar'}>
                         <span />
                         {state.sidebarModalVisible ? 'Hide sidebar' : 'Show sidebar'}
                     </label>
