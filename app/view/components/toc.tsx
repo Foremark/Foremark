@@ -926,7 +926,7 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
                 ref={e => this.element = e}
             >
             <a onClick={this.handleClick} href={href}>
-                {
+                <span>
                     <button onClick={this.handleToggle} type='button'
                         className={isExpanded ? CN.expanded : CN.collapsed}
                         disabled={!expandable}>
@@ -935,7 +935,7 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
                                 : 'Leaf'
                         }
                     </button>
-                }
+                </span>
                 <Port tagName='div' element={this.label} injectAsHtml={true} />
             </a>
             {

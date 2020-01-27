@@ -53,13 +53,22 @@ li.item {
         }
     }
 
-    // Expand/collapse button
-    > a > button {
+    // Expand/collapse button. The wrapping `span` creates a containing block
+    // that simulates the inner height of a one-line TOC item. `button` is
+    // positioned in the center vertically inside the `span`.
+    > a > span {
         float: left;
-        margin: 0; padding: 0;
-        width: 1.5em; height: 1.5em;
+        display: inline-block;
         position: relative;
-        top: calc(0.02em);
+        width: 1.5em;
+        &:before { content: "　" /* U+3000 Ideographic Space */; }
+    }
+    > a > span > button {
+        @height: 1.2em;
+        margin: 0; padding: 0;
+        width: 100%; height: @height;
+        position: absolute;
+        left: 0; top: calc(50% - @height / 2);
 
         border: none; background: none;
         @text-hidden();
@@ -125,7 +134,7 @@ li.item {
     &.L9 > a { .indent(8); }
 
     &.active {
-        > a > button:before {
+        > a > span > button:before {
             border-color: #eee;
         }
         > a {
@@ -139,7 +148,7 @@ li.item {
 
         // Use a different style for a smaller screen
         @media (max-width: @screen-medium-max) {
-            > a > button:before {
+            > a > span > button:before {
                 border-color: #666;
                 @media (prefers-color-scheme: dark) {
                     border-color: #eee;
