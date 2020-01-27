@@ -6,7 +6,12 @@
     font-size: 0.8rem;
     line-height: 1.2;
 
-    code { font-size: 0.73rem; }
+    code {
+        font-size: 0.75rem;
+        @monospace-font-family();
+        letter-spacing: -0.02em;
+        overflow-wrap: break-word;
+    }
 
     margin: 0;
     padding: 5px 0;
