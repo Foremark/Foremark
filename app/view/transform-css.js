@@ -8,6 +8,6 @@ module.exports = function (css) {
         /url\(\.\/([^)]+)\)/g,
         function (_, path) {
             return 'url("' + publicPath + path + '")';
-        },
+        }
     );
 };
