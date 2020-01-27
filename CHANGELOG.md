@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.4.0] - 2020-01-27
+
 - Updated dependencies.
     - Many user-facing changes were made to KaTeX. Read the section v0.11.1 through v0.10.1 of [KaTeX's `CHANGELOG.md`](https://github.com/KaTeX/KaTeX/blob/master/CHANGELOG.md) to see the list of changes.
 - Made various stylistic changes to the viewer application.
@@ -179,7 +181,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial release.
 
-[Unreleased]: https://github.com/Foremark/Foremark/compare/0.3.0...HEAD
+[Unreleased]: https://github.com/Foremark/Foremark/compare/0.4.0...HEAD
+[0.4.0]: https://github.com/Foremark/Foremark/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/Foremark/Foremark/compare/0.2.3...0.3.0
 [0.2.3]: https://github.com/Foremark/Foremark/compare/0.2.2...0.2.3
 [0.2.2]: https://github.com/Foremark/Foremark/compare/0.2.1...0.2.2
