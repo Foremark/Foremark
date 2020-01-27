@@ -111,7 +111,6 @@ body {
         height: 30px;
         display: inline-block;
         box-sizing: border-box;
-        border: 1px solid #aaa;
         border-radius: 1000px;
         opacity: 0.5;
         position: relative;
@@ -122,7 +121,6 @@ body {
         }
     }
     > input[type=checkbox]:checked + label {
-        border-color: @button-highlight-color;
         background: @button-highlight-color;
         color: #eee;
         opacity: 1;
@@ -131,7 +129,7 @@ body {
     label.sidebarToggle, label.sidebarToggleModal {
         width: 30px; @text-hidden();
         > span {
-            left: 8px; top: 10px; width: 12px;
+            left: 9px; top: 11px; width: 12px;
             &:before, &:after {
                 content: "";
                 left: 0; right: 0;

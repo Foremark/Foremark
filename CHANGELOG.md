@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Updated dependencies.
     - Many user-facing changes were made to KaTeX. Read the section v0.11.1 through v0.10.1 of [KaTeX's `CHANGELOG.md`](https://github.com/KaTeX/KaTeX/blob/master/CHANGELOG.md) to see the list of changes.
+- Made a small stylistic change to the button for toggling the sidebar.
 - **Breaking**: The viewer application no longer adds `.mf-processed` to `html`.
 
 ## [0.3.0] - 2019-05-08
