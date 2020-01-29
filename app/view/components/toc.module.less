@@ -46,7 +46,7 @@ li.item {
         &:hover { text-decoration: underline; }
 
         // Disabled entry
-        &[href=""] {
+        &:not([href]) {
             opacity: 0.5;
             cursor: default !important;
             text-decoration: none !important;

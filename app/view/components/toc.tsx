@@ -903,7 +903,7 @@ class NodeView extends React.Component<NodeViewProps, NodeViewState> {
         let href;
         switch (node.type) {
             case NodeType.External:
-                href = getExternalNodeTarget(node, sitemap!) || '';
+                href = getExternalNodeTarget(node, sitemap!) || void 0;
                 break;
             case NodeType.Internal:
                 href = '#' + node.anchor!.id;
