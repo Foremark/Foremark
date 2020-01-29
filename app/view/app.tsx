@@ -35,6 +35,14 @@ export interface AppProps {
      * Defaults to `document.location.assign`.
      */
     assignLocation?: (url: string) => void;
+
+    /**
+     * Overrides the displayed document. Warning: TOC will be generated based
+     * on `foremarkDocument` even if `children` is set.
+     *
+     * When specified, it should have `<main>` as the root element.
+     */
+    children?: React.ComponentChildren;
 }
 
 interface AppState {
@@ -200,10 +208,14 @@ export class App extends React.Component<AppProps, AppState> {
             </aside>
 
             {
-                <Port
-                    tagName='main'
-                    injectAsHtml={this.props.injectDocumentAsHtml}
-                    element={this.props.foremarkDocument} />
+                this.props.children
+                ?
+                    this.props.children
+                :
+                    <Port
+                        tagName='main'
+                        injectAsHtml={this.props.injectDocumentAsHtml}
+                        element={this.props.foremarkDocument} />
             }
         </div>;
     }
