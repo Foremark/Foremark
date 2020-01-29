@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 - Internal enhancements for `Foremark-Gatsby`
+- Fixed `\vec{...}` not rendering
 
 ## [0.4.0] - 2020-01-27
 

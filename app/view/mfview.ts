@@ -636,10 +636,12 @@ const KATEX_ENTITY_REGEX = new RegExp(
 
 /**
  * KaTeX generates entity references defined in HTML but not in XHTML.
- * This function replaces such entity references.
+ * This function replaces such entity references. It also adds `xmlns` to inline
+ * SVG images to use the correct XML namespace.
  */
 function xhtmlifyKatexOutput(html: string): string {
-    return html.replace(KATEX_ENTITY_REGEX, (_, name) => KATEX_ENTITY_TABLE_MAP.get(name)!);
+    return html.replace(KATEX_ENTITY_REGEX, (_, name) => KATEX_ENTITY_TABLE_MAP.get(name)!)
+        .replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
 }
 
 const HANDLERS: { [tagName: string]: (node: Element, vc: ViewerConfig) => void | PromiseLike<void> } & Object = {
