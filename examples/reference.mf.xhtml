@@ -1361,6 +1361,18 @@ expandMfText(mfText);
 
 [the `jsdom` library]: https://www.npmjs.com/package/jsdom
 
+## Using the viewer application as a library
+
+Using the viewer application as a library is not supported, but it's certainly possible.
+
+The viewer application is not included in the NPM package in a way that it can be easily integrated into an existing application. Clients intending to incorporate the viewer application instead should copy Foremark's source tree into their own code base, e.g., by using a Git submodule, and import the modules in `app`.
+
+The semantic versioning of the NPM package does not cover the programming interface of the viewer application as it's not considered as a part of the package. The interface may change at any time, even between patch releases.
+
+[`Foremark-Gatsby`][] is an example of a project that uses the viewer application as a library.
+
+[`Foremark-Gatsby`]: https://github.com/Foremark/Foremark-Gatsby
+
 ]]></pre> <!-- Foremark footer -->
 <script src="../browser/foremark.js" async="async" />
 <script src="global.js" data-rel="foremark-config" async="async" />
