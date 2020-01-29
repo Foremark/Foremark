@@ -114,7 +114,7 @@ export interface SitemapConfigEntryCompact extends Array<any> {
  */
 export interface Sitemap {
     rootEntries: ReadonlyArray<SitemapEntry>;
-    currentEntry: SitemapEntry;
+    currentEntry: SitemapEntry | null;
     documentRoot: string;
 }
 

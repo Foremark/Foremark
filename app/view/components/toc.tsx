@@ -39,6 +39,8 @@ interface TableOfContentsState {
      * This value is uniquely determined from the active node. Nevertheless we
      * store the full path in order to determine the active state of a collapsed
      * `NodeView` quickly.
+     *
+     * This can be empty if there is no active node.
      */
     activeNodePath: ReadonlyArray<TocNode>;
 }
@@ -51,7 +53,7 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
     private readonly root: TocNode;
     /** The root node of the current page's TOC tree. When a sitemap is disabled,
      * this is identical to `root`. */
-    private readonly localRoot: TocNode;
+    private readonly localRoot: TocNode | null;
 
     private readonly mainRoot: ViewNode;
     private searchRoot?: ViewNode;
@@ -133,7 +135,7 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
 
         if (typeof document === 'undefined' || init) {
             // In server-side rendering, a scroll position is unavailable
-            if (this.localRoot.type !== NodeType.Root) {
+            if (this.localRoot && this.localRoot.type !== NodeType.Root) {
                 this.setActiveNode(this.localRoot, init);
             }
             return;
@@ -145,7 +147,7 @@ export class TableOfContents extends React.Component<TableOfContentsProps, Table
 
         let activeNode: TocNode | null = null;
 
-        if (this.localRoot.type !== NodeType.Root) {
+        if (this.localRoot && this.localRoot.type !== NodeType.Root) {
             activeNode = this.localRoot;
         }
 
@@ -554,7 +556,7 @@ function buildNodeTree(nodes: TocNode[]): TocNode {
  * Construct a node tree from a sitemap and a node tree for the current page's
  * headings. The original tree is destroyed.
  */
-function incorporateSitemapIntoNodeTree(localRoot: TocNode, sitemap: Sitemap): [TocNode, TocNode] {
+function incorporateSitemapIntoNodeTree(localRoot: TocNode, sitemap: Sitemap): [TocNode, TocNode | null] {
     let newLocalRoot: TocNode | null = null;
 
     function convertFragment(fragment: ReadonlyArray<SitemapEntry>, parent: TocNode | null): TocNode[] {
@@ -606,7 +608,7 @@ function incorporateSitemapIntoNodeTree(localRoot: TocNode, sitemap: Sitemap): [
 
     globalRoot.children = convertFragment(sitemap.rootEntries, globalRoot);
 
-    return [globalRoot, newLocalRoot!];
+    return [globalRoot, newLocalRoot];
 }
 
 function recalculateLevels(node: TocNode, level: number): void {
