@@ -119,7 +119,7 @@ Prerequisite:
 - `npm install -g yarn`
 - [`rustup`](https://rustup.rs) `toolchain add nightly-2019-01-20`
 - `rustup target add wasm32-unknown-unknown --toolchain nightly-2019-01-20`
-- `cargo install` [`wasm-bindgen-cli`](https://rustwasm.github.io/wasm-bindgen/whirlwind-tour/basic-usage.html) `--version 0.2.33`
+- `cargo install` [`wasm-bindgen-cli`](https://rustwasm.github.io/wasm-bindgen/whirlwind-tour/basic-usage.html) `--version 0.2.56`
 - `cargo install` [`wasm-snip`](https://github.com/rustwasm/wasm-snip)
 - [Binaryen](https://github.com/WebAssembly/binaryen) (`brew install binaryen` on Homebrew) including: `wasm-opt`
 - `cargo install` [`cargo-license`](https://github.com/onur/cargo-license)
