@@ -1,0 +1,593 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>&quot;view/media/oembed-providers&quot; | foremark</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">foremark</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../globals.html">Globals</a>
+				</li>
+				<li>
+					<a href="_view_media_oembed_providers_.html">&quot;view/media/oembed-providers&quot;</a>
+				</li>
+			</ul>
+			<h1>External module &quot;view/media/oembed-providers&quot;</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Object literals</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-object-literal tsd-parent-kind-external-module"><a href="_view_media_oembed_providers_.html#builtin_oembed_endpoints" class="tsd-kind-icon">BUILTIN_<wbr>OEMBED_<wbr>ENDPOINTS</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Object literals</h2>
+				<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-external-module">
+					<a name="builtin_oembed_endpoints" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> BUILTIN_<wbr>OEMBED_<wbr>ENDPOINTS</h3>
+					<div class="tsd-signature tsd-kind-icon">BUILTIN_<wbr>OEMBED_<wbr>ENDPOINTS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L11">app/view/media/oembed-providers.ts:11</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The default set of oEmbed provider endpoints.</p>
+						</div>
+						<p><a href="https://oembed.com">https://oembed.com</a> provides a directory of providers, but not all of them
+							work with our oEmbed consumer implementation. Furthermore, including every
+							known provider would increase the bundle size significantly (about 70KiB).
+						As such, we include a small hand-picked set of them.</p>
+					</div>
+					<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-object-literal">
+						<a name="builtin_oembed_endpoints.clyp" class="tsd-anchor"></a>
+						<h3>clyp</h3>
+						<div class="tsd-signature tsd-kind-icon">clyp<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L12">app/view/media/oembed-providers.ts:12</a></li>
+							</ul>
+						</aside>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.clyp.schemes" class="tsd-anchor"></a>
+							<h3>schemes</h3>
+							<div class="tsd-signature tsd-kind-icon">schemes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [&#x27;http://clyp.it/*&#x27;,&#x27;http://clyp.it/playlist/*&#x27;,]</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L13">app/view/media/oembed-providers.ts:13</a></li>
+								</ul>
+							</aside>
+						</section>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.clyp.url" class="tsd-anchor"></a>
+							<h3>url</h3>
+							<div class="tsd-signature tsd-kind-icon">url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;https://api.clyp.it/oembed/?format&#x3D;json&quot;</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L17">app/view/media/oembed-providers.ts:17</a></li>
+								</ul>
+							</aside>
+						</section>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-object-literal">
+						<a name="builtin_oembed_endpoints.codepen" class="tsd-anchor"></a>
+						<h3>codepen</h3>
+						<div class="tsd-signature tsd-kind-icon">codepen<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L19">app/view/media/oembed-providers.ts:19</a></li>
+							</ul>
+						</aside>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.codepen.format" class="tsd-anchor"></a>
+							<h3>format</h3>
+							<div class="tsd-signature tsd-kind-icon">format<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"jsonp"</span><span class="tsd-signature-symbol"> = &quot;jsonp&quot;</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L25">app/view/media/oembed-providers.ts:25</a></li>
+								</ul>
+							</aside>
+						</section>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.codepen.schemes-1" class="tsd-anchor"></a>
+							<h3>schemes</h3>
+							<div class="tsd-signature tsd-kind-icon">schemes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [&#x27;http://codepen.io/*&#x27;,&#x27;https://codepen.io/*&#x27;,]</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L20">app/view/media/oembed-providers.ts:20</a></li>
+								</ul>
+							</aside>
+						</section>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.codepen.url-1" class="tsd-anchor"></a>
+							<h3>url</h3>
+							<div class="tsd-signature tsd-kind-icon">url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;https://codepen.io/api/oembed?format&#x3D;js&quot;</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L24">app/view/media/oembed-providers.ts:24</a></li>
+								</ul>
+							</aside>
+						</section>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-object-literal">
+						<a name="builtin_oembed_endpoints.derpibooru" class="tsd-anchor"></a>
+						<h3>derpibooru</h3>
+						<div class="tsd-signature tsd-kind-icon">derpibooru<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L27">app/view/media/oembed-providers.ts:27</a></li>
+							</ul>
+						</aside>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.derpibooru.schemes-2" class="tsd-anchor"></a>
+							<h3>schemes</h3>
+							<div class="tsd-signature tsd-kind-icon">schemes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [&#x27;https://derpibooru.org/*&#x27;,&#x27;https://derpibooru.org/images/*&#x27;,&#x27;https://trixiebooru.org/*&#x27;,&#x27;https://trixiebooru.org/images/*&#x27;,]</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L28">app/view/media/oembed-providers.ts:28</a></li>
+								</ul>
+							</aside>
+						</section>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.derpibooru.url-2" class="tsd-anchor"></a>
+							<h3>url</h3>
+							<div class="tsd-signature tsd-kind-icon">url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;https://derpibooru.org/oembed.json&quot;</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L34">app/view/media/oembed-providers.ts:34</a></li>
+								</ul>
+							</aside>
+						</section>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-object-literal">
+						<a name="builtin_oembed_endpoints.deviantart" class="tsd-anchor"></a>
+						<h3>deviantart</h3>
+						<div class="tsd-signature tsd-kind-icon">deviantart<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L36">app/view/media/oembed-providers.ts:36</a></li>
+							</ul>
+						</aside>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.deviantart.format-1" class="tsd-anchor"></a>
+							<h3>format</h3>
+							<div class="tsd-signature tsd-kind-icon">format<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"jsonp"</span><span class="tsd-signature-symbol"> = &quot;jsonp&quot;</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L44">app/view/media/oembed-providers.ts:44</a></li>
+								</ul>
+							</aside>
+						</section>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.deviantart.schemes-3" class="tsd-anchor"></a>
+							<h3>schemes</h3>
+							<div class="tsd-signature tsd-kind-icon">schemes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [&#x27;http://*.deviantart.com/art/*&#x27;,&#x27;http://*.deviantart.com/*#/d*&#x27;,&#x27;http://fav.me/*&#x27;,&#x27;http://sta.sh/*&#x27;]</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L37">app/view/media/oembed-providers.ts:37</a></li>
+								</ul>
+							</aside>
+						</section>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.deviantart.url-3" class="tsd-anchor"></a>
+							<h3>url</h3>
+							<div class="tsd-signature tsd-kind-icon">url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;https://backend.deviantart.com/oembed?format&#x3D;jsonp&quot;</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L43">app/view/media/oembed-providers.ts:43</a></li>
+								</ul>
+							</aside>
+						</section>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-object-literal">
+						<a name="builtin_oembed_endpoints.facebook" class="tsd-anchor"></a>
+						<h3>facebook</h3>
+						<div class="tsd-signature tsd-kind-icon">facebook<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L60">app/view/media/oembed-providers.ts:60</a></li>
+							</ul>
+						</aside>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.facebook.format-2" class="tsd-anchor"></a>
+							<h3>format</h3>
+							<div class="tsd-signature tsd-kind-icon">format<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"jsonp"</span><span class="tsd-signature-symbol"> = &quot;jsonp&quot;</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L66">app/view/media/oembed-providers.ts:66</a></li>
+								</ul>
+							</aside>
+						</section>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.facebook.schemes-4" class="tsd-anchor"></a>
+							<h3>schemes</h3>
+							<div class="tsd-signature tsd-kind-icon">schemes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [&#x27;https://www.facebook.com/*/videos/*&#x27;,&#x27;https://www.facebook.com/video.php&#x27;,]</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L61">app/view/media/oembed-providers.ts:61</a></li>
+								</ul>
+							</aside>
+						</section>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.facebook.url-4" class="tsd-anchor"></a>
+							<h3>url</h3>
+							<div class="tsd-signature tsd-kind-icon">url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;https://www.facebook.com/plugins/video/oembed.json&quot;</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L65">app/view/media/oembed-providers.ts:65</a></li>
+								</ul>
+							</aside>
+						</section>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-object-literal">
+						<a name="builtin_oembed_endpoints.facebook_post" class="tsd-anchor"></a>
+						<h3>facebook-<wbr>post</h3>
+						<div class="tsd-signature tsd-kind-icon">facebook-<wbr>post<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L46">app/view/media/oembed-providers.ts:46</a></li>
+							</ul>
+						</aside>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.facebook_post.format-3" class="tsd-anchor"></a>
+							<h3>format</h3>
+							<div class="tsd-signature tsd-kind-icon">format<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"jsonp"</span><span class="tsd-signature-symbol"> = &quot;jsonp&quot;</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L58">app/view/media/oembed-providers.ts:58</a></li>
+								</ul>
+							</aside>
+						</section>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.facebook_post.schemes-5" class="tsd-anchor"></a>
+							<h3>schemes</h3>
+							<div class="tsd-signature tsd-kind-icon">schemes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [&#x27;https://www.facebook.com/*/posts/*&#x27;,&#x27;https://www.facebook.com/photos/*&#x27;,&#x27;https://www.facebook.com/photo.php&#x27;,&#x27;https://www.facebook.com/*/activity/*&#x27;,&#x27;https://www.facebook.com/permalink.php&#x27;,&#x27;https://www.facebook.com/media/set?set&#x3D;*&#x27;,&#x27;https://www.facebook.com/questions/*&#x27;,&#x27;https://www.facebook.com/notes/*/*/*&#x27;,]</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L47">app/view/media/oembed-providers.ts:47</a></li>
+								</ul>
+							</aside>
+						</section>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.facebook_post.url-5" class="tsd-anchor"></a>
+							<h3>url</h3>
+							<div class="tsd-signature tsd-kind-icon">url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;https://www.facebook.com/plugins/post/oembed.json&quot;</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L57">app/view/media/oembed-providers.ts:57</a></li>
+								</ul>
+							</aside>
+						</section>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-object-literal">
+						<a name="builtin_oembed_endpoints.mixcloud" class="tsd-anchor"></a>
+						<h3>mixcloud</h3>
+						<div class="tsd-signature tsd-kind-icon">mixcloud<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L68">app/view/media/oembed-providers.ts:68</a></li>
+							</ul>
+						</aside>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.mixcloud.format-4" class="tsd-anchor"></a>
+							<h3>format</h3>
+							<div class="tsd-signature tsd-kind-icon">format<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"jsonp"</span><span class="tsd-signature-symbol"> = &quot;jsonp&quot;</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L74">app/view/media/oembed-providers.ts:74</a></li>
+								</ul>
+							</aside>
+						</section>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.mixcloud.schemes-6" class="tsd-anchor"></a>
+							<h3>schemes</h3>
+							<div class="tsd-signature tsd-kind-icon">schemes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [&#x27;http://www.mixcloud.com/*/*/&#x27;,&#x27;https://www.mixcloud.com/*/*/&#x27;,]</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L69">app/view/media/oembed-providers.ts:69</a></li>
+								</ul>
+							</aside>
+						</section>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.mixcloud.url-6" class="tsd-anchor"></a>
+							<h3>url</h3>
+							<div class="tsd-signature tsd-kind-icon">url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;https://www.mixcloud.com/oembed/?format&#x3D;json&quot;</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L73">app/view/media/oembed-providers.ts:73</a></li>
+								</ul>
+							</aside>
+						</section>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-object-literal">
+						<a name="builtin_oembed_endpoints.slideshare" class="tsd-anchor"></a>
+						<h3>slideshare</h3>
+						<div class="tsd-signature tsd-kind-icon">slideshare<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L76">app/view/media/oembed-providers.ts:76</a></li>
+							</ul>
+						</aside>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.slideshare.format-5" class="tsd-anchor"></a>
+							<h3>format</h3>
+							<div class="tsd-signature tsd-kind-icon">format<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"jsonp"</span><span class="tsd-signature-symbol"> = &quot;jsonp&quot;</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L85">app/view/media/oembed-providers.ts:85</a></li>
+								</ul>
+							</aside>
+						</section>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.slideshare.schemes-7" class="tsd-anchor"></a>
+							<h3>schemes</h3>
+							<div class="tsd-signature tsd-kind-icon">schemes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [&#x27;https://www.slideshare.net/*/*&#x27;,&#x27;https://fr.slideshare.net/*/*&#x27;,&#x27;https://de.slideshare.net/*/*&#x27;,&#x27;https://es.slideshare.net/*/*&#x27;,&#x27;https://pt.slideshare.net/*/*&#x27;,]</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L77">app/view/media/oembed-providers.ts:77</a></li>
+								</ul>
+							</aside>
+						</section>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.slideshare.url-7" class="tsd-anchor"></a>
+							<h3>url</h3>
+							<div class="tsd-signature tsd-kind-icon">url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;https://www.slideshare.net/api/oembed/2?format&#x3D;json&quot;</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L84">app/view/media/oembed-providers.ts:84</a></li>
+								</ul>
+							</aside>
+						</section>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-object-literal">
+						<a name="builtin_oembed_endpoints.soundcloud" class="tsd-anchor"></a>
+						<h3>soundcloud</h3>
+						<div class="tsd-signature tsd-kind-icon">soundcloud<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L95">app/view/media/oembed-providers.ts:95</a></li>
+							</ul>
+						</aside>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.soundcloud.schemes-8" class="tsd-anchor"></a>
+							<h3>schemes</h3>
+							<div class="tsd-signature tsd-kind-icon">schemes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [&#x27;http://soundcloud.com/*&#x27;,&#x27;https://soundcloud.com/*&#x27;,]</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L96">app/view/media/oembed-providers.ts:96</a></li>
+								</ul>
+							</aside>
+						</section>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.soundcloud.url-8" class="tsd-anchor"></a>
+							<h3>url</h3>
+							<div class="tsd-signature tsd-kind-icon">url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;https://soundcloud.com/oembed?format&#x3D;json&quot;</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L100">app/view/media/oembed-providers.ts:100</a></li>
+								</ul>
+							</aside>
+						</section>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-object-literal">
+						<a name="builtin_oembed_endpoints.twitter" class="tsd-anchor"></a>
+						<h3>twitter</h3>
+						<div class="tsd-signature tsd-kind-icon">twitter<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L87">app/view/media/oembed-providers.ts:87</a></li>
+							</ul>
+						</aside>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.twitter.format-6" class="tsd-anchor"></a>
+							<h3>format</h3>
+							<div class="tsd-signature tsd-kind-icon">format<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"jsonp"</span><span class="tsd-signature-symbol"> = &quot;jsonp&quot;</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L93">app/view/media/oembed-providers.ts:93</a></li>
+								</ul>
+							</aside>
+						</section>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.twitter.schemes-9" class="tsd-anchor"></a>
+							<h3>schemes</h3>
+							<div class="tsd-signature tsd-kind-icon">schemes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [&#x27;https://twitter.com/*/status/*&#x27;,&#x27;https://*.twitter.com/*/status/*&#x27;,]</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L88">app/view/media/oembed-providers.ts:88</a></li>
+								</ul>
+							</aside>
+						</section>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.twitter.url-9" class="tsd-anchor"></a>
+							<h3>url</h3>
+							<div class="tsd-signature tsd-kind-icon">url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;https://publish.twitter.com/oembed?format&#x3D;json&quot;</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L92">app/view/media/oembed-providers.ts:92</a></li>
+								</ul>
+							</aside>
+						</section>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-object-literal">
+						<a name="builtin_oembed_endpoints.vimeo" class="tsd-anchor"></a>
+						<h3>vimeo</h3>
+						<div class="tsd-signature tsd-kind-icon">vimeo<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L102">app/view/media/oembed-providers.ts:102</a></li>
+							</ul>
+						</aside>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.vimeo.schemes-10" class="tsd-anchor"></a>
+							<h3>schemes</h3>
+							<div class="tsd-signature tsd-kind-icon">schemes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [&#x27;https://vimeo.com/*&#x27;,&#x27;https://vimeo.com/album/*/video/*&#x27;,&#x27;https://vimeo.com/channels/*/*&#x27;,&#x27;https://vimeo.com/groups/*/videos/*&#x27;,&#x27;https://vimeo.com/ondemand/*/*&#x27;,&#x27;https://player.vimeo.com/video/*&#x27;]</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L103">app/view/media/oembed-providers.ts:103</a></li>
+								</ul>
+							</aside>
+						</section>
+						<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+							<a name="builtin_oembed_endpoints.vimeo.url-10" class="tsd-anchor"></a>
+							<h3>url</h3>
+							<div class="tsd-signature tsd-kind-icon">url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;https://vimeo.com/api/oembed.json&quot;</span></div>
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Foremark/Foremark/blob/46b40e2/app/view/media/oembed-providers.ts#L111">app/view/media/oembed-providers.ts:111</a></li>
+								</ul>
+							</aside>
+						</section>
+					</section>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="../globals.html"><em>Globals</em></a>
+					</li>
+					<li class="current tsd-kind-external-module">
+						<a href="_view_media_oembed_providers_.html">&quot;view/media/oembed-<wbr>providers&quot;</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-object-literal tsd-parent-kind-external-module">
+						<a href="_view_media_oembed_providers_.html#builtin_oembed_endpoints" class="tsd-kind-icon">BUILTIN_<wbr>OEMBED_<wbr>ENDPOINTS</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>
