@@ -1,0 +1,49 @@
+/*
+ *  Computer Modern Unicode fonts
+ *
+ *  @license SIL Open Font License, Version 1.1
+ *
+ *  Copyright (C) Authors of original metafont fonts:
+ *  Donald Ervin Knuth (cm, concrete fonts)
+ *  1995, 1996, 1997 J"org Knappen, 1990, 1992 Norbert Schwarz (ec fonts)
+ *  1992-2006 A.Khodulev, O.Lapko, A.Berdnikov, V.Volovich (lh fonts)
+ *  1997-2005 Claudio Beccari (cb greek fonts)
+ *  2002 FUKUI Rei (tipa fonts)
+ *  2003-2005 Han The Thanh (Vietnamese fonts)
+ *  1996-2005 Walter Schmidt (cmbright fonts)
+ *
+ *  Copyright (C) 2003-2009, Andrey V. Panov (panov@canopus.iacp.dvo.ru),
+ *  with Reserved Font Family Name "Computer Modern Unicode fonts".
+ *
+ *  This Font Software is licensed under the SIL Open Font License, Version 1.1.
+ *  This license is copied below, and is also available with a FAQ at:
+ *  http://scripts.sil.org/OFL
+ *
+ */
+@font-face {
+  font-family: 'CMU Typewriter Text';
+  font-style: normal;
+  font-weight: normal;
+  src: local('CMU Typewriter Text Regular'), url('cmuntt.woff2') format('woff2'), url('cmuntt.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'CMU Typewriter Text';
+  font-style: italic;
+  font-weight: normal;
+  src: local('CMU Typewriter Text Italic'), url('cmunit.woff2') format('woff2'), url('cmunit.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'CMU Typewriter Text';
+  font-style: normal;
+  font-weight: bold;
+  src: local('CMU Typewriter Text Bold'), url('cmuntb.woff2') format('woff2'), url('cmuntb.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'CMU Typewriter Text';
+  font-style: italic;
+  font-weight: bold;
+  src: local('CMU Typewriter Text BoldItalic'), url('cmuntx.woff2') format('woff2'), url('cmuntx.woff') format('woff');
+}

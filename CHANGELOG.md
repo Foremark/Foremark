@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Changed the monospace font to [CMU Typewriter](https://en.wikipedia.org/wiki/Computer_Modern)
+
 ## [0.4.2] - 2020-01-31
 
 - Changed the monospace font to [Overpass Mono](https://overpassfont.org)
