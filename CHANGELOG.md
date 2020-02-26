@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 - Changed the monospace font to [CMU Typewriter](https://en.wikipedia.org/wiki/Computer_Modern)
+- Hide underlines when printing
 
 ## [0.4.2] - 2020-01-31
 
